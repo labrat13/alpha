@@ -1,0 +1,5 @@
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\regexTest\bin\Release\regexTest.exe
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\regexTest\bin\Release\regexTest.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\regexTest\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\regexTest\obj\Release\regexTest.exe
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\regexTest\obj\Release\regexTest.pdb

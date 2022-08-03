@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FirstProcedures</name>
+    </assembly>
+    <members>
+        <member name="T:FirstProcedures.Procedures">
+            <summary>
+            Класс должен содержать реализации процедур для команд Оператора
+            </summary>
+        </member>
+        <member name="M:FirstProcedures.Procedures.CommandHandlerExample(Operator.Engine,System.String,Operator.ArgumentCollection)">
+            <summary>
+            Пример функции процедуры обработчика команды
+            </summary>
+            <param name="engine">Механизм исполнения команд</param>
+            <param name="query">Текст запроса для возможной дополнительной обработки</param>
+            <param name="args">Список аргументов</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

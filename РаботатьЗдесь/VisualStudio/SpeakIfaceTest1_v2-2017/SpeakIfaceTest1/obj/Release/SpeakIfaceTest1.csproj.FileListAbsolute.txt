@@ -1,0 +1,12 @@
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\Release\SIdb.mdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\Release\Operator.exe
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\Release\Operator.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\Release\System.Data.SQLite.dll
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\Release\System.Data.SQLite.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\Release\System.Data.SQLite.xml
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\obj\Release\Operator.exe
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\obj\Release\Operator.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\Release\Readme-Operator.txt
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\Release\Version-Operator.txt
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\Release\sidb.sqlite

@@ -1,0 +1,16 @@
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\SIdb.mdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\FirstProcedures.dll
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\FirstProcedures.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\Operator.exe
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\System.Data.SQLite.dll
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\Operator.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\System.Data.SQLite.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\System.Data.SQLite.xml
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\obj\Release\FirstProcedures.dll
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\obj\Release\FirstProcedures.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\Readme-Operator.txt
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\Version-Operator.txt
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\sidb.sqlite
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\Readme-FirstProcedures.txt
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Release\Version-FirstProcedures.txt

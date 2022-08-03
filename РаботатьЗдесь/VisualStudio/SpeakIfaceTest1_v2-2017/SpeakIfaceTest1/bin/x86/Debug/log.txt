@@ -1,0 +1,177 @@
+﻿SESSION 07.07.2019 18:03:14
+SESSION 07.07.2019 18:06:54
+QUERY играть хиты
+QUERY найти предмет кент
+QUERY играть тоска
+QUERY открыть хиты
+QUERY открыть плеер
+SESSION 07.07.2019 20:02:50
+QUERY выход
+ENDSESSION 07.07.2019 20:03:48
+SESSION 07.07.2019 20:06:02
+SESSION 07.07.2019 20:08:26
+SESSION 07.07.2019 20:18:22
+QUERY играть хиты
+QUERY открыть и
+QUERY играть хиты
+QUERY выход
+ENDSESSION 07.07.2019 20:19:27
+SESSION 07.07.2019 20:19:45
+QUERY выход
+ENDSESSION 07.07.2019 20:20:00
+SESSION 07.07.2019 20:20:11
+SESSION 07.07.2019 20:21:04
+QUERY выход
+ENDSESSION 07.07.2019 20:21:09
+SESSION 07.07.2019 20:32:52
+QUERY 
+EXCEPTION System.NullReferenceException : Object reference not set to an instance of an object.
+SESSION 07.07.2019 20:33:48
+QUERY играть хиты
+QUERY 
+EXCEPTION System.NullReferenceException : Object reference not set to an instance of an object.
+SESSION 07.07.2019 20:35:16
+QUERY 
+EXCEPTION System.NullReferenceException : Object reference not set to an instance of an object.
+SESSION 07.07.2019 20:36:23
+QUERY 
+QUERY 
+QUERY 
+QUERY 
+QUERY выход
+ENDSESSION 07.07.2019 20:36:55
+SESSION 07.07.2019 20:37:29
+QUERY 
+QUERY 
+QUERY выход
+ENDSESSION 07.07.2019 20:37:42
+SESSION 07.07.2019 20:39:45
+QUERY играть
+QUERY 
+EXCEPTION System.NullReferenceException : Object reference not set to an instance of an object.
+SESSION 07.07.2019 20:45:35
+QUERY искать
+Close by Ctrl+Break 07.07.2019 20:47:10
+ENDSESSION 07.07.2019 20:47:11
+SESSION 07.07.2019 20:49:32
+QUERY играть хиты
+QUERY открыть калькулятор
+QUERY выход
+ENDSESSION 07.07.2019 20:50:05
+SESSION 07.07.2019 23:43:14
+QUERY создать место карман
+EXCEPTION System.IO.FileNotFoundException : Не удается найти указанный файл. (Exception from HRESULT: 0x80070002)
+SESSION 07.07.2019 23:45:32
+QUERY создать место картон
+EXCEPTION System.IO.FileNotFoundException : Не удается найти указанный файл. (Exception from HRESULT: 0x80070002)
+SESSION 08.07.2019 1:16:46
+QUERY создать место
+QUERY создать место х
+QUERY спать
+ENDSESSION 08.07.2019 1:17:19
+SESSION 08.07.2019 9:21:20
+QUERY создать место картон
+QUERY играть картону
+QUERY выход
+ENDSESSION 08.07.2019 9:28:11
+SESSION 10.07.2019 18:57:24
+QUERY выход
+ENDSESSION 10.07.2019 18:57:50
+SESSION 10.07.2019 18:58:01
+QUERY выход
+ENDSESSION 10.07.2019 19:00:13
+SESSION 10.07.2019 19:47:32
+SESSION 10.07.2019 19:51:53
+QUERY выход
+ENDSESSION 10.07.2019 19:59:49
+SESSION 10.07.2019 20:16:16
+QUERY выход
+ENDSESSION 10.07.2019 20:16:25
+SESSION 10.07.2019 20:17:19
+QUERY выход
+ENDSESSION 10.07.2019 20:17:59
+SESSION 10.07.2019 20:37:18
+QUERY выход
+ENDSESSION 10.07.2019 20:38:58
+SESSION 10.07.2019 20:41:53
+QUERY выход
+ENDSESSION 10.07.2019 20:42:51
+SESSION 10.07.2019 20:44:37
+QUERY выход
+ENDSESSION 10.07.2019 20:44:44
+SESSION 10.07.2019 20:45:09
+QUERY играть хиты
+QUERY выход
+ENDSESSION 10.07.2019 20:46:22
+SESSION 10.07.2019 21:49:53
+QUERY играть хиты
+QUERY выход
+ENDSESSION 10.07.2019 21:51:48
+SESSION 10.07.2019 21:57:55
+QUERY играть хиты
+QUERY играть файл хиты
+QUERY выход
+ENDSESSION 10.07.2019 22:01:40
+SESSION 10.07.2019 22:03:27
+QUERY играть файл хиты
+SESSION 10.07.2019 22:05:15
+QUERY играть файл хиты
+QUERY играть файл хиты
+SESSION 10.07.2019 22:18:19
+QUERY играть файл хиты
+SESSION 10.07.2019 22:21:37
+QUERY играть файл хиты
+QUERY играть хиты
+SESSION 13.07.2019 8:08:14
+QUERY создать место тоска
+QUERY выход
+ENDSESSION 13.07.2019 8:09:38
+SESSION 13.07.2019 8:21:39
+QUERY создать место тоска
+QUERY выход
+ENDSESSION 13.07.2019 8:24:55
+SESSION 13.07.2019 8:34:24
+QUERY создать место тоска
+QUERY создать место темп
+QUERY Создать место темп
+QUERY играть хиты
+QUERY выход
+ENDSESSION 13.07.2019 8:38:56
+SESSION 01.05.2020 4:45:06
+QUERY показать команды
+QUERY показать команды
+QUERY выход
+ENDSESSION 01.05.2020 4:47:16
+SESSION 01.05.2020 4:47:28
+QUERY показать процедуры
+QUERY показать команды
+QUERY выход
+ENDSESSION 01.05.2020 4:48:45
+SESSION 01.05.2020 4:50:18
+QUERY показать команды
+QUERY создать команду Новая команда
+SESSION 01.05.2020 5:17:43
+QUERY показать команды
+QUERY создать команду Новая команда
+QUERY выход
+ENDSESSION 01.05.2020 5:19:56
+SESSION 01.05.2020 5:20:58
+QUERY создать команду Новая команда
+QUERY новая моя музыка
+QUERY новая темп
+QUERY удалить команду Новая команда
+QUERY выход
+ENDSESSION 01.05.2020 5:24:42
+SESSION 22.05.2020 16:30:46
+QUERY выход
+ENDSESSION 22.05.2020 16:30:54
+SESSION 22.05.2020 19:34:15
+QUERY notepad
+QUERY chkdsk
+QUERY exit
+ENDSESSION 22.05.2020 19:39:06
+SESSION 22.05.2020 19:42:37
+QUERY играть хиты
+QUERY играть хиты
+QUERY выход
+ENDSESSION 22.05.2020 19:43:22

@@ -1,0 +1,54 @@
+V:\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\bin\Debug\FirstProcedures.dll
+V:\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\bin\Debug\FirstProcedures.pdb
+V:\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\bin\Debug\SpeakIfaceTest1.exe
+V:\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\bin\Debug\SpeakIfaceTest1.pdb
+V:\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\obj\Debug\ResolveAssemblyReference.cache
+V:\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\obj\Debug\FirstProcedures.dll
+V:\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\obj\Debug\FirstProcedures.pdb
+C:\Work\Mapped\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\bin\Debug\FirstProcedures.dll
+C:\Work\Mapped\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\bin\Debug\FirstProcedures.pdb
+C:\Work\Mapped\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\bin\Debug\SpeakIfaceTest1.exe
+C:\Work\Mapped\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\bin\Debug\SpeakIfaceTest1.pdb
+C:\Work\Mapped\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\obj\Debug\ResolveAssemblyReference.cache
+C:\Work\Mapped\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\obj\Debug\FirstProcedures.dll
+C:\Work\Mapped\Projects\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1\FirstProcedures\obj\Debug\FirstProcedures.pdb
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\FirstProcedures\bin\Debug\SIdb.mdb
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\FirstProcedures\bin\Debug\FirstProcedures.dll
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\FirstProcedures\bin\Debug\FirstProcedures.pdb
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\FirstProcedures\bin\Debug\SpeakIfaceTest1.exe
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\FirstProcedures\bin\Debug\SpeakIfaceTest1.pdb
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\FirstProcedures\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\FirstProcedures\obj\Debug\FirstProcedures.dll
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\FirstProcedures\obj\Debug\FirstProcedures.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\SIdb.mdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\FirstProcedures.dll
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\FirstProcedures.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Operator.exe
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\System.Data.SQLite.dll
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Operator.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\System.Data.SQLite.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\System.Data.SQLite.xml
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\obj\Debug\FirstProcedures.dll
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\obj\Debug\FirstProcedures.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Readme-Operator.txt
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Version-Operator.txt
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\sidb.sqlite
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Readme-FirstProcedures.txt
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Version-FirstProcedures.txt
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Readme-FirstProcedures.txt
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Version-FirstProcedures.txt
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\sidb.sqlite
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Version-Operator.txt
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Readme-Operator.txt
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\SIdb.mdb
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\FirstProcedures.dll
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\FirstProcedures.pdb
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Operator.exe
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\System.Data.SQLite.dll
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\Operator.pdb
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\System.Data.SQLite.pdb
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\bin\Debug\System.Data.SQLite.xml
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\obj\Debug\FirstProcedures.dll
+C:\Users\Администратор\Documents\GitHub\myOperator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\FirstProcedures\obj\Debug\FirstProcedures.pdb

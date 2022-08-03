@@ -1,0 +1,8 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <StartAction>Program</StartAction>
+    <StartProgram>V:\МоиПроекты\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\x86\Debug\SpeakIfaceTest1.exe</StartProgram>
+    <StartWorkingDirectory>
+    </StartWorkingDirectory>
+  </PropertyGroup>
+</Project>

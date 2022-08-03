@@ -1,0 +1,11 @@
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\bin\Release\OperatorLogAnalyzer.exe.config
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\bin\Release\OperatorLogAnalyzer.exe
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\bin\Release\OperatorLogAnalyzer.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\obj\Release\OperatorLogAnalyzer.AboutBox1.resources
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\obj\Release\OperatorLogAnalyzer.Properties.Resources.resources
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\obj\Release\OperatorLogAnalyzer.csproj.GenerateResource.Cache
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\obj\Release\OperatorLogAnalyzer.exe
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\obj\Release\OperatorLogAnalyzer.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\bin\Release\Readme-OperatorLogAnalyzer.txt
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\OperatorLogAnalyzer\bin\Release\Version-OperatorLogAnalyzer.txt

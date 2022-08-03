@@ -1,0 +1,21 @@
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\SpeakIfaceTest1\bin\x86\Debug\SIdb.mdb
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\SpeakIfaceTest1\bin\x86\Debug\SpeakIfaceTest1.exe
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\SpeakIfaceTest1\bin\x86\Debug\SpeakIfaceTest1.pdb
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\SpeakIfaceTest1\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\SpeakIfaceTest1\obj\x86\Debug\SpeakIfaceTest1.exe
+C:\Documents and Settings\JohnSmith\Рабочий стол\SpeakIfaceTest1\SpeakIfaceTest1\obj\x86\Debug\SpeakIfaceTest1.pdb
+V:\МоиПроекты\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\x86\Debug\SIdb.mdb
+V:\МоиПроекты\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\x86\Debug\SpeakIfaceTest1.exe
+V:\МоиПроекты\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\x86\Debug\SpeakIfaceTest1.pdb
+V:\МоиПроекты\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\obj\x86\Debug\ResolveAssemblyReference.cache
+V:\МоиПроекты\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\obj\x86\Debug\SpeakIfaceTest1.exe
+V:\МоиПроекты\РечевойИнтерфейс\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\obj\x86\Debug\SpeakIfaceTest1.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\x86\Debug\SIdb.mdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\x86\Debug\System.Data.SQLite.dll
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\x86\Debug\System.Data.SQLite.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\x86\Debug\System.Data.SQLite.xml
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\x86\Debug\Operator.exe
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\bin\x86\Debug\Operator.pdb
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\obj\x86\Debug\Operator.exe
+C:\Users\Администратор\Documents\GitHub\Operator\РаботатьЗдесь\VisualStudio\SpeakIfaceTest1_v2-2017\SpeakIfaceTest1\obj\x86\Debug\Operator.pdb
