@@ -1,0 +1,61 @@
+﻿++ Как Сделана Моя Экранная Клавиатура
+
+Клавиатура это приложение, которое всегда TOPMOST, всегда на виду. Благодаря этому, окно управляемого ей приложения, даже получая фокус ввода, не перекрывает клавиатуру, и весь процесс ввода текста происходит визуально гладко.
+
+#define WS_EX_NOACTIVATE        0x08000000L
+SetWindowLong(hwnd, GWL_EXSTYLE, style | WS_EX_TOPMOST | WS_EX_NOACTIVATE | WS_EX_APPWINDOW);
+
+Клавиатура содержит таймер, который работает постоянно и через каждые 300мс получает дескриптор текущего окна с фокусом ввода от GetForegroundWindow(). Если этот дескриптор - не дескриптор собственного окна приложения, то он записывается в глобальную переменную.
+
+#define MY_TIMER_EVENT 1022
+hMyWnd = hwnd;	//установим дескриптор нашего окна в глобальную переменную
+SetTimer(hwnd, MY_TIMER_EVENT, 300, (TIMERPROC) TimerProcedure);
+
+VOID CALLBACK TimerProcedure(
+    HWND hwnd,        // handle to window for timer messages
+    UINT message,     // WM_TIMER message
+    UINT idTimer,     // timer identifier
+    DWORD dwTime)     // current system time
+{
+HWND tmpWnd = GetForegroundWindow();	//получаем форегроунд
+// если это окно и это не наше окно, то пишем его в переменную
+if((IsWindow(tmpWnd)) && (tmpWnd != hMyWnd)) hOtherWnd = tmpWnd;
+
+return;
+}
+
+Далее, когда пользователь кликает по кнопке клавиатуры, этому чужому окну посылаются сообщения как бы от клавиатуры. Точно механизм я не помню, но эти события клавиш вставляются в общую очередь сообщений от клавиатуры и потом просто обрабатываются системой дальше.
+
+//функция посылает клавишу
+void SendKeys(BYTE VirKey, DWORD Flags)
+{
+//	keybd_event(VirKey, 0, 0, 0);			//нажмем кнопку
+//	keybd_event(VirKey, 0, KEYEVENTF_KEYUP, 0); //отпустим кнопочку
+
+	INPUT inp;	//событие
+
+	inp.type = INPUT_KEYBOARD;
+	inp.ki.wVk = VirKey;
+	inp.ki.dwExtraInfo = 0;
+	inp.ki.dwFlags = Flags;
+	inp.ki.time = 0;
+	inp.ki.wScan = 0;
+
+
+	SendInput(1, &inp, sizeof(INPUT));
+}
+
+Когда пользователь водит мышью по окну клавиатуры, ей приходят события NCHITTEST, они обрабатываются и перебрасывают фокус ввода на чужое окно. Но эти события только для окна клавиатуры, а не для кнопок на нем. Кнопки обрабатываются самостоятельно. Так что как только пользователь снимает мышь с кнопки, фокус ввода сразу передается чужому окну.
+	case WM_NCHITTEST:
+		SetForegroundWindow(hOtherWnd);
+		break; 
+
+Приложение запускается только в одном экземпляре. Для этого оно проверяет существование глобального объекта ядра - именованного мутекса. И если такой уже есть, то завершается. А если нет - создает этот объект и продолжает работу.
+
+//мутекс для защиты от дублирования
+	HANDLE hMutex = CreateMutexW(NULL, TRUE, L"(C) 2007 Selyakov M Pavel (MeraMan)");
+	if(GetLastError() == ERROR_ALREADY_EXISTS) {
+		if(hMutex != NULL) CloseHandle(hMutex);
+		return;
+	};
+	 

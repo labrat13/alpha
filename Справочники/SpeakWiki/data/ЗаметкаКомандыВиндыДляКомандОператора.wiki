@@ -1,0 +1,23 @@
+﻿++ Команды Винды Для Команд Оператора
+
+rundll32.exe shell32.dll,Control_RunDLL - панель управления
+rundll32.exe shell32.dll,Control_RunDLL hotplug.dll - извлечь устройство
+rundll32.exe shell32.dll,Control_RunDLL appwiz.cpl,,0 - удаление программ
+
+rundll32.exe shell32.dll,Control_RunDLL desk.cpl,,0 - свойства экрана
+rundll32.exe shell32.dll,Control_RunDLL inetcpl.cpl,,0 - свойства браузера
+rundll32.exe shell32.dll,Control_RunDLL intl.cpl,,0 - свойства языка
+rundll32.exe shell32.dll,Control_RunDLL main.cpl @0 - свойства мыши
+rundll32.exe shell32.dll,Control_RunDLL main.cpl @1 - свойства клавиатуры
+rundll32.exe shell32.dll,Control_RunDLL mmsys.cpl,,0 - свойства звука
+rundll32.exe shell32.dll,Control_RunDLL ncpa.cpl - сетевые подключения
+rundll32.exe shell32.dll,Control_RunDLL sysdm.cpl,,0 - свойства системы
+rundll32.exe shell32.dll,Control_RunDLL timedate.cpl - часы
+rundll32.exe shell32.dll,ShellExecute - Проводник
+
+rundll32.exe shell32.dll,SHHelpShortcuts_RunDLL Connect - подключить сетевой диск
+rundll32.exe shell32.dll,SHHelpShortcuts_RunDLL Disconnect - отключить сетевой диск
+rundll32.exe shell32.dll,SHHelpShortcuts_RunDLL PrintersFolder - Принтеры
+rundll32.exe shell32.dll,SHHelpShortcuts_RunDLL FontsFolder - Шрифты
+rundll32.exe shell32.dll,SHHelpShortcuts_RunDLL AddPrinter - добавить принтер
+rundll32.exe shell32.dll,SHHelpShortcuts_RunDLL PrintTestPage - распечатать тестовую страницу
