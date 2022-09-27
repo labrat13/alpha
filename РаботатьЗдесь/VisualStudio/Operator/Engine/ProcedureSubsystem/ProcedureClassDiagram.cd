@@ -1,2 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Engine.ProcedureSubsystem.LibraryManagerBase" Collapsed="true">
+    <Position X="1" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAQAAAAAAAAAggAAAIAEAEAAAAIAAAAAEgCAAAA=</HashCode>
+      <FileName>ProcedureSubsystem\LibraryManagerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.ProcedureSubsystem.OperatorProcedureAttribute" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAEAAAAQAAEAAAAAAAAQAAAAAAABAAAA=</HashCode>
+      <FileName>ProcedureSubsystem\OperatorProcedureAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.ProcedureSubsystem.ProcedureExecutionManager" Collapsed="true">
+    <Position X="3.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>ProcedureSubsystem\ProcedureExecutionManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.EngineSubsystem" Collapsed="true">
+    <Position X="1" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAACAAAAAABIAAAAAAAAAAAAAAIAAAAAAAAAACCAAA=</HashCode>
+      <FileName>OperatorEngine\EngineSubsystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Engine.ProcedureSubsystem.ImplementationState" Collapsed="true">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIEAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProcedureSubsystem\ImplementationState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

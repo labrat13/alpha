@@ -39,7 +39,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbSubsystem\OperatorDbAdapter.cs" />
+    <Compile Include="OperatorEngine\EnumProcedureResult.cs" />
+    <Compile Include="LexiconSubsystem\BCSA.cs" />
+    <Compile Include="LogSubsystem\LogManager.cs" />
+    <Compile Include="OperatorEngine\ArgumentCollection.cs" />
+    <Compile Include="OperatorEngine\Engine.cs" />
+    <Compile Include="OperatorEngine\EngineSubsystem.cs" />
+    <Compile Include="OperatorEngine\Item.cs" />
+    <Compile Include="OperatorEngine\Place.cs" />
+    <Compile Include="OperatorEngine\Procedure.cs" />
+    <Compile Include="OperatorEngine\UserQuery.cs" />
+    <Compile Include="ProcedureSubsystem\ImplementationState.cs" />
+    <Compile Include="ProcedureSubsystem\LibraryManagerBase.cs" />
+    <Compile Include="ProcedureSubsystem\OperatorProcedureAttribute.cs" />
+    <Compile Include="ProcedureSubsystem\ProcedureExecutionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingSubsystem\ApplicationSettingsBase.cs" />
+    <Compile Include="SettingSubsystem\SettingItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utility\" />

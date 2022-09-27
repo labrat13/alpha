@@ -1,2 +1,109 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Engine.OperatorEngine.EngineSubsystem" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAACAAAAAABIAAAAAAAAAAAAAAIAAAAAAAAAACCAAA=</HashCode>
+      <FileName>OperatorEngine\EngineSubsystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.DbSubsystem.OperatorDbAdapter" Collapsed="true">
+    <Position X="0.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>DbSubsystem\OperatorDbAdapter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.LexiconSubsystem.BCSA" Collapsed="true">
+    <Position X="2.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>LexiconSubsystem\BCSA.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.LogSubsystem.LogManager" Collapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>LogSubsystem\LogManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.Engine" Collapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>OperatorEngine\Engine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.SettingSubsystem.ApplicationSettingsBase" Collapsed="true">
+    <Position X="9" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>SettingSubsystem\ApplicationSettingsBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.ProcedureSubsystem.LibraryManagerBase" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAQAAAAAAAAAggAAAIAEAEAAAAIAAAAAEgCAAAA=</HashCode>
+      <FileName>ProcedureSubsystem\LibraryManagerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.ProcedureSubsystem.ProcedureExecutionManager" Collapsed="true">
+    <Position X="13.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>ProcedureSubsystem\ProcedureExecutionManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.Item" Collapsed="true">
+    <Position X="2.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>OperatorEngine\Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.Place" Collapsed="true">
+    <Position X="1" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>OperatorEngine\Place.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.Procedure" Collapsed="true">
+    <Position X="2.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>OperatorEngine\Procedure.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.SettingSubsystem.SettingItem" Collapsed="true">
+    <Position X="4.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SettingSubsystem\SettingItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.ArgumentCollection" Collapsed="true">
+    <Position X="7" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAIAAAAAAAIAAAAgAAAAg=</HashCode>
+      <FileName>OperatorEngine\ArgumentCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.UserQuery" Collapsed="true">
+    <Position X="9.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>OperatorEngine\UserQuery.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Engine.OperatorEngine.EnumProcedureResult" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAEQAAAAAAAAAAggQAAAAQIAAAAggAABA=</HashCode>
+      <FileName>OperatorEngine\EnumProcedureResult.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

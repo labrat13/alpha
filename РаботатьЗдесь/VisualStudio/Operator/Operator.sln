@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralProcedures", "Genera
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcedureUtils", "ProcedureUtils\ProcedureUtils.csproj", "{E6A675AC-B7EE-4C12-90F1-B1A84ABD4629}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{3CC883C3-1E6C-48EB-BDE3-2F2DA3FA1DF7}"
+	ProjectSection(SolutionItems) = preProject
+		Новый объект Сущности.txt = Новый объект Сущности.txt
+		Создать версию 2022г.txt = Создать версию 2022г.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
