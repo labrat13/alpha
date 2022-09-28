@@ -57,10 +57,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingSubsystem\ApplicationSettingsBase.cs" />
     <Compile Include="SettingSubsystem\SettingItem.cs" />
+    <Compile Include="Utility\FileUtility.cs" />
+    <Compile Include="Utility\StringUtility.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utility\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Engine-Readme.txt" />
     <Content Include="Engine-Todo.txt" />
