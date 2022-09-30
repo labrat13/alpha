@@ -58,6 +58,7 @@ namespace Engine.OperatorEngine
 
         //TODO: решено позже добавить в объект Item ссылку на объект Хранилища, унифицированный для БД и БиблиотекаПроцедур,
         // и из него запрашивать возможность удаления и изменения итемов.
+        //Это должна быть ссылка на объект класса LibraryManagerBase ? Они должны уже храниться где-то в коллекции сборок Процедур где-то в коллекциях тут.
 
         /// <summary>
         /// Название Хранилища ( Библиотеки Процедур или БД).  Не сохранять в таблицу БД!
@@ -68,6 +69,10 @@ namespace Engine.OperatorEngine
         /// Название пространства имен Сущности.
         /// </summary>
         protected String m_namespace;
+        /// <summary>
+        /// Флаг что Сущность не может быть изменена в Хранилище.
+        /// </summary>
+        protected bool m_readOnly;
 
         #endregion
 
@@ -82,7 +87,7 @@ namespace Engine.OperatorEngine
             this.m_title = "";
             this.m_storage = "";
             this.m_namespace = "";
-
+            this.m_readOnly = false;
             return;
         }
 
@@ -141,6 +146,15 @@ namespace Engine.OperatorEngine
             get { return this.m_namespace; }
             set { this.m_namespace = value; }
         }
+
+        /// <summary>
+        /// Флаг что Сущность не может быть изменена в Хранилище.
+        /// </summary>
+        public bool ReadOnly
+        {
+            get { return this.m_readOnly; }
+            set { this.m_readOnly = value; }
+        }
         #endregion
 
         /// <summary>
@@ -180,6 +194,7 @@ namespace Engine.OperatorEngine
             // сейчас только объекты, хранящиеся в БД или Файл настроек, могут быть изменены или удалены.
             return isItemFromStorage(Item.StorageKeyForDatabaseItem) || isItemFromStorage(Item.StorageKeyForSettingFileItem);
             // TODO: а вообще, надо получить объект Хранилища и запросить это значение у него.
+            
         }
 
         /// <summary>
@@ -191,6 +206,7 @@ namespace Engine.OperatorEngine
             // сейчас только объекты, хранящиеся в БД или Файл настроек, могут быть изменены или удалены.
             return isItemFromStorage(Item.StorageKeyForDatabaseItem) || isItemFromStorage(Item.StorageKeyForSettingFileItem);
             // TODO: а вообще, надо получить объект Хранилища и запросить это значение у него.
+            //TODO: сейчас есть флаг рид-онли и нужно его использовать вместо этой функции
         }
         /// <summary>
         /// NT-Получить одну строку описания свойств итема

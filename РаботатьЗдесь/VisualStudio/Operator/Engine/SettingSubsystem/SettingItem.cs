@@ -16,5 +16,190 @@ namespace Engine.SettingSubsystem
     public class SettingItem : OperatorEngine.Item
     {
         //TODO: Add code here
+
+        // DONE: убедиться, что при извлечении из файла настроек итемы получают источник = ФайлНастроек
+        // DONE: убедиться, что при извлечении из БД итемы получают источник = Database
+
+            /// <summary>
+            /// NT-Default constructor
+            /// </summary>
+        public SettingItem() : base()
+        {
+        }
+
+         /// <summary>
+         /// NT-Конструктор копирования.
+         /// </summary>
+         /// <param name="p">Копируемый объект.</param>         
+        public SettingItem(SettingItem p)
+        {
+            this.m_descr = (p.m_descr);
+            this.m_namespace = (p.m_namespace);
+            this.m_path = (p.m_path);
+            this.m_storage = (p.m_storage);
+            this.m_title = (p.m_title);
+            this.m_tableid = p.m_tableid;
+            this.m_readOnly = (p.m_readOnly);
+            
+            return;
+        }
+
+            /// <summary>
+            /// NT - Constructor from EnumSettingKey.
+            /// </summary>
+            /// <param name="key">EnumSettingKey member.</param>
+            /// <param name="value">Setting value as string.</param>
+        public SettingItem(EnumSettingKey key, String value)
+        {
+            this.m_tableid = 0;
+            this.m_title = key.getTitle();
+            this.m_descr = key.getDescription();
+            this.m_path = value;
+            this.m_namespace = key.getNamespace();
+
+            return;
+        }
+
+        /// <summary>
+        /// NT-Parameter constructor - not for Database Item.
+        /// </summary>
+        /// <param name="group">Setting item namespace as group.</param>
+        /// <param name="title">item title</param>
+        /// <param name="value">item value</param>
+        /// <param name="descr">item description text</param>
+        public SettingItem(String group, String title, String value, String descr)
+        {
+            this.m_tableid = 0;
+            this.m_path = value;
+            this.m_descr = descr;
+            this.m_title = title;
+            this.m_namespace = group;
+
+            return;
+        }
+          
+        /// <summary>
+        /// NT-Parameter constructor - for Database Item.
+        /// </summary>
+        /// <param name="id">item table id or 0 if not.</param>
+        /// <param name="group">Setting item namespace as group.</param>
+        /// <param name="title">item title</param>
+        /// <param name="value">item value</param>
+        /// <param name="descr">item description text</param>
+        /// <param name="storage">item storage keyword</param>
+        public SettingItem(int id,
+                String group,
+                String title,
+                String value,
+                String descr,
+                String storage)
+        {
+            this.m_tableid = id;
+            this.m_namespace = group;
+            this.m_path = value;
+            this.m_descr = descr;
+            this.m_title = title;
+            this.m_storage = storage;
+
+            return;
+        }
+
+         /// <summary>
+         /// NT-Return string for debug
+         /// </summary>
+         /// <returns></returns>
+    public override String ToString()
+        {
+            return base.getSingleLineProperties();
+        }
+
+        /// <summary>
+        /// NT-получить однострочное описание Настройки.
+        /// </summary>
+        /// <returns>Функция возвращает однострочное описание Настройки в формате "Команда "Значение" из "Хранилище"."Название": Описание."</returns>        
+        public String toSingleDescriptionString()
+        {
+            return String.format("Команда \"%s\" из \"%s\".\"%s\": %s.", this.m_path.trim(), this.m_storage.trim(), this.m_title.trim(), this.m_descr.trim());
+        }
+
+        /// <summary>
+        /// NT- Get value.
+        /// </summary>
+        /// <returns>Returns Value as String.</returns>
+        public String getValueAsString()
+        {
+            return this.m_path;
+        }
+          
+         /// <summary>
+         /// NT- Set value.
+         /// </summary>
+         /// <param name="val">Value as String.</param>
+        public void setValue(String val)
+        {
+            this.m_path = val;
+        }
+
+        /// <summary>
+        /// NR- Get value
+        /// </summary>
+        /// <returns>Returns Value as Integer; returns null if Value has invalid format.</returns>
+        public Int32 getValueAsInteger()
+        {
+            Int32 result = null;
+
+            try
+            {
+                result = Integer.valueOf(this.m_path);
+            }
+            catch (Exception e)
+            {
+                result = null;
+            }
+
+            return result;
+        }
+
+        /**
+         * NR- Get value
+         * 
+         * @return Returns Value as Boolean; returns null if Value has invalid format.
+         */
+        public Boolean getValueAsBoolean()
+        {
+            Boolean result = null;
+
+            try
+            {
+                result = Boolean.valueOf(this.m_path);
+            }
+            catch (Exception e)
+            {
+                result = null;
+            }
+
+            return result;
+        }
+
+            /// <summary>
+            /// NT-Settings value as Boolean
+            /// </summary>
+            /// <param name="value">the value to set</param>
+        public void setValue(bool value)
+        {
+            this.m_path = value.ToString();
+        }
+
+        /**
+         * NR-Settings value as Integer
+         * 
+         * @param value
+         *            the value to set
+         */
+        public void setValue(Integer value)
+        {
+            this.m_path = value.toString();
+        }
+
     }
 }

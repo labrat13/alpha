@@ -59,7 +59,7 @@
   <Class Name="Engine.OperatorEngine.Item" Collapsed="true">
     <Position X="2.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AoAAIAAAAAAgAEIkAIQQAgQAAAAAYAAQgAQIAAAAkgA=</HashCode>
       <FileName>OperatorEngine\Item.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -80,7 +80,7 @@
   <Class Name="Engine.SettingSubsystem.SettingItem" Collapsed="true">
     <Position X="4.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAQAAAAAAAEAAIAAAAAAAgIAAEAAAAAAAAAAAA=</HashCode>
       <FileName>SettingSubsystem\SettingItem.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -94,7 +94,7 @@
   <Class Name="Engine.OperatorEngine.UserQuery" Collapsed="true">
     <Position X="9.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAEAAAAAAgAAEAgAABAAAAAAAAAgAAAAACAAAgAA=</HashCode>
       <FileName>OperatorEngine\UserQuery.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -103,6 +103,20 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQAAEQAAAAAAAAAAggQAAAAQIAAAAggAABA=</HashCode>
       <FileName>OperatorEngine\EnumProcedureResult.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Engine.EnumRegexType">
+    <Position X="1" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAIAQAAAAAAAAAAAAAAAAAAAAJA=</HashCode>
+      <FileName>EnumRegexType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Engine.EnumProcedureResult">
+    <Position X="4.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAEQAAAAAAAAQAggQAAAAQIAAAAggAABA=</HashCode>
+      <FileName>EnumProcedureResult.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />
