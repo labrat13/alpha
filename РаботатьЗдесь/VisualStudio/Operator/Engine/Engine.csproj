@@ -87,6 +87,7 @@
     <Compile Include="Utility\StringUtility.cs" />
     <Compile Include="Utility\OperatorVersion.cs" />
     <Compile Include="Utility\SystemInfoManager.cs" />
+    <Compile Include="Utility\WindowUtility.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
