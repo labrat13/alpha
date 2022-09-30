@@ -13,7 +13,7 @@ namespace Engine.OperatorEngine
         /// <summary>
         /// Список аргументов коллекции
         /// </summary>
-        private List<FuncArgument> m_args;
+        protected List<FuncArgument> m_args;
 
         /// <summary>
         /// NT- Конструктор

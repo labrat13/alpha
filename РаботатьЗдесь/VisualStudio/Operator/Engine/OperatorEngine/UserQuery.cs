@@ -102,18 +102,18 @@ namespace Engine.OperatorEngine
         public void ChangeQuery(Engine en, String q)
         {
             //// TODO: patch code here
-            //// записать в лог старое значение и новое значение запроса
-            //String old = GetNullOrString(this.m_Query);
-            //StringBuilder sb = new StringBuilder();
-            //sb.Append("Изменен текст запроса: \"");
-            //sb.Append(old);
-            //sb.Append("\" заменен на \"");
-            //sb.Append(q);
-            //sb.Append("\".");
-            //// записать в лог сообщение
-            //en.getLogManager().AddMessage(EnumLogMsgClass.QueryReplaced, EnumLogMsgState.OK, sb.toString());
-            //// изменить значение запроса
-            //this.m_Query = q;
+            // записать в лог старое значение и новое значение запроса
+            String old = GetNullOrString(this.m_Query);
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Изменен текст запроса: \"");
+            sb.Append(old);
+            sb.Append("\" заменен на \"");
+            sb.Append(q);
+            sb.Append("\".");
+            // записать в лог сообщение
+            en.getLogManager().AddMessage(LogSubsystem.EnumLogMsgClass.QueryReplaced, LogSubsystem.EnumLogMsgState.OK, sb.ToString());
+            // изменить значение запроса
+            this.m_Query = q;
 
             return;
         }

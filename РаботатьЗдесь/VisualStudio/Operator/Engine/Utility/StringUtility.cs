@@ -11,7 +11,51 @@ namespace Engine.Utility
     public class StringUtility
     {
         //TODO: port this class from Java
-        
+
+        /// <summary>
+        /// NT-проверяет что список не содержит такой строки
+        /// </summary>
+        /// <param name="lis">Проверяемый список.</param>
+        /// <param name="sss">Искомая строка.</param>
+        /// <returns>Функция возвращает true, если искомая строка присутствует в списке, false в противном случае.</returns>
+        /// <remarks>
+        /// Использован именно список, а не словарь, чтобы сравнивать слова без учета регистра символов.
+        /// Следует вынести эту функцию отсюда в общую библиотеку, так как она явно общего назначения. 
+        /// Или как расширение списка: List'string'.Contains(string s, StringComparison mode)
+        /// </remarks>
+        public static bool ListNotContains(List<string> lis, string sss, StringComparison mode)
+        {
+            foreach (String s in lis)
+                if (String.Equals(s, sss, mode)) //StringComparison.OrdinalIgnoreCase))
+                    return false;
+            return true;
+        }
+
+        /// <summary>
+        /// NT-Проверить на допустимость значение Double, введенное пользователем.
+        /// </summary>
+        /// <param name="str">Текстовое значение веса</param>
+        /// <param name="cultureInfo">Информация о языке</param>
+        /// <returns>Возвращает true, если значение допустимо в качестве Double, false в противном случае.</returns>
+        public static bool IsValidFloatFormat(string str, System.Globalization.CultureInfo cultureInfo)
+        {
+            //bool result = false;
+            //try
+            //{
+            //    //это должно парситься в Double
+            //    double d = Double.Parse(str, cultureInfo);
+            //        result = true;
+            //}
+            //catch
+            //{
+            //    result = false;
+            //}
+            //return result;
+
+            Double t;
+            return Double.TryParse(str, out t);
+        }
+
         /// <summary>
         /// Compare two strings ignore case
         /// </summary>
@@ -37,33 +81,29 @@ namespace Engine.Utility
         }
 
 
-        /**
-  * NT-Check String.IsNullOrEmpty()
-  * 
-  * @param s
-  *            string object
-  * @return Returns true if string is null or empty. Returns false otherwise/
-  */
-        public static boolean StringIsNullOrEmpty(String s)
+
+      /// <summary>
+      /// NT-Check String.IsNullOrEmpty()
+      /// </summary>
+      /// <param name="s">string object</param>
+      /// <returns>Returns true if string is null or empty. Returns false otherwise</returns>
+        public static bool StringIsNullOrEmpty(String s)
         {
-            if (s == null)
-                return true;
-            // else
-            return s.isEmpty();
+            //TODO: заменить это во всех местах, где оно встречается, эту функцию удалить.
+            return String.IsNullOrEmpty(s);
         }
 
-        /**
-         * Compare two strings
-         * 
-         * @param s1
-         *            String
-         * @param s2
-         *            String
-         * @return Returns True if strings are equal, returns False otherwise.
-         */
-        public static boolean StringEquals(String s1, String s2)
+
+         /// <summary>
+         /// Compare two strings
+         /// </summary>
+         /// <param name="s1">String</param>
+         /// <param name="s2">String</param>
+         /// <returns>Returns True if strings are equal, returns False otherwise.</returns>
+        public static bool StringEquals(String s1, String s2)
         {
-            return (s1.compareTo(s2) == 0);
+            //TODO: заменить это во всех местах, где оно встречается, эту функцию удалить.
+            return s1.Equals(s2, StringComparison.Ordinal);
         }
 
         /**
@@ -155,6 +195,7 @@ namespace Engine.Utility
 
             return result;
         }
+
 
         /**
          * NT-Split string by regex and optional remove empty elements from result

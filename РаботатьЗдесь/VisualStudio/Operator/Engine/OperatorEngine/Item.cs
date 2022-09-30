@@ -7,7 +7,7 @@ using Engine.Utility;
 namespace Engine.OperatorEngine
 {
     /// <summary>
-    /// NR - Базовый класс для Процедур и Мест Оператора.
+    /// NT - Базовый класс для Процедур и Мест Оператора.
     /// </summary>
     public class Item
     {
@@ -166,6 +166,7 @@ namespace Engine.OperatorEngine
             return this.getSingleLineProperties();
         }
 
+        #region Эти функции надо перенести в объект менеджера библиотеки Процедур
         /// <summary>
         /// NT-Проверить что элемент должен храниться в указанном Хранилище.
         /// </summary>
@@ -208,6 +209,8 @@ namespace Engine.OperatorEngine
             // TODO: а вообще, надо получить объект Хранилища и запросить это значение у него.
             //TODO: сейчас есть флаг рид-онли и нужно его использовать вместо этой функции
         }
+#endregion
+
         /// <summary>
         /// NT-Получить одну строку описания свойств итема
         /// </summary>

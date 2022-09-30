@@ -6,133 +6,111 @@ using System.Text;
 namespace Engine.OperatorEngine
 {
     /// <summary>
-    /// NR - 
+    /// NT - Коллекция Типов
     /// </summary>
-    internal class EntityTypesCollection
+    public class EntityTypesCollection
     {
-        //TODO: Port this class from Java
-        
-        // #region *** Fields ***
 
-        /**
-         * Словарь типов сущностей первого уровня
-         */
-        private HashMap<String, EntityType> m_EntityTypes;
-        // #endregion
+        #region *** Fields ***
 
-        /**
-         * Default constructor
-         */
+        /// <summary>
+        /// Словарь типов сущностей первого уровня
+        /// </summary>
+        private Dictionary<String, EntityType> m_EntityTypes;
+        #endregion
+
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public EntityTypesCollection()
         {
-            this.m_EntityTypes = new HashMap<String, EntityType>();
+            this.m_EntityTypes = new Dictionary<string, EntityType>();
         }
-        // #region *** Properties ***
+        #region *** Properties ***
 
-        /**
-         * Словарь типов сущностей первого уровня
-         * 
-         * @return Словарь типов сущностей первого уровня
-         */
-        public HashMap<String, EntityType> get_EntityTypes()
+        /// <summary>
+        /// Словарь типов сущностей первого уровня
+        /// </summary>
+        public Dictionary<String, EntityType> EntityTypes
         {
-            return this.m_EntityTypes;
+            get { return m_EntityTypes; }
+            set { m_EntityTypes = value; }
         }
 
-        /**
-         * Словарь типов сущностей первого уровня
-         * 
-         * @param value
-         *            Словарь типов сущностей первого уровня
-         */
-        public void set_EntityTypes(HashMap<String, EntityType> value)
-        {
-            this.m_EntityTypes = value;
-        }
+        #endregion
 
-        // #endregion
-
-        /**
-         * NT-Ищет запись типа по его названию. Если тип не упомянут, возвращается null
-         * 
-         * @param nameOfType
-         *            Название типа
-         * @return Возвращает первый найденный объект записи типа или null если объект не найден
-         */
+        /// <summary>
+        /// NT-Ищет запись типа по его названию. Если тип не упомянут, возвращается null
+        /// </summary>
+        /// <param name="nameOfType">Название типа</param>
+        /// <returns>Возвращает первый найденный объект записи типа или null если объект не найден</returns>
         public EntityType ContainsType(String nameOfType)
         {
-            if (m_EntityTypes.containsKey(nameOfType))
-                return m_EntityTypes.get(nameOfType);
+            if (m_EntityTypes.ContainsKey(nameOfType))
+                return m_EntityTypes[nameOfType];
             else
             {
-                for (Map.Entry<String, EntityType> kvp : m_EntityTypes.entrySet())
+                foreach (KeyValuePair<String, EntityType> kvp in m_EntityTypes)
                 {
-                    EntityType res = kvp.getValue().ContainsType(nameOfType);
-                    if (res != null)
-                        return res;
+                    EntityType res = kvp.Value.ContainsType(nameOfType);
+                    if (res != null) return res;
                 }
                 return null;
             }
         }
 
-        /**
-         * NT-Распарсить строку описания классов сущности в дерево классов
-         * 
-         * @param expression
-         *            Выражение описания классов сущности
-         * @throws Exception
-         *             Exception from EntityTypesCollection.ParseExpression()
-         */
-        public void ParseExpression(String expression) throws Exception
+        /// <summary>
+        /// NT-Распарсить строку описания классов сущности в дерево классов
+        /// </summary>
+        /// <param name="expression">Выражение описания классов сущности </param>
+        public void ParseExpression(String expression)
         {
-            // Это образец формата для разработки парсинга.
-            // выражение представляет собой список выражений типов через ;
-            // Мои места:: Коллекция музыки<Файл::ФайлМузыки>;Файловая система
-            // ::Папка < Файловая система::Папка,Файл>;
+            //Это образец формата для разработки парсинга.
+            //выражение представляет собой список выражений типов через ;
+            //Мои места:: Коллекция музыки<Файл::ФайлМузыки>;Файловая система ::Папка < Файловая система::Папка,Файл>; 
 
-            // тут надо бы исключение перехватывать и выводить boolean результат
-            // парсинга.
+            //тут надо бы исключение перехватывать и выводить boolean результат парсинга.
 
-            // парсим
-            // 1) удаляем пробелы с начала и конца выражения
-            String exp = expression.trim();
-        // 2) разделяем на элементы по ;
-        // String[] sar = exp.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-        String[] sar = Utility.StringSplit(exp, ";", true);
-        // тут мы получим несколько элементов:
-        // [0] Мои места:: Коллекция музыки<Файл::ФайлМузыки>
-        // [1] Файловая система ::Папка < Файловая система::Папка,Файл>
-        // [2] элемент после последней ; должен уже быть удален как пустой
-        // элемент
-        // 3) передаем каждое выражение для парсинга в объект типа
-        for (String s : sar)
-        {
-            EntityType t = new EntityType(); // создаем новый объект
-        t.ParseExpression(s); // отправляем строку на парсинг
-            this.m_EntityTypes.put(t.get_Title(), t); // добавляем объект в коллекцию.
+            //парсим
+            //1) удаляем пробелы с начала и конца выражения
+            String exp = expression.Trim();
+            //2) разделяем на элементы по ;
+            String[] sar = exp.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            //тут мы получим несколько элементов:
+            //[0] Мои места:: Коллекция музыки<Файл::ФайлМузыки>
+            //[1] Файловая система ::Папка < Файловая система::Папка,Файл>
+            //[2] элемент после последней ; должен уже быть удален как пустой элемент
+            //3) передаем каждое выражение для парсинга в объект типа 
+            foreach (String s in sar)
+            {
+                EntityType t = new EntityType(); //создаем новый объект
+                t.ParseExpression(s); //отправляем строку на парсинг
+                this.m_EntityTypes.Add(t.Title, t); //добавляем объект в коллекцию.
+            }
+
+            return;
         }
 
-        return;
-    }
-/**
- * Check expression parsing
- * @param exp Выражение описания классов сущности
- * @return Возвращает true, если выражение распарсено, false в противном случае.
- */
-public static boolean TryParsingExpression(String exp)
-{
-    boolean result = true;
-    try
-    {
-        EntityTypesCollection t = new EntityTypesCollection();
-        t.ParseExpression(exp);
-    }
-    catch (Exception ex)
-    {
-        result = false;
-    }
+        /// <summary>
+        /// NT-Check expression parsing
+        /// </summary>
+        /// <param name="exp">Выражение описания классов сущности</param>
+        /// <returns>Возвращает true, если выражение распарсено, false в противном случае.</returns>
+        public static bool TryParsingExpression(String exp)
+        {
+            bool result = true;
+            try
+            {
+                EntityTypesCollection t = new EntityTypesCollection();
+                t.ParseExpression(exp);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
 
-    return result;
-}
+            return result;
+        }
     }
 }

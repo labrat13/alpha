@@ -6,146 +6,111 @@ using System.Text;
 namespace Engine.OperatorEngine
 {
     /// <summary>
-    /// NR - Представляет Процедуру Оператора.
+    /// NT - Класс Процедуры Оператора
     /// </summary>
     public class Procedure :Item
     {
-        //TODO: Port this class from Java code
-         #region Fields
-        /**
-         * порядковый номер проверки в очереди проверок для команды - для поддержки
-         * очередность проверки выражений
-         */
+
+        #region Fields
+
+        /// <summary>
+        /// порядковый номер проверки в очереди проверок для команды - для поддержки очередность проверки выражений
+        /// </summary>
         private Double m_ves;
 
-        /**
-         * регулярное выражение - для проверки соответствия команды и процедуры.
-         */
+        /// <summary>
+        /// регулярное выражение - для проверки соответствия команды и процедуры.
+        /// </summary>
         private String m_regex;
 
-         #endregion
+        #endregion
         /**
          * NT-Стандартный конструктор
          */
-        public Procedure()
+        public Procedure() : base()
         {
-            super();
             this.m_ves = 0.5;
-            this.m_regex = "";
+            this.m_regex = String.Empty;
         }
 
-        /**
-         * NT-Конструктор копирования.
-         * @param p Образец копирования.
-         */
-        public Procedure(Procedure p)
+        
+        /// <summary>
+        /// NT-Конструктор копирования.
+        /// </summary>
+        /// <param name="p">Образец копирования</param>
+            public Procedure(Procedure p)
         {
-            this.m_descr = Utility.StringCopy(p.m_descr);
-            this.m_namespace = Utility.StringCopy(p.m_namespace);
-            this.m_path = Utility.StringCopy(p.m_path);
-            this.m_regex = Utility.StringCopy(p.m_regex);
-            this.m_storage = Utility.StringCopy(p.m_storage);
+            this.m_descr = String.Copy(p.m_descr);
+            this.m_namespace = String.Copy(p.m_namespace);
+            this.m_path = String.Copy(p.m_path);
+            this.m_regex = String.Copy(p.m_regex);
+            this.m_storage = String.Copy(p.m_storage);
             this.m_tableid = p.m_tableid;
-            this.m_title = Utility.StringCopy(p.m_title);
+            this.m_title = String.Copy(p.m_title);
             this.m_ves = p.m_ves;
+            this.m_readOnly = p.m_readOnly;
+
+            return;
         }
 
-         #region *** Properties ***
+        #region *** Properties ***
 
-
-        /**
-         * порядковый номер проверки в очереди проверок для команды - для поддержки
-         * очередность проверки выражений
-         *
-         * @return порядковый номер проверки в очереди проверок для команды - для
-         *         поддержки очередность проверки выражений
-         */
-        public Double get_Ves()
+        /// <summary>
+        /// порядковый номер проверки в очереди проверок для команды - для поддержки очередность проверки выражений
+        /// </summary>
+        public Double Ves
         {
-            return this.m_ves;
+            get { return m_ves; }
+            set { m_ves = value; }
         }
-
-        /**
-         * порядковый номер проверки в очереди проверок для команды - для поддержки
-         * очередность проверки выражений
-         *
-         * @param val
-         *            порядковый номер проверки в очереди проверок для команды - для
-         *            поддержки очередность проверки выражений
-         */
-        public void set_Ves(Double val)
+        /// <summary>
+        /// регулярное выражение - для проверки соответствия команды и процедуры. До 255 символов.
+        /// </summary>
+        public String Regex
         {
-            this.m_ves = val;
+            get { return m_regex; }
+            set { m_regex = value; }
         }
 
-        /**
-         * регулярное выражение - для проверки соответствия команды и процедуры. До
-         * 255 символов.
-         *
-         * @return регулярное выражение - для проверки соответствия команды и
-         *         процедуры. До 255 символов.
-         */
-        public String get_Regex()
-        {
-            return this.m_regex;
-        }
+        #endregion
 
-        /**
-         * регулярное выражение - для проверки соответствия команды и процедуры. До
-         * 255 символов.
-         *
-         * @param val
-         *            регулярное выражение - для проверки соответствия команды и
-         *            процедуры. До 255 символов.
-         */
-        public void set_Regex(String val)
-        {
-            this.m_regex = val;
-        }
-
-         #endregion
-        /**
-         * NT-Получить строку описания свойств Процедуры для отладчика.
-         * 
-         * @return Функция возвращает описание свойств Процедуры одной строкой.
-         */
-        @Override
-    public String toString()
+        /// <summary>
+        /// NT-Получить строку описания свойств Процедуры для отладчика.
+        /// </summary>
+        /// <returns>Функция возвращает описание свойств Процедуры одной строкой.</returns>
+        public override string ToString()
         {
             return this.getSingleLineProperties();
         }
 
-        /**
-         * NT-Получить одну строку описания свойств Процедуры.
-         * Для вывода списка Процедур в разных случаях работы программы.
-         * 
-         * @return Функция возвращает описание свойств Процедуры одной строкой.
-         */
-        @Override
-    public String getSingleLineProperties()
+        /// <summary>
+        /// NT-Получить одну строку описания свойств Процедуры. Для вывода списка Процедур в разных случаях работы программы.
+        /// </summary>
+        /// <returns>Функция возвращает описание свойств Процедуры одной строкой.</returns>
+    public override String getSingleLineProperties()
         {
             // TODO: формат строки свойств Сущности неудовлетворительный - нужно переделать на понятный.
             // Одна строка, 80 символов макс.
             StringBuilder sb = new StringBuilder();
-            sb.append(this.m_storage);
-            sb.append(':');
-            sb.append(this.m_tableid);
-            sb.append(";");
-            sb.append(this.m_title);
-            sb.append(";");
-            sb.append("[").append(this.m_namespace).append("]");
-            sb.append(";");
-            sb.append("ves=");
-            sb.append(this.m_ves);
-            sb.append(";path=");
-            sb.append(this.m_path);
-            sb.append(";");
-            sb.append(this.m_descr);
-            if (sb.length() > 80)
+            sb.Append(this.m_storage);
+            sb.Append(':');
+            sb.Append(this.m_tableid);
+            sb.Append(";");
+            sb.Append(this.m_title);
+            sb.Append(";");
+            sb.Append("[").Append(this.m_namespace).Append("]");
+            sb.Append(";");
+            sb.Append("ves=");
+            sb.Append(this.m_ves);
+            sb.Append(";path=");
+            sb.Append(this.m_path);
+            sb.Append(";");
+            sb.Append(this.m_descr);
+            if (sb.Length > 80)
             {
-                sb.setLength(80);
+                sb.Length = 80;
             }
-            return sb.toString();
+            return sb.ToString();
         }
 
         // /**
@@ -172,28 +137,23 @@ namespace Engine.OperatorEngine
         // return sb.toString();
         // }
 
-        /**
-         * NT-Проверить на допустимость значение Вес Процедуры, введенное
-         * пользователем.
-         *
-         * @param str
-         *            Текстовое значение веса
-         * @return Возвращает true если значение допустимо в качестве Веса
-         *         Процедуры, false в противном случае.
-         */
-        public static boolean IsValidVesFormat(String str)
+        /// <summary>
+        /// NT-Проверить на допустимость значение Вес Процедуры, введенное пользователем.
+        /// </summary>
+        /// <param name="str">Текстовое значение веса</param>
+        /// <param name="cultureInfo">Информация о языке</param>
+        /// <returns>Возвращает true если значение допустимо в качестве Веса Процедуры, false в противном случае.</returns>
+        public static bool IsValidVesFormat(string str, System.Globalization.CultureInfo cultureInfo)
         {
-            boolean result = false;
+            bool result = false;
             try
             {
-                // это должно парситься в Double, быть меньше 1 и больше 0
-                double d = Double.parseDouble(str);
+                //это должно парситься в Double, быть меньше 1 и больше 0
+                double d = Double.Parse(str, cultureInfo);
                 if ((d > 0.0d) && (d < 1.0d))
-                {
                     result = true;
-                }
             }
-            catch (Exception e)
+            catch
             {
                 result = false;
             }
