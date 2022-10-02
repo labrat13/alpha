@@ -6,11 +6,11 @@ using System.Text;
 namespace Engine.OperatorEngine
 {
     /// <summary>
-    /// NR - Представляет аргумент функции
+    /// NT - Представляет аргумент функции
     /// </summary>
     public class FuncArgument
     {
-        //TODO: port this class from Java
+
 
         #region *** Fields ***        
         /// <summary>

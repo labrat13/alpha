@@ -10,7 +10,7 @@ namespace Engine.DbSubsystem
     /// </summary>
     public class SqliteDbAdapter
     {
-        // Fields ===================================
+        #region *** Fields ***
 
         /**
          * Database file connection string
@@ -27,18 +27,15 @@ namespace Engine.DbSubsystem
          */
         protected int m_Timeout;
 
-        // ==========================================
+        #endregion
 
-        /**
-         * RT-Default constructor
-         * 
-         * @throws Exception
-         *             Error on database access occured.
-         */
-        public SqliteDbAdapter() throws Exception
+            
+         /// <summary>
+         /// RT-Default constructor
+         /// </summary>
+         /// <exception cref="Exception">Error on database access occured.</exception>
+        public SqliteDbAdapter() 
         {
-            // load class from library
-            Class.forName("org.sqlite.JDBC");
 
         this.m_connection = null;
         this.m_connectionString = "";// string.Empty;
@@ -47,22 +44,24 @@ namespace Engine.DbSubsystem
 
         return;
     }
-    // //TODO: как реализовать деструктор на Java, если он необходим?
-    // ~SqliteDbAdapter()
-    // {
-    // this.Close();
-    //
-    // return;
-    // }
+        /// <summary>
+        /// Destructor
+        /// </summary>
+        ~SqliteDbAdapter()
+        {
+            this.Close();
 
-    // Properties =========================
+            return;
+        }
 
-    /**
-     * NT-Get command execution timeout in seconds.
-     * 
-     * @return Returns command execution timeout in seconds.
-     */
-    public int getTimeout()
+        /#region *** Properties ***
+
+        /**
+         * NT-Get command execution timeout in seconds.
+         * 
+         * @return Returns command execution timeout in seconds.
+         */
+        public int getTimeout()
     {
         return this.m_Timeout;
     }
@@ -108,15 +107,16 @@ namespace Engine.DbSubsystem
 
         return result;
     }
+        #endregion
 
-    // Service functions ================================
-    /**
-     * RT-Clear all member commands
-     * 
-     * @throws Exception
-     *             Function not implemented in this class.
-     */
-    protected void ClearCommands() throws Exception
+        #region *** Service functions ***
+        /**
+         * RT-Clear all member commands
+         * 
+         * @throws Exception
+         *             Function not implemented in this class.
+         */
+        protected void ClearCommands() throws Exception
     {
         ; // throw new Exception("Function not implemented in this class.");
     }
@@ -211,8 +211,8 @@ namespace Engine.DbSubsystem
 
         return result;
     }
-
-    // Transaction functions =======================================
+    #endregion
+    #region *** Transaction functions ***
     /**
      * NR-Transaction begins on first query
      * 
@@ -253,7 +253,9 @@ public void TransactionRollback() throws Exception
         return;
 }
 
-// General adapter functions ===================
+#endregion
+
+#region *** General adapter functions *** 
 
 /**
  * RT- Execute INSERT UPDATE DELETE query
@@ -624,7 +626,7 @@ public void TableDrop(String table, int timeout) throws SQLException
 
         return;
 }
-
+#endregion
     // Service functions =========================
 
     }

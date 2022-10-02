@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Engine.DbSubsystem;
+using Engine.OperatorEngine;
+using Engine.ProcedureSubsystem;
+using Engine.SettingSubsystem;
 
 namespace Engine.OperatorEngine
 {
@@ -14,64 +18,59 @@ namespace Engine.OperatorEngine
     ///  перенаправляя их менеджерам соответствующих подсистем и библиотек.
     /// Для всех операций с Процедурами и Местами из кода Процедур использовать этот класс, а не Бд итп.
     /// </remarks>
-    internal class ElementCacheManager
+    internal class ElementCacheManager : EngineSubsystem
     {
-        //TODO: Port this classs from Java
+        //TODO: Port this class from Java
+        //- сначала портировать адаптер БД, он дает тут много ошибок.
+        //- заменить везде LinkedList на List
+        //- и вообще осмотреть типы и значения в функциях всего проекта.
+        //- Неймспейсы лучше всего хранить в объектах HashSet или SortedSet - решить.
 
         // Этот класс должен быть реализован так, чтобы он открывал БД только на
         // время чтения или записи, а не держал ее постоянно открытой.
         // Так меньше возможность повредить БД при глюках OS.
 
-        // Constants and Fields ==============================
-        /**
-         * Engine backreference
-         */
-        protected Engine m_Engine;
+        #region *** Constants and Fields ***
 
-        /**
-         * Db adapter backreference.
-         */
+        /// <summary>
+        /// Db adapter backreference
+        /// </summary>
         protected OperatorDbAdapter m_db;
 
-        /**
-         * PEM backreference.
-         */
+        /// <summary>
+        /// PEM backreference.
+        /// </summary>
         protected ProcedureExecutionManager m_PEM;
 
-        /**
-         * Список процедур, все процедуры держим здесь в памяти. Они примерно будут
-         * занимать до 1 мб на 1000 процедур.
-         */
+        /// <summary>
+        /// Список процедур, все процедуры держим здесь в памяти. Они примерно будут занимать до 1 мб на 1000 процедур.
+        /// </summary>
         private ProcedureCollection m_procedures;
 
-        /**
-         * Список мест, все места держим здесь в памяти. Они будут мало памяти
-         * занимать, наверно..
-         */
+        /// <summary>
+        /// Список мест, все места держим здесь в памяти. Они будут мало памяти занимать, наверно..
+        /// </summary>
         private PlacesCollection m_places;
 
-        /**
-         * Коллекция настроек, все настройки держим в памяти.
-         */
+        /// <summary>
+        /// Коллекция настроек, все настройки держим в памяти.
+        /// </summary>
         private SettingItemCollection m_settings;
+        #endregion
 
-        // Constructors =============================
+        #region *** Constructors ***
 
-        /**
-         * NT- Constructor
-         * 
-         * @param engine
-         *            Engine backreference.
-         * @param db
-         *            Db adapter backreference.
-         * @param pem
-         *            PEM backreference.
-         */
+            /// <summary>
+            /// NT- Constructor
+            /// </summary>
+            /// <param name="engine">Engine backreference.</param>
+            /// <param name="db">Db adapter backreference.</param>
+            /// <param name="pem">PEM backreference.</param>
         public ElementCacheManager(Engine engine,
                 OperatorDbAdapter db,
-                ProcedureExecutionManager pem)
+                ProcedureExecutionManager pem): base(engine)
         {
-            this.m_Engine = engine;
+            //this.m_Engine = engine; done in base class
             this.m_db = db;
             this.m_PEM = pem;
             // create collection objects
@@ -81,44 +80,40 @@ namespace Engine.OperatorEngine
 
             return;
         }
-
-        /**
-         * NT-Список процедур, все процедуры держим здесь в памяти.
-         * 
-         * @return the procedures collection object.
-         */
-        public ProcedureCollection get_ProcedureCollection()
+        #endregion
+        
+        #region ***  Properties ***
+        /// <summary>
+        /// NT-Список процедур, все процедуры держим здесь в памяти.
+        /// </summary>
+        public ProcedureCollection Procedures
         {
-            return m_procedures;
+            get { return this.m_procedures; }
         }
 
-        /**
-         * NT-Список мест, все места держим здесь в памяти.
-         * 
-         * @return the places collection object.
-         */
-        public PlacesCollection get_PlaceCollection()
+        /// <summary>
+        /// NT-Список мест, все места держим здесь в памяти
+        /// </summary>
+        public PlacesCollection Places
         {
-            return m_places;
+            get { return this.m_places; }
         }
 
-        /**
-         * NT-Получить коллекцию настроек.
-         * 
-         * @return Функция возвращает объект коллекции настроек.
-         */
-        public SettingItemCollection get_SettingCollection()
+        /// <summary>
+        /// NT-Получить коллекцию настроек.
+         /// </summary>
+        public SettingItemCollection Settings
         {
-            return this.m_settings;
+            get { return this.m_settings; }
         }
 
-        /**
-         * NT-Get string representation of object.
-         * 
-         * @see java.lang.Object#toString()
-         */
-        @Override
-    public String toString()
+        #endregion
+
+
+        /// <summary>
+        /// NT-Get string representation of object.
+        /// </summary>
+        public override String ToString()
         {
             int procCount = 0;
             if (this.m_procedures != null)
@@ -132,56 +127,54 @@ namespace Engine.OperatorEngine
             if (this.m_settings != null)
                 settingCount = this.m_settings.getTitleCount();
 
-            String result = String.format("ElementCacheManager; procedures=%d; places=%d; setting keys=%d", procCount, placeCount, settingCount);
+            String result = String.Format("ElementCacheManager; procedures={0}; places={1}; setting keys={2}", procCount, placeCount, settingCount);
 
             return result;
         }
 
-        /**
-         * NT-Заполнить кеши элементов и подготовить к работе.
-         * 
-         * @throws Exception
-         *             Ошибка.
-         */
-        public void Open() throws Exception
+        #region  *** Override this in child classes ***
+        /// <summary>
+        /// NT-Initialize Subsystem. This function must be overrided in child classes.
+        /// </summary>
+        /// <exception cref="Exception">Exception at Function must be overridden</exception>
+        protected override void onOpen()
         {
-        this.ReloadProceduresPlacesSettings();
+            //Заполнить кеши элементов и подготовить к работе.
+            this.ReloadProceduresPlacesSettings();
+        }
 
-        return;
-    }
+        /// <summary>
+        /// NT-De-initialize Subsystem. This function must be overrided in child classes.
+        /// </summary>
+        /// <exception cref="Exception">Exception at Function must be overridden</exception>
+        protected override void onClose()
+        {
+            //Завершить работу и сбросить кеши элементов
+            this.m_places.Clear();
+            this.m_procedures.Clear();
+            this.m_settings.Clear();
 
-    /**
-     * NT-Завершить работу и сбросить кеши элементов
-     * 
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void Close() throws Exception
-    {
-        this.m_places.Clear();
-        this.m_procedures.Clear();
-        this.m_settings.Clear();
+            return;
+        }
+        #endregion
 
-        return;
-    }
 
-    // *** Procedure function ***
+        #region *** Procedure function ***
 
-    /**
-     * NT-Добавить Процедуру в БД и обновить кеш процедур.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @param p
-     *            Procedure for adding to database
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void AddProcedure(Procedure p) throws Exception
+        /// <summary>
+        /// NR-Добавить Процедуру в БД и обновить кеш процедур.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="p">Procedure for adding to database</param>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void AddProcedure(Procedure p) 
     {
         // Тут вообще-то не должно такого быть, так как все Процедуры добавляются только в БД Оператора.
         if (!p.isItemFromDatabase())
-            throw new Exception(String.format("Error: cannot add Procedure \"%s\" to read-only Procedure library", p.get_Title()));
+            throw new Exception(String.Format("Error: cannot add Procedure \"{0}\" to read-only Procedure library", p.Title));
         // else
         try
         {
@@ -200,7 +193,7 @@ namespace Engine.OperatorEngine
         {
             // cancel adding and rethrow exception
             this.m_db.TransactionRollback();
-            throw new Exception(String.format("Error with adding Procedure \"%s\" : %s", p.get_Title(), e.toString()));
+            throw new Exception(String.Format("Error with adding Procedure \"{0}\" : {1}", p.Title, e.ToString()));
         }
         finally
 {
@@ -211,36 +204,35 @@ namespace Engine.OperatorEngine
 return;
     }
 
-    /**
-     * NT-Добавить несколько Процедур в БД и обновить кеш процедур.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @param procedures
-     *            Список заполненных Процедур
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void AddProcedure(LinkedList<Procedure> procedures) throws Exception
+        /// <summary>
+        /// NR-Добавить несколько Процедур в БД и обновить кеш процедур.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="procedures"> Список заполненных Процедур</param>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void AddProcedure(List<Procedure> procedures)
 {
         // TODO: тут надо весь список Процеду добавить в БД атомарно: либо весь, либо ничего.
         // значит, это надо делать в пределах одной транзакции.
 
         // если список пустой, сразу выйти
-        if (procedures.size() <= 0)
+        if (procedures.Count <= 0)
             return;
         // 1. Проверить, что все объекты списка предназначены для записи в бд, иначе выбросить исключение.
-        for (Procedure p : procedures)
+        foreach (Procedure p in procedures)
             if (p.isItemFromDatabase() == false)
-                throw new Exception(String.format("Error: cannot add Procedure \"%s\" to read-only Procedure library", p.get_Title()));
+                throw new Exception(String.Format("Error: cannot add Procedure \"{0}\" to read-only Procedure library", p.Title));
 // 2. Добавить объект в БД
-Procedure p_ref = procedures.get(0);
+Procedure p_ref = procedures[0];
 try
 {
     // sure database is opened
     this.m_db.Open();
     // add procedures
-    for (Procedure p : procedures)
+    foreach (Procedure p in procedures)
     {
         this.m_db.AddProcedure(p);
         p_ref = p; // for exception string formatting
@@ -257,7 +249,7 @@ catch (Exception e)
 {
     // cancel adding and rethrow exception
     this.m_db.TransactionRollback();
-    throw new Exception(String.format("Error with adding Procedure \"%s\" : %s", p_ref.get_Title(), e.toString()));
+    throw new Exception(String.Format("Error with adding Procedure \"{0}\" : {1}", p_ref.Title, e.ToString()));
 }
 finally
 {
@@ -267,27 +259,26 @@ finally
 return;
     }
 
-    /**
-     * NT-Remove Procedure from database и обновить кеш процедур.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @param p
-     *            Procedure for remove
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void RemoveProcedure(Procedure p) throws Exception
+        /// <summary>
+        /// NR-Remove Procedure from database и обновить кеш процедур.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="p">Procedure for remove</param>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void RemoveProcedure(Procedure p)
 {
         if (!p.isItemFromDatabase())
-            throw new Exception(String.format("Error: cannot delete Procedure \"%s\" from read-only Procedure library", p.get_Title()));
+            throw new Exception(String.Format("Error: cannot delete Procedure \"{0}\" from read-only Procedure library", p.Title));
 // else
 try
 {
     // sure database is opened
     this.m_db.Open();
     // add procedure
-    this.m_db.RemoveProcedure(p.get_TableId());
+    this.m_db.RemoveProcedure(p.TableId);
     // reload cache
     this.reloadProcedures();
     // TODO: если тут возникнет исключение, то в кеше будут неправильные данные - в нем же нельзя откатить транзакцию.
@@ -299,7 +290,7 @@ catch (Exception e)
 {
     // cancel adding and rethrow exception
     this.m_db.TransactionRollback();
-    throw new Exception(String.format("Error with deleting Procedure \"%s\" : %s", p.get_Title(), e.toString()));
+    throw new Exception(String.Format("Error with deleting Procedure \"{0}\" : {1}", p.Title, e.ToString()));
 }
 finally
 {
@@ -310,20 +301,19 @@ finally
 return;
     }
 
-    /**
-     * NT-Update Procedure in database и обновить кеш процедур.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @param p
-     *            Procedure for update
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void UpdateProcedure(Procedure p) throws Exception
+        /// <summary>
+        /// NR-Update Procedure in database и обновить кеш процедур.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="p">Procedure for update</param>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void UpdateProcedure(Procedure p) 
 {
         if (!p.isItemFromDatabase())
-            throw new Exception(String.format("Error: cannot update Procedure \"%s\" from read-only Procedure library", p.get_Title()));
+            throw new Exception(String.Format("Error: cannot update Procedure \"{0}\" from read-only Procedure library", p.Title));
 // else
 try
 {
@@ -342,7 +332,7 @@ catch (Exception e)
 {
     // cancel adding and rethrow exception
     this.m_db.TransactionRollback();
-    throw new Exception(String.format("Error with update Procedure \"%s\" : %s", p.get_Title(), e.toString()));
+    throw new Exception(String.Format("Error with update Procedure \"{0}\" : {1}", p.Title, e.ToString()));
 }
 finally
 {
@@ -353,15 +343,16 @@ finally
 return;
     }
 
-    /**
-     * NT-Удалить все Процедуры из БД Оператора и обновить кеш процедур.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void RemoveAllProceduresFromDatabase() throws Exception
+
+        /// <summary>
+        /// NR-Удалить все Процедуры из БД Оператора и обновить кеш процедур.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void RemoveAllProceduresFromDatabase() 
 {
         try
         {
@@ -380,7 +371,7 @@ return;
         {
         // cancel adding and rethrow exception
         this.m_db.TransactionRollback();
-        throw new Exception(e.toString());
+        throw new Exception(e.ToString());
     }
         finally
         {
@@ -390,23 +381,24 @@ return;
 
         return;
 }
+        #endregion
 
-// ==== Place function ==============================
-/**
- * NT-Добавить новое место и обновить кеш мест.
- * БД открывается, если еще не открыта, затем закрывается.
- * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
- * 
- * @param p
- *            Добавляемое место
- * @throws Exception
- *             Ошибка при использовании БД.
- */
-public void AddPlace(Place p) throws Exception
+        #region *** Place function ***
+           
+        /// <summary>
+        /// NR-Добавить новое место и обновить кеш мест.
+        /// </summary>
+        /// <remarks>
+        ///  БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="p">Добавляемое место</param>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void AddPlace(Place p)
 {
         // Тут вообще-то не должно такого быть, так как все Места добавляются только в БД Оператора.
         if (!p.isItemFromDatabase())
-            throw new Exception(String.format("Error: cannot add Place \"%s\" to read-only Procedure library", p.get_Title()));
+            throw new Exception(String.Format("Error: cannot add Place \"{0}\" to read-only Procedure library", p.Title));
 // else
 try
 {
@@ -425,7 +417,7 @@ catch (Exception e)
 {
     // cancel adding and rethrow exception
     this.m_db.TransactionRollback();
-    throw new Exception(String.format("Error with adding Place \"%s\" : %s", p.get_Title(), e.toString()));
+    throw new Exception(String.Format("Error with adding Place \"{0}\" : {1}", p.Title, e.ToString()));
 }
 finally
 {
@@ -436,36 +428,35 @@ finally
 return;
     }
 
-    /**
-     * NT-Добавить несколько Мест в БД и обновить кеш мест.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @param places
-     *            Список заполненных Мест
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void AddPlace(LinkedList<Place> places) throws Exception
+        /// <summary>
+        /// NR-Добавить несколько Мест в БД и обновить кеш мест.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="places">Список заполненных Мест</param>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void AddPlace(List<Place> places)
 {
         // TODO: тут надо весь список Мест добавить в БД атомарно: либо весь, либо ничего.
         // значит, это надо делать в пределах одной транзакции.
 
         // если список пустой, сразу выйти
-        if (places.size() <= 0)
+        if (places.Count <= 0)
             return;
         // 1. Проверить, что все объекты списка предназначены для записи в бд, иначе выбросить исключение.
-        for (Place p : places)
+        foreach (Place p in places)
             if (p.isItemFromDatabase() == false)
-                throw new Exception(String.format("Error: cannot add Place \"%s\" to read-only Procedure library", p.get_Title()));
+                throw new Exception(String.Format("Error: cannot add Place \"{0}\" to read-only Procedure library", p.Title));
 // 2. Добавить объект в БД
-Place p_ref = places.get(0);
+Place p_ref = places[0];
 try
 {
     // sure database is opened
     this.m_db.Open();
     // add places
-    for (Place p : places)
+    foreach (Place p in places)
     {
         this.m_db.AddPlace(p);
         p_ref = p; // for exception string formatting
@@ -482,7 +473,7 @@ catch (Exception e)
 {
     // cancel adding and rethrow exception
     this.m_db.TransactionRollback();
-    throw new Exception(String.format("Error with adding Place \"%s\" : %s", p_ref.get_Title(), e.toString()));
+    throw new Exception(String.Format("Error with adding Place \"{0}\" : {1}", p_ref.Title, e.ToString()));
 }
 finally
 {
@@ -492,27 +483,26 @@ finally
 return;
     }
 
-    /**
-     * NT-Remove Place from database и обновить кеш мест.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @param p
-     *            Place for remove.
-     * @throws Exception
-     *             Ошибка при исполнении.
-     */
-    public void RemovePlace(Place p) throws Exception
+        /// <summary>
+        /// NR-Remove Place from database и обновить кеш мест.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="p">Place for remove.</param>
+        /// <exception cref="Exception">Ошибка при исполнении.</exception>
+        public void RemovePlace(Place p)
 {
         if (!p.isItemFromDatabase())
-            throw new Exception(String.format("Error: cannot delete Place \"%s\" from read-only Procedure library", p.get_Title()));
+            throw new Exception(String.Format("Error: cannot delete Place \"{0}\" from read-only Procedure library", p.Title));
 // else
 try
 {
     // sure database is opened
     this.m_db.Open();
     // remove place
-    this.m_db.RemovePlace(p.get_TableId());
+    this.m_db.RemovePlace(p.TableId);
     // reload cache
     this.reloadPlaces();
     // TODO: если тут возникнет исключение, то в кеше будут неправильные данные - в нем же нельзя откатить транзакцию.
@@ -524,7 +514,7 @@ catch (Exception e)
 {
     // cancel adding and rethrow exception
     this.m_db.TransactionRollback();
-    throw new Exception(String.format("Error with deleting Place \"%s\" : %s", p.get_Title(), e.toString()));
+    throw new Exception(String.Format("Error with deleting Place \"{0}\" : {1}", p.Title, e.ToString()));
 }
 finally
 {
@@ -536,21 +526,21 @@ return;
 
     }
 
-    /**
-     * NT-Update Place in database и обновить кеш мест.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @param p
-     *            Place for update.
-     * @throws Exception
-     *             Ошибка при исполнении.
-     */
-    public void UpdatePlace(Place p) throws Exception
+
+        /// <summary>
+        /// NR-Update Place in database и обновить кеш мест.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="p">Place for update.</param>
+        /// <exception cref="Exception">Ошибка при исполнении</exception>
+        public void UpdatePlace(Place p)
 {
 
         if (!p.isItemFromDatabase())
-            throw new Exception(String.format("Error: cannot update Place \"%s\" from read-only Procedure library", p.get_Title()));
+            throw new Exception(String.Format("Error: cannot update Place \"{0}\" from read-only Procedure library", p.Title));
 // else
 try
 {
@@ -569,7 +559,7 @@ catch (Exception e)
 {
     // cancel adding and rethrow exception
     this.m_db.TransactionRollback();
-    throw new Exception(String.format("Error with update Place \"%s\" : %s", p.get_Title(), e.toString()));
+    throw new Exception(String.Format("Error with update Place \"{0}\" : {1}", p.Title, e.ToString()));
 }
 finally
 {
@@ -581,15 +571,16 @@ return;
 
     }
 
-    /**
-     * NT-Удалить все Места из БД Оператора и обновить кеш процедур.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void RemoveAllPlacesFromDatabase() throws Exception
+
+        /// <summary>
+        /// NR-Удалить все Места из БД Оператора и обновить кеш процедур.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void RemoveAllPlacesFromDatabase()
 {
         try
         {
@@ -608,7 +599,7 @@ return;
         {
         // cancel adding and rethrow exception
         this.m_db.TransactionRollback();
-        throw new Exception(e.toString());
+        throw new Exception(e.ToString());
     }
         finally
         {
@@ -618,19 +609,20 @@ return;
 
         return;
 }
+        #endregion
 
-// ==== Setting function ==============================
-/**
- * NT-Добавить новую настройку и обновить кеш настроек.
- * БД открывается, если еще не открыта, затем закрывается.
- * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
- * 
- * @param p
- *            Добавляемая настройка
- * @throws Exception
- *             Ошибка при использовании БД.
- */
-public void AddSetting(SettingItem p) throws Exception
+        #region *** Setting function ***
+
+        /// <summary>
+        /// NR-Добавить новую настройку и обновить кеш настроек.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="p">Добавляемая настройка</param>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void AddSetting(SettingItem p)
 {
 
         try
@@ -650,7 +642,7 @@ public void AddSetting(SettingItem p) throws Exception
         {
         // cancel adding and rethrow exception
         this.m_db.TransactionRollback();
-        throw new Exception(String.format("Error with adding Setting \"%s\" : %s", p.toString(), e.toString()));
+        throw new Exception(String.Format("Error with adding Setting \"{0}\" : {1}", p.ToString(), e.ToString()));
     }
         finally
         {
@@ -662,36 +654,35 @@ public void AddSetting(SettingItem p) throws Exception
 }
 
 
-/**
- * NT-Добавить несколько Настроек в БД и обновить кеш настроек.
- * БД открывается, если еще не открыта, затем закрывается.
- * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
- * 
- * @param settings
- *            Список заполненных Настроек
- * @throws Exception
- *             Ошибка при использовании БД.
- */
-public void AddSetting(LinkedList<SettingItem> settings) throws Exception
+        /// <summary>
+        /// NR-Добавить несколько Настроек в БД и обновить кеш настроек.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="settings">Список заполненных Настроек</param>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void AddSetting(List<SettingItem> settings) 
 {
         // TODO: тут надо весь список Настроек добавить в БД атомарно: либо весь, либо ничего.
         // значит, это надо делать в пределах одной транзакции.
 
         // если список пустой, сразу выйти
-        if (settings.size() <= 0)
+        if (settings.Count <= 0)
             return;
         // 1. Проверить, что все объекты списка предназначены для записи в бд, иначе выбросить исключение.
-        for (SettingItem p : settings)
+        foreach (SettingItem p in settings)
             if (p.isItemFromDatabase() == false)
-                throw new Exception(String.format("Error: cannot add Setting \"%s\" to Database.", p.get_Title()));
+                throw new Exception(String.Format("Error: cannot add Setting \"{0}\" to Database.", p.Title));
 // 2. Добавить объект в БД
-SettingItem p_ref = settings.get(0);
+SettingItem p_ref = settings[0];
 try
 {
     // sure database is opened
     this.m_db.Open();
     // add places
-    for (SettingItem p : settings)
+    foreach (SettingItem p in settings)
     {
         this.m_db.AddSetting(p);
         p_ref = p; // for exception string formatting
@@ -708,7 +699,7 @@ catch (Exception e)
 {
     // cancel adding and rethrow exception
     this.m_db.TransactionRollback();
-    throw new Exception(String.format("Error with adding Setting \"%s\" : %s", p_ref.toString(), e.toString()));
+    throw new Exception(String.Format("Error with adding Setting \"{0}\" : {1}", p_ref.ToString(), e.ToString()));
 }
 finally
 {
@@ -718,27 +709,27 @@ finally
 return;
     }
 
-    /**
-     * NT-Удалить Настройку из БД и обновить кеш Настроек.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @param p
-     *            Удаляемая настройка.
-     * @throws Exception
-     *             Ошибка при исполнении.
-     */
-    public void RemoveSetting(SettingItem p) throws Exception
+
+        /// <summary>
+        /// NR-Удалить Настройку из БД и обновить кеш Настроек.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="p">Удаляемая настройка.</param>
+        /// <exception cref="Exception">Ошибка при исполнении.</exception>
+        public void RemoveSetting(SettingItem p) 
 {
         if (!p.isItemFromDatabase())
-            throw new Exception(String.format("Error: cannot delete Setting \"%s\" - is not from Database", p.toString()));
+            throw new Exception(String.Format("Error: cannot delete Setting \"{0}\" - is not from Database", p.ToString()));
 // else
 try
 {
     // sure database is opened
     this.m_db.Open();
     // remove place
-    this.m_db.RemoveSetting(p.get_TableId());
+    this.m_db.RemoveSetting(p.TableId);
     // reload cache
     this.reloadSettings();
     // TODO: если тут возникнет исключение, то в кеше будут неправильные данные - в нем же нельзя откатить транзакцию.
@@ -750,7 +741,7 @@ catch (Exception e)
 {
     // cancel adding and rethrow exception
     this.m_db.TransactionRollback();
-    throw new Exception(String.format("Error with deleting Setting \"%s\" : %s", p.toString(), e.toString()));
+    throw new Exception(String.Format("Error with deleting Setting \"{0}\" : {1}", p.ToString(), e.ToString()));
 }
 finally
 {
@@ -762,20 +753,20 @@ return;
 
     }
 
-    /**
-     * NT-Изменить Настройку в БД и обновить кеш Настроек.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @param p
-     *            Изменяемая Настройка.
-     * @throws Exception
-     *             Ошибка при исполнении.
-     */
-    public void UpdateSetting(SettingItem p) throws Exception
+
+        /// <summary>
+        /// NR-Изменить Настройку в БД и обновить кеш Настроек.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <param name="p">Изменяемая Настройка.</param>
+        /// <exception cref="Exception">Ошибка при исполнении.</exception>
+        public void UpdateSetting(SettingItem p)
 {
         if (!p.isItemFromDatabase())
-            throw new Exception(String.format("Error: cannot update Setting \"%s\" with invalid ID to Database.", p.toString()));
+            throw new Exception(String.Format("Error: cannot update Setting \"{0}\" with invalid ID to Database.", p.ToString()));
 // else
 try
 {
@@ -794,7 +785,7 @@ catch (Exception e)
 {
     // cancel adding and rethrow exception
     this.m_db.TransactionRollback();
-    throw new Exception(String.format("Error with update Setting \"%s\" : %s", p.toString(), e.toString()));
+    throw new Exception(String.Format("Error with update Setting \"{0}\" : {1}", p.ToString(), e.ToString()));
 }
 finally
 {
@@ -806,15 +797,16 @@ return;
 
     }
 
-    /**
-     * NT-Удалить все Места из БД Оператора и обновить кеш процедур.
-     * БД открывается, если еще не открыта, затем закрывается.
-     * Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
-     * 
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void RemoveAllSettingsFromDatabase() throws Exception
+
+        /// <summary>
+        /// NR-Удалить все Места из БД Оператора и обновить кеш процедур.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// Если выброшено исключение, транзакция откатывается и исключение перевыбрасывается.
+        /// </remarks>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        public void RemoveAllSettingsFromDatabase() 
 {
         try
         {
@@ -833,7 +825,7 @@ return;
         {
         // cancel adding and rethrow exception
         this.m_db.TransactionRollback();
-        throw new Exception(e.toString());
+        throw new Exception(e.ToString());
     }
         finally
         {
@@ -843,26 +835,27 @@ return;
 
         return;
 }
+        #endregion
 
-// ========= Reloading functions =========================
-/**
- * NT-Перезагрузить кеш-коллекции мест данными из источника.
- * Чтобы они соответствовали содержимому источника, если он был изменен.
- * БД должна быть уже открыта и не будет закрыта в коде функции.
- * Таблица не будет изменена, коммит транзакции не нужен.
- * 
- * @throws Exception
- *             Ошибка при использовании БД.
- */
-protected void reloadPlaces() throws Exception
+        #region *** Reloading functions ***
+
+        /// <summary>
+        /// NR-Перезагрузить кеш-коллекции мест данными из источника, чтобы они соответствовали содержимому источника, если он был изменен.
+        /// </summary>
+        /// <remarks>
+        /// БД должна быть уже открыта и не будет закрыта в коде функции.
+        /// Таблица не будет изменена, коммит транзакции не нужен.
+        /// </remarks>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        protected void reloadPlaces()
 {
         // тут заполнить коллекцию мест данными мест.
         this.m_places.Clear();
     // 1. добавить из БД
-    LinkedList<Place> llp = this.m_db.GetAllPlaces();
+    List<Place> llp = this.m_db.GetAllPlaces();
         this.m_places.Fill(llp);
     // 2. Добавить из PEM (из Библиотек Процедур)
-    LinkedList<Place> llp2 = this.m_PEM.GetAllPlaces();
+    List<Place> llp2 = this.m_PEM.GetAllPlaces();
         this.m_places.Fill(llp2);
     // 3. постобработка Мест?
     // - TODO: проверить что постобработка объектов мест выполнена.
@@ -870,86 +863,85 @@ protected void reloadPlaces() throws Exception
     // можно сортировать по названию только при получении общего списка Мест.
 
     // clean up
-    llp.clear();
+    llp.Clear();
     llp = null;
-    llp2.clear();
+    llp2.Clear();
     llp2 = null;
 
         return;
 }
 
-/**
- * NT-Перезагрузить кеш-коллекции процедур данными из источника.
- * Чтобы они соответствовали содержимому источника, если он был изменен.
- * БД должна быть уже открыта и не будет закрыта в коде функции.
- * Таблица не будет изменена, коммит транзакции не нужен.
- * 
- * @throws Exception
- *             Ошибка при использовании БД.
- */
-protected void reloadProcedures() throws Exception
+
+        /// <summary>
+        /// NR-Перезагрузить кеш-коллекции процедур данными из источника. Чтобы они соответствовали содержимому источника, если он был изменен.
+        /// </summary>
+        /// <remarks>
+        /// БД должна быть уже открыта и не будет закрыта в коде функции.
+        /// Таблица не будет изменена, коммит транзакции не нужен.
+        /// </remarks>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        protected void reloadProcedures()
 {
         // тут заполнить коллекцию процедур данными процедур.
         // И не забыть их отсортировать по весу.
         this.m_procedures.Clear();
     // 1. добавить из БД
-    LinkedList<Procedure> llp = this.m_db.GetAllProcedures();
+    List<Procedure> llp = this.m_db.GetAllProcedures();
         this.m_procedures.Fill(llp);
     // 2. Добавить из PEM (из Библиотек Процедур)
-    LinkedList<Procedure> llp2 = this.m_PEM.GetAllProcedures();
+    List<Procedure> llp2 = this.m_PEM.GetAllProcedures();
         this.m_procedures.Fill(llp2);
     // 3. постобработка Процедур?
     // - TODO: проверить что постобработка объектов выполнена.
     // 4. Сортировка коллекции Процедур по весу - already done in Fill() function.
 
     // clean up
-    llp.clear();
+    llp.Clear();
     llp = null;
-    llp2.clear();
+    llp2.Clear();
     llp2 = null;
 
         return;
 }
 
-/**
- * NT-Перезагрузить кеш-коллекции настроек данными из источника.
- * Чтобы они соответствовали содержимому источника, если он был изменен.
- * БД должна быть уже открыта и не будет закрыта в коде функции.
- * Таблица не будет изменена, коммит транзакции не нужен.
- * 
- * @throws Exception
- *             Ошибка при использовании БД.
- */
-protected void reloadSettings() throws Exception
+        /// <summary>
+        /// NR-Перезагрузить кеш-коллекции настроек данными из источника. Чтобы они соответствовали содержимому источника, если он был изменен.
+        /// </summary>
+        /// <remarks>
+        ///  БД должна быть уже открыта и не будет закрыта в коде функции.
+        /// Таблица не будет изменена, коммит транзакции не нужен.
+        /// </remarks>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        protected void reloadSettings() 
 {
         // тут заполнить коллекцию настроек данными настроек
         this.m_settings.Clear();
     // 1. добавить из БД
-    LinkedList<SettingItem> llp = this.m_db.GetAllSettings();
+    List<SettingItem> llp = this.m_db.GetAllSettings();
         this.m_settings.addItems(llp);
     // 2. Добавить из PEM (из Библиотек Процедур)
-    LinkedList<SettingItem> llp2 = this.m_PEM.GetAllSettings();
+    List<SettingItem> llp2 = this.m_PEM.GetAllSettings();
         this.m_settings.addItems(llp2);
     // 3. постобработка Настроек?
     // - TODO: проверить что постобработка объектов выполнена.
 
     // clean up
-    llp.clear();
-    llp2.clear();
+    llp.Clear();
+    llp2.Clear();
     llp = null;
     llp2 = null;
 
         return;
 }
 
-/**
- * NT- Перезагрузить кеш-коллекции Процедур и Мест из БД и Библиотек Процедур.
- * БД открывается, если еще не открыта, затем закрывается.
- * 
- * @throws Exception
- *             Ошибка при использовании БД.
- */
-protected void ReloadProceduresPlacesSettings() throws Exception
+        /// <summary>
+        /// NR- Перезагрузить кеш-коллекции Процедур и Мест из БД и Библиотек Процедур.
+        /// </summary>
+        /// <remarks>
+        /// БД открывается, если еще не открыта, затем закрывается.
+        /// </remarks>
+        /// <exception cref="Exception">Ошибка при использовании БД.</exception>
+        protected void ReloadProceduresPlacesSettings() 
 {
         try
         {
@@ -971,42 +963,46 @@ protected void ReloadProceduresPlacesSettings() throws Exception
 
         return;
 }
+        #endregion
 
-// *** Получить Процедуры и Места как списки ***
-/**
- * NT-Получить список всех Процедур для перечисления.
- * 
- * @return Функция возвращает список всех Процедур для перечисления.
- */
-public LinkedList<Procedure> getProceduresAsList()
+        #region *** Получить Процедуры и Места как списки ***
+
+        /// <summary>
+        /// NR-Получить список всех Процедур для перечисления.
+        /// </summary>
+        /// <returns>Функция возвращает список всех Процедур для перечисления.</returns>
+        public LinkedList<Procedure> getProceduresAsList()
 {
     return this.m_procedures.get_Procedures();
 }
 
-/**
- * NT-Получить список всех Мест для перечисления.
- * 
- * @return Функция возвращает список всех Мест для перечисления.
- */
-public LinkedList<Place> getPlacesAsList()
+
+        /// <summary>
+        /// NR-Получить список всех Мест для перечисления.
+        /// </summary>
+        /// <returns>Функция возвращает список всех Мест для перечисления.</returns>
+        public LinkedList<Place> getPlacesAsList()
 {
     return this.m_places.getPlacesAsList();
 }
-/**
- * NT-Получить список всех Настроек для перечисления.
- * 
- * @return Функция возвращает список всех Настроек для перечисления.
- */
-public LinkedList<SettingItem> getSettingsAsList()
+
+
+        /// <summary>
+        /// NR-Получить список всех Настроек для перечисления.
+        /// </summary>
+        /// <returns>Функция возвращает список всех Настроек для перечисления.</returns>
+        public LinkedList<SettingItem> getSettingsAsList()
 {
     return this.m_settings.getAllItems();
 }
+        #endregion
 
-/** NT-Получить первое же значение настройки.
- * @param title Название настройки.
- * @return Функция возвращает значение настройки либо null, если настройка не найдена.
- */
-public String getSettingFirstValue(String title)
+        /// <summary>
+        /// NR-Получить первое же значение настройки.
+        /// </summary>
+        /// <param name="title">Название настройки.</param>
+        /// <returns>Функция возвращает значение настройки либо null, если настройка не найдена.</returns>
+        public String getSettingFirstValue(String title)
 {
     String result = null;
     SettingItem si = this.m_settings.getFirstItem(title);
@@ -1016,73 +1012,68 @@ public String getSettingFirstValue(String title)
     return result;
 }
 
-/**
- * NT- Получить облако тегов-неймспейсов для элементов этого менеджера.
- * 
- * @param forProcedures
- *            Извлекать теги коллекции Процедур.
- * @param forPlaces
- *            Извлекать теги коллекции Мест.
- * @param forSettings
- *            Извлекать теги коллекции Настроек.
- * @return
- *         Функция возвращает строку - перечисление названий неймспейсов элементов этого менеджера.
- */
-public String getNamespacesChainString(
-        boolean forProcedures,
-        boolean forPlaces,
-        boolean forSettings)
+
+        /// <summary>
+        /// NR- Получить облако тегов-неймспейсов для элементов этого менеджера.
+        /// </summary>
+        /// <param name="forProcedures">Извлекать теги коллекции Процедур.</param>
+        /// <param name="forPlaces">Извлекать теги коллекции Мест.</param>
+        /// <param name="forSettings">Извлекать теги коллекции Настроек.</param>
+        /// <returns>Функция возвращает строку - перечисление названий неймспейсов элементов этого менеджера.</returns>
+        public String getNamespacesChainString(
+        bool forProcedures,
+        bool forPlaces,
+        bool forSettings)
 {
     // Получить сортированный массив уникальных названий неймспейсов
     String[] nss = this.getNamespaces(forProcedures, forPlaces, forSettings, true);
-    // собрать их в строку с разделителем - пробелом или табом.
-    // StringBuilder sb = new StringBuilder();
-    // for(String s : nss)
-    // sb.append(s).append(", ");
-    // result = sb.toString().trim();
+    // собрать их в строку с разделителем - пробелом или табом. 
+    String result = String.Join(", ", nss);
 
-    //заменено на 
-    String result = String.join(", ", nss);
-
-    return result.trim();
+    return result.Trim();
 }
 
-/** NT-Получить массив названий неймспейсов для элементов этого менеджера.
- * @param forProcedures Извлекать теги коллекции Процедур.
- * @param forPlaces Извлекать теги коллекции Мест.
- * @param forSettings Извлекать теги коллекции Настроек.
- * @param sorted Сортировать по алфавиту.
- * @return
- * Функция возвращает массив названий неймспейсов элементов этого менеджера.
- */
-public String[] getNamespaces(boolean forProcedures, boolean forPlaces, boolean forSettings, boolean sorted)
+
+        /// <summary>
+        /// NR-Получить массив названий неймспейсов для элементов этого менеджера.
+        /// </summary>
+        /// <param name="forProcedures">Извлекать теги коллекции Процедур.</param>
+        /// <param name="forPlaces">Извлекать теги коллекции Мест.</param>
+        /// <param name="forSettings">Извлекать теги коллекции Настроек.</param>
+        /// <param name="sorted">Сортировать по алфавиту.</param>
+        /// <returns>Функция возвращает массив названий неймспейсов элементов этого менеджера.</returns>
+        public String[] getNamespaces(bool forProcedures, bool forPlaces, bool forSettings, bool sorted)
 {
+    //Это набор уникальных значений, добавление не вызывает исключения.
     HashSet<String> set = new HashSet<String>();
     HashSet<String> nss = null;
     //add default namespace constant
-    set.add(NamespaceConstants.NsDefault);
+    set.Add(NamespaceConstants.NsDefault);
     //add Procedure namespaces
     if (forProcedures == true)
     {
         nss = this.m_procedures.getNamespaces();
-        set.addAll(nss);
+        foreach(String s in nss)
+                set.Add(s);
     }
     //add Place namespaces
     if (forPlaces == true)
     {
         nss = this.m_places.getNamespaces();
-        set.addAll(nss);
-    }
+                foreach (String s in nss)
+                    set.Add(s);
+            }
     //add Setting namespaces
     if (forSettings == true)
     {
         nss = this.m_settings.getNamespaces();
-        set.addAll(nss);
-    }
+                foreach (String s in nss)
+                    set.Add(s);
+            }
     //form output array
-    String[] result = set.toArray(new String[set.size()]);
+    String[] result = set.ToArray<string>());
     if (sorted)
-        Arrays.sort(result);
+        Array.Sort(result);
 
     return result;
 }

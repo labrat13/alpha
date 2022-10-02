@@ -159,5 +159,32 @@ namespace Engine.OperatorEngine
             }
             return result;
         }
+
+        /// <summary>
+        /// NT - Предикат сортировки списка процедур
+        /// </summary>
+        /// <param name="p1">Procedure object</param>
+        /// <param name="p2">Procedure object</param>
+        /// <returns></returns>
+        public static int SortByVes(Procedure p1, Procedure p2)
+        {
+            //if p1 > p2 return 1
+            if (p1 == null)
+            {
+                if (p2 == null) return 0;
+                else return -1;
+            }
+            else
+            {
+                if (p2 == null) return 1;
+                else
+                {
+                    if (p1.m_ves > p2.m_ves)
+                        return 1;
+                    else if (p1.m_ves < p2.m_ves) return -1;
+                    else return 0;
+                }
+            }
+        }
     }
 }

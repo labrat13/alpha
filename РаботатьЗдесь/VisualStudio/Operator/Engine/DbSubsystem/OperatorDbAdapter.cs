@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Engine.OperatorEngine;
 
 namespace Engine.DbSubsystem
 {
@@ -13,49 +14,38 @@ namespace Engine.DbSubsystem
         //DONE: OperatorEngine.EngineSubsystem решено не имплементить здесь, но и не внедрять в SqliteDbAdapter.
         //А вовсе без него тут обойтись как исключение из правила, насколько возможно.
 
-        /// <summary>
-        /// NR - Конструктор
-        /// </summary>
-        /// <param name="engine">Ссылка на объект движка.</param>
-        public OperatorDbAdapter(OperatorEngine.Engine engine) : base()
-        {
-            //TODO: Add code here
-        }
-
-
-
-
+        #region *** Constants and Fields ***
 
         /**
      * Application database file name
      */
-        public final static String AppDbFileName = "db.sqlite";
+        public const String AppDbFileName = "db.sqlite";
 
         /**
          * Places table title
          */
-        public final static String TablePlaces = "places";
+        public const String TablePlaces = "places";
 
         /**
          * Routines table title
          */
-        public final static String TableProcs = "routines";
+        public const String TableProcs = "routines";
 
         /**
          * Settings table title
          */
-        public final static String TableSetting = "setting";
+        public const String TableSetting = "setting";
 
         /**
          * Значение неправильного TableID итема, если итем не из таблиц БД.
          */
-        public static final int Invalid_TableID = -1;
+        public const int Invalid_TableID = -1;
 
         /**
          * Backreference to Engine object - for logging
          * Can be null where call this.CreateNewDatabase() !
          */
-        protected Engine m_Engine;
+        protected Engine.OperatorEngine.Engine m_Engine;
 
         // TODO: add new command here! Add init to constructor, Add code for new command to ClearCommand()!
 
@@ -88,18 +78,17 @@ namespace Engine.DbSubsystem
          * SQL Command for UpdateSetting function
          */
         protected PreparedStatement m_cmdUpdateSetting;
+#endregion
 
-        /**
-         * NT-Default constructor
-         * 
-         * @param engine
-         *            Engine backreference for log writing.
-         * @throws Exception
-         *             Error in database.
-         */
-        public OperatorDbAdapter(Engine engine) throws Exception
+         
+         /// <summary>
+         /// NT-Default constructor
+         /// </summary>
+         /// <param name="engine">Engine backreference for log writing.</param>
+         /// <exception cref="Exception">Error in database.</exception>
+        public OperatorDbAdapter(Engine.OperatorEngine.Engine engine):base()
         {
-            super();
+            
         this.m_Engine = engine;// for logging
         // reset command object
         // TODO: Add code for new command here!
@@ -113,17 +102,15 @@ namespace Engine.DbSubsystem
         return;
     }
 
-    /**
-     * NT-Get string representation of object.
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString()
+/// <summary>
+/// NT-Get string representation of object.
+/// </summary>
+/// <returns></returns>
+    public override String ToString()
     {
-        boolean active = this.isConnectionActive();
-        String cstr = Utility.GetStringTextNull(this.m_connectionString);
-        String result = String.format("OperatorDbAdapter; connection=\"%s\"; active=%s", cstr, active);
+        bool active = this.isConnectionActive();
+        String cstr = Utility.StringUtility.GetStringTextNull(this.m_connectionString);
+        String result = String.Format("OperatorDbAdapter; connection=\"{0}\"; active={1}", cstr, active);
 
         return result;
     }
@@ -134,8 +121,7 @@ namespace Engine.DbSubsystem
      * @throws SQLException
      *             Error on database access occured.
      */
-    @Override
-    protected void ClearCommands() throws SQLException
+    protected override void ClearCommands() throws SQLException
     {
         // TODO: add code for new command here!
         //Эта функция вызывается 4 раза при каждом добавлении или изменении любого Элемента в таблицах.
@@ -253,7 +239,7 @@ public boolean CreateDatabaseTables() throws SQLException
         return result;
 }
 
-// === Places table function =============================
+#region *** Places table function ***
 
 /**
  * NT-Получить все записи таблицы Places
@@ -395,7 +381,9 @@ public void RemoveAllPlaces() throws Exception
         this.TableClear(TablePlaces, m_Timeout);
 }
 
-// === Procedures table function ===================
+#endregion
+
+#region *** Procedures table function ***
 
 /**
  * NT-Получить все записи таблицы Процедур
@@ -530,7 +518,10 @@ public void RemoveAllProcedures() throws Exception
         this.TableClear(TableProcs, m_Timeout);
 }
 
-// === Setting table function ====================================
+#endregion
+
+#region *** Setting table function ***
+
 /**
  * NT- Получить все записи таблицы настроек Оператора
  * 
@@ -662,9 +653,7 @@ public void RemoveAllSettings() throws Exception
 {
         this.TableClear(TableSetting, m_Timeout);
 }
-    
-    // === ============================================================
-
+    #endregion
 
     }
 }

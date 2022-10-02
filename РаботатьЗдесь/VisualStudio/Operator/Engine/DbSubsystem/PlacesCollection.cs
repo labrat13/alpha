@@ -1,78 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Engine.OperatorEngine;
 
 namespace Engine.DbSubsystem
 {
     /// <summary>
-    /// Коллекция мест для быстрого доступа из кода
+    /// NT-Коллекция мест для быстрого доступа из кода
     /// </summary>
     internal class PlacesCollection
     {
-        /**
-     * Словарь синонимов сущностей мест
-     */
-        private HashMap<String, Place> m_places;
 
-        /**
-         * Default constructor
-         */
+        /// <summary>
+        /// Словарь синонимов сущностей мест
+        /// </summary>
+        private Dictionary<String, Place> m_places;
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public PlacesCollection()
         {
-            this.m_places = new HashMap<String, Place>();
+            this.m_places = new Dictionary<String, Place>();
         }
 
-        // Properties ====================
-        /**
-         * Словарь синонимов сущностей мест
-         * 
-         * @return the places
-         */
-        public HashMap<String, Place> get_Places()
+        #region *** Properties ***
+
+        /// <summary>
+        /// Словарь синонимов сущностей мест.
+        /// </summary>
+        public Dictionary<String, Place> Places
         {
-            return m_places;
+            get { return m_places; }
+            set { this.m_places = value; }
         }
 
-        /**
-         * Словарь синонимов сущностей мест
-         * 
-         * @param places
-         *            the places to set
-         */
-        public void set_Places(HashMap<String, Place> places)
-        {
-            this.m_places = places;
-        }
+        #endregion
 
-        // Functions ====================
-        /**
-         * NT-Очистить коллекцию
-         */
+        #region *** Functions ***
+
+
+        /// <summary>
+        /// NT-Очистить коллекцию
+        /// </summary>
         public void Clear()
         {
-            this.m_places.clear();
+            this.m_places.Clear();
         }
 
-        /**
-         * NT-Get count of collection items.
-         * 
-         * @return Returns count of collection items.
-         */
-        public int getCount()
+
+        /// <summary>
+        /// NT-Get count of collection items.
+        /// </summary>
+        public int Count
         {
-            return this.m_places.size();
+            get { return this.m_places.Count; }
         }
 
-        /**
-         * NT-Добавить в словарь синонимы для указанного места
-         * 
-         * @param p
-         *            Объект места
-         * @throws Exception
-         *             Ошибка: Синоним Места уже существует в словаре мест.
-         */
-        public void Add(Place p) throws Exception
+        /// <summary>
+        /// NT-Добавить в словарь синонимы для указанного места
+        /// </summary>
+        /// <param name="p"> Объект места</param>
+        /// <exception cref="Exception">Ошибка: Синоним Места уже существует в словаре мест.</exception>
+        public void Add(Place p)
         {
             // Если такое словосочетание уже есть в словаре, будет выброшено
             // исключение,
@@ -112,216 +101,201 @@ namespace Engine.DbSubsystem
 
             // заменено на новый код с предварительной проверкой
             // Функция p.GetSynonims() занимает относительно много времени, поэтому ее однократно вызывать надо.
-            LinkedList<String> syno = p.GetSynonims();
-        // если синонимов нет, все скидать в словарь, а если есть - выбросить исключение.
-        if (this.ContainsPlaceSynonims(syno) == false)
-        {
-            for (String s : syno)
-                this.m_places.put(s, p);
-        }
-        else
-        {
-            throw new Exception(String.format("Ошибка: Один из синонимов места %s уже существует в словаре мест.", p.get_Title()));
-        }
-        return;
+            List<String> syno = p.GetSynonims();
+            // если синонимов нет, все скидать в словарь, а если есть - выбросить исключение.
+            if (this.ContainsPlaceSynonims(syno) == false)
+            {
+                foreach (String s in syno)
+                    this.m_places.Add(s, p);
+            }
+            else
+            {
+                throw new Exception(String.Format("Ошибка: Один из синонимов места {0} уже существует в словаре мест.", p.Title));
+            }
+            return;
         }
 
-        /**
-         * NT-Удалить место из коллекции мест
-         * 
-         * @param p
-         *            Удаляемое место
-         */
+
+        /// <summary>
+        /// NT-Удалить место из коллекции мест
+        /// </summary>
+        /// <param name="p">Удаляемое место</param>
         public void Remove(Place p)
         {
             // удалить все пары ключ-значение, где значением является указанное
             // место.
-            LinkedList<String> lis = new LinkedList<String>();
+            List<String> lis = new List<String>();
             // получим список всех ключей, к которым привязан этот объект
             // это может оказаться сравнительно долгим процессом, если в системе
-            // много мест - боее 10000.
+            // много мест - более 10000.
             // но все равно нужен полный перебор всех элементов словаря, и ничего
             // тут не ускорить.
-            for (Map.Entry<String, Place> kvp : m_places.entrySet())
+            foreach (KeyValuePair<String, Place> kvp in this.m_places)
             {
-                if (kvp.getValue() == p)
-                    lis.add(kvp.getKey());
+                if (kvp.Value == p)
+                    lis.Add(kvp.Key);
             }
             // Теперь удалим из словаря все эти ключи и их данные
-            for (String s : lis)
-                m_places.remove(s);
+            foreach (String s in lis)
+                m_places.Remove(s);
             // тут вроде все.
-            lis.clear();
+            lis.Clear();
 
             return;
         }
 
-        /**
-         * NT-Определить, есть ли такой синоним в коллекции. Это для упрощения
-         * вызывающего кода
-         * 
-         * @param synonim
-         *            Проверяемый синоним Места.
-         * @return Возвращает True если имя есть в коллекции, иначе возвращает
-         *         False.
-         */
-        public boolean ContainsPlaceBySynonim(String synonim)
+        /// <summary>
+        /// NT-Определить, есть ли такой синоним в коллекции. Это для упрощения вызывающего кода
+        /// </summary>
+        /// <param name="synonim">Проверяемый синоним Места.</param>
+        /// <returns>Возвращает True если имя есть в коллекции, иначе возвращает False.</returns>
+        public bool ContainsPlaceBySynonim(String synonim)
         {
-            return this.m_places.containsKey(synonim);
+            return this.m_places.ContainsKey(synonim);
         }
 
-        /**
-         * NT-Определить, существует ли в коллекции хотя бы один синоним из данного Места.
-         * 
-         * @param p
-         *            Объект Места
-         * @return
-         *         Возвращает True, если хотя бы один синоним данного Места уже существует в коллекции.
-         *         Возвращает False в противном случае.
-         */
-        public boolean ContainsPlaceSynonims(Place p)
+
+        /// <summary>
+        /// NT-Определить, существует ли в коллекции хотя бы один синоним из данного Места.
+        /// </summary>
+        /// <param name="p">Объект Места</param>
+        /// <returns>
+        /// Возвращает True, если хотя бы один синоним данного Места уже существует в коллекции. 
+        /// Возвращает False в противном случае.
+        /// </returns>
+        public bool ContainsPlaceSynonims(Place p)
         {
-            LinkedList<String> syno = p.GetSynonims();
+            List<String> syno = p.GetSynonims();
 
             return this.ContainsPlaceSynonims(syno);
         }
 
-        /**
-         * NT-Определить, существует ли в коллекции хотя бы один синоним из данного Места.
-         * 
-         * @param syno
-         *            Список синонимов из объекта Места.
-         * @return
-         *         Возвращает True, если хотя бы один синоним данного Места уже существует в коллекции.
-         *         Возвращает False в противном случае.
-         */
-        public boolean ContainsPlaceSynonims(LinkedList<String> syno)
+        /// <summary>
+        /// NT-Определить, существует ли в коллекции хотя бы один синоним из данного Места.
+        /// </summary>
+        /// <param name="syno">Список синонимов из объекта Места.</param>
+        /// <returns>
+        /// Возвращает True, если хотя бы один синоним данного Места уже существует в коллекции.
+        /// Возвращает False в противном случае.
+        /// </returns>
+        public bool ContainsPlaceSynonims(List<String> syno)
         {
-            for (String s : syno)
+            foreach (String s in syno)
             {
-                if (this.m_places.containsKey(s))
+                if (this.m_places.ContainsKey(s))
                     return true;
             }
             return false;
         }
 
-
-
-        /**
-         * NT-Получить объект места по синониму (тексту аргумента).
-         * 
-         * @param synonim
-         *            Синоним места
-         * @return Возвращает объект Места или null если место отсутствует в
-         *         коллекции.
-         */
+        /// <summary>
+        /// NT-Получить объект места по синониму (тексту аргумента).
+        /// </summary>
+        /// <param name="synonim">Синоним места</param>
+        /// <returns>Возвращает объект Места или null если место отсутствует в коллекции.</returns>
         public Place GetPlace(String synonim)
         {
-            String t = synonim.trim();
-            if (this.m_places.containsKey(t))
+            String t = synonim.Trim();
+            if (this.m_places.ContainsKey(t))
             {
-                return this.m_places.get(t);
+                return this.m_places[t];
             }
             else return null;
         }
 
-        /**
-         * NT-Заполнить коллекцию местами из списка
-         * 
-         * @param list
-         *            Список Мест
-         * @throws Exception
-         *             Ошибка: Синоним Места уже существует в словаре мест.
-         */
-        public void Fill(LinkedList<Place> list) throws Exception
-        {
-        for (Place p : list)
-        {
-            // p.ParseEntityTypeString(); TODO: проверить, что это уже сделано при чтении из БД
-            this.Add(p);
-    }
-        return;
-    }
 
-/**
- * NR-Выбрать из БД Места по названию, без учета регистра символов
- * 
- * @param placeTitle
- *            Название места
- * @return Возвращает список мест с указанным названием
- */
-public LinkedList<Place> getByTitle(String placeTitle)
-{
-    // словарь имеет ключ - синоним, так что в словаре по 6 штук одних и тех
-    // же объектов мест.
-    // поэтому создадим еще один словарь - временный для уникализации
-    // объектов мест.
-    LinkedList<Place> result = new LinkedList<Place>();
-    HashMap<Integer, Place> tdic = new HashMap<Integer, Place>();
-
-    for (Place p : this.m_places.values())
-            if (Utility.StringEqualsOrdinalIgnoreCase(p.get_Title(), placeTitle))
-{
-    // TODO: check: переделал уникальный ключ Места с tableid на hashcode,
-    // поскольку tableid теперь не всегда уникальный, поскольку часть Мест
-    // теперь хранятся в Бибилиотеках Процедур и имеют tableid = -1.
-    int key = p.hashCode();
-    if (!tdic.containsKey(key))
-        tdic.put(key, p);
-}
-// тут перенесем содержимое словаря в выходной список и уничтожим
-// словарь
-result.addAll(tdic.values());
-tdic.clear();
-tdic = null;
-
-return result;
-    }
-
-    /**
-     * NT-Выбрать из коллекции все Места.
-     * 
-     * @return Возвращает список всех имеющихся в коллекции Мест.
-     */
-    public LinkedList<Place> getPlacesAsList()
-{
-    // словарь имеет ключ - синоним, так что в словаре по 6 штук одних и тех же объектов мест.
-    // поэтому создадим еще один словарь - временный для уникализации объектов мест.
-    LinkedList<Place> result = new LinkedList<Place>();
-    HashMap<Integer, Place> tdic = new HashMap<Integer, Place>();
-    for (Place p : this.m_places.values())
+        /// <summary>
+        /// NT-Заполнить коллекцию местами из списка.
+        /// </summary>
+        /// <param name="list">Список Мест</param>
+        /// <exception cref="Exception">Ошибка: Синоним Места уже существует в словаре мест.</exception>
+        public void Fill(LinkedList<Place> list)
         {
-    if (p != null)
-    {
-        //будем использовать хешкод объекта как уникальный ключ.
-        int key = p.hashCode();
-        if (!tdic.containsKey(key))
-        {
-            tdic.put(key, p);
+            foreach (Place p in list)
+            {
+                // p.ParseEntityTypeString(); TODO: проверить, что это уже сделано при чтении из БД
+                this.Add(p);
+            }
+            return;
         }
-    }
-}
-//тут перенесем содержимое словаря в выходной список и уничтожим словарь
-result.addAll(tdic.values());
-tdic.clear();
-tdic = null;
 
-return result;
-    }
+        /// <summary>
+        /// NR-Выбрать из БД Места по названию, без учета регистра символов
+        /// </summary>
+        /// <param name="placeTitle">Название места</param>
+        /// <returns>Возвращает список мест с указанным названием</returns>
+        public List<Place> getByTitle(String placeTitle)
+        {
+            // словарь имеет ключ - синоним, так что в словаре по 6 штук одних и тех
+            // же объектов мест.
+            // поэтому создадим еще один словарь - временный для уникализации
+            // объектов мест.
+            List<Place> result = new List<Place>();
+            Dictionary<int, Place> tdic = new Dictionary<int, Place>();
 
-    /**
-     * NT-Получить множество уникальных названий неймспейсов элементов коллекции.
-     * 
-     * @return Функция возвращает множество уникальных названий неймспейсов элементов коллекции.
-     */
-    public HashSet<String> getNamespaces()
-{
-    HashSet<String> set = new HashSet<String>();
-    // add existing item namespaces
-    for (Place p : this.m_places.values())
-            set.add(Utility.GetStringTextNull(p.get_Namespace()));
+            foreach (Place p in this.m_places.Values)
+                if (Utility.StringUtility.StringEqualsOrdinalIgnoreCase(p.Title, placeTitle))
+                {
+                    // TODO: check: переделал уникальный ключ Места с tableid на hashcode,
+                    // поскольку tableid теперь не всегда уникальный, поскольку часть Мест
+                    // теперь хранятся в Бибилиотеках Процедур и имеют tableid = -1.
+                    int key = p.GetHashCode();
+                    if (!tdic.ContainsKey(key))
+                        tdic.Add(key, p);
+                }
+            // тут перенесем содержимое словаря в выходной список и уничтожим
+            // словарь
+            result.AddRange(tdic.Values);
+            tdic.Clear();
+            tdic = null;
 
-return set;
-    }
+            return result;
+        }
+
+        /// <summary>
+        /// NT-Выбрать из коллекции все Места.
+        /// </summary>
+        /// <returns>Возвращает список всех имеющихся в коллекции Мест.</returns>
+        public List<Place> getPlacesAsList()
+        {
+            // словарь имеет ключ - синоним, так что в словаре по 6 штук одних и тех же объектов мест.
+            // поэтому создадим еще один словарь - временный для уникализации объектов мест.
+            List<Place> result = new List<Place>();
+            Dictionary<int, Place> tdic = new Dictionary<int, Place>();
+            foreach (Place p in this.m_places.Values)
+            {
+                if (p != null)
+                {
+                    //будем использовать хешкод объекта как уникальный ключ.
+                    int key = p.GetHashCode();
+                    if (!tdic.ContainsKey(key))
+                    {
+                        tdic.Add(key, p);
+                    }
+                }
+            }
+            //тут перенесем содержимое словаря в выходной список и уничтожим словарь
+            result.AddRange(tdic.Values);
+            tdic.Clear();
+            tdic = null;
+
+            return result;
+        }
+
+        /// <summary>
+        /// NT-Получить множество уникальных названий неймспейсов элементов коллекции.
+        /// </summary>
+        /// <returns>Функция возвращает множество уникальных названий неймспейсов элементов коллекции.</returns>
+        public HashSet<String> getNamespaces()
+        {
+            HashSet<String> set = new HashSet<String>();
+            // add existing item namespaces
+            foreach (Place p in this.m_places.Values)
+                set.Add(Utility.StringUtility.GetStringTextNull(p.Namespace));
+
+            return set;
+        }
+
+        #endregion
     }
 }

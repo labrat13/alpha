@@ -1,57 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Engine.OperatorEngine;
 
 namespace Engine.DbSubsystem
 {
     /// <summary>
-    /// NR - Коллекция - список Процедур
+    /// NT - Коллекция - список Процедур
     /// </summary>
     internal class ProcedureCollection
     {
-        /**
-     * Список объектов процедур
-     */
-        private LinkedList<Procedure> m_proclist;
 
-        /**
-         * Default constructor
-         */
+        /// <summary>
+        /// Список объектов процедур
+        /// </summary>
+        private List<Procedure> m_proclist;
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public ProcedureCollection()
         {
-            this.m_proclist = new LinkedList<Procedure>();
+            this.m_proclist = new List<Procedure>();
         }
 
-        /**
-         * NT-Получить список объектов процедур
-         * 
-         * @return Список объектов процедур
-         */
-        public LinkedList<Procedure> get_Procedures()
+        /// <summary>
+        /// RT-Получить список объектов процедур.
+        /// </summary>
+        public List<Procedure> Procedures
         {
-            return this.m_proclist;
+            get { return this.m_proclist; }
         }
 
-        /**
-         * NT-Очистить коллекцию
-         */
+        /// <summary>
+        /// RT-Очистить коллекцию
+        /// </summary>
         public void Clear()
         {
-            this.m_proclist.clear();
+            this.m_proclist.Clear();
         }
 
-        /**
-         * NT-Get count of collection items.
-         * 
-         * @return Returns count of collection items.
-         */
-        public int getCount()
+        /// <summary>
+        /// RT-Get count of collection items.
+        /// </summary>
+        public int Count
         {
-            return this.m_proclist.size();
+            get { return this.m_proclist.Count; }
         }
 
-        // TODO: Процедуры более не должны создаваться из кода.
         // TODO: Проверить, что Процедуры в коллекции сортируются по Весу после
         // заполнения коллекции!
 
@@ -90,97 +85,69 @@ namespace Engine.DbSubsystem
         // return;
         // }
 
-        /**
-         * Fill collection from database and sort by Ves field
-         * 
-         * @param list
-         *            List of Procedure from database
-         */
-        public void Fill(LinkedList<Procedure> list)
+        /// <summary>
+        /// NT - Fill collection from database and sort by Ves field.
+        /// </summary>
+        /// <param name="list">List of Procedure from database</param>
+        public void Fill(List<Procedure> list)
         {
-            this.m_proclist.addAll(list);
+            this.m_proclist.AddRange(list);
             // сортировать процедуры по весу обязательно, иначе команды будут
             // исполняться не по их весу.
-            SortByVes(this.m_proclist);
+            this.m_proclist.Sort(Procedure.SortByVes);
 
             return;
         }
 
-        /**
-         * NT- Сортировать процедуры по возрастанию веса
-         * 
-         * @param list
-         *            List of procedures for sorting
-         */
-        public static void SortByVes(LinkedList<Procedure> list)
+        /// <summary>
+        /// NT-Выбрать из коллекции Процедуры по названию, без учета регистра символов
+        /// </summary>
+        /// <param name="title">Название Процедуры</param>
+        /// <returns>Возвращает список Процедур с указанным названием</returns>
+        public List<Procedure> getByTitle(String title)
         {
-            if (list.size() > 1)
+            List<Procedure> result = new List<Procedure>();
+            foreach (Procedure p in this.m_proclist)
             {
-                Collections.sort(list, new Comparator<Procedure>()
+                if (title.Equals(p.Title, StringComparison.OrdinalIgnoreCase))
+                    result.Add(p);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// NT - Получить из коллекции Процедуру по ее Пути, без учета регистра символов.
+        /// </summary>
+        /// <param name="procedurePath">Путь Процедуры.</param>
+        /// <returns>
+        /// Функция возвращает объект Процедуры, соответствующий указанному пути.
+        /// Функция возвращает null, если Процедура не найдена.
+        /// </returns>
+        public Procedure getByPath(String procedurePath)
+        {
+            foreach (Procedure p in this.m_proclist)
             {
+                if (procedurePath.Equals(p.Path, StringComparison.OrdinalIgnoreCase))
+                    return p;
+            }
 
-                @Override
-                public int compare(Procedure u1, Procedure u2)
-                {
-                    return u1.get_Ves().compareTo(u2.get_Ves());
-                }
-            });
+            return null;
         }
 
-        return;
-    }
-
-    /**
-     * NT-Выбрать из коллекции Процедуры по названию, без учета регистра символов
-     * 
-     * @param title
-     *            Название Процедуры
-     * @return Возвращает список Процедур с указанным названием
-     */
-    public LinkedList<Procedure> getByTitle(String title)
-    {
-        LinkedList<Procedure> result = new LinkedList<Procedure>();
-        for (Procedure p : this.m_proclist)
+        /// <summary>
+        /// NT-Получить множество уникальных названий неймспейсов элементов коллекции.
+        /// </summary>
+        /// <returns>Функция возвращает множество уникальных названий неймспейсов элементов коллекции.</returns>
+        public HashSet<String> getNamespaces()
         {
-            if (title.equalsIgnoreCase(p.get_Title()))
-                result.add(p);
+            HashSet<String> set = new HashSet<String>();
+            // add existing item namespaces
+            foreach (Procedure p in this.m_proclist)
+                set.Add(Utility.StringUtility.GetStringTextNull(p.Namespace));
+
+            return set;
         }
 
-        return result;
     }
-
-    /**
-     * NT - Получить из коллекции Процедуру по ее Пути, без учета регистра символов.
-     * 
-     * @param procedurePath
-     *            Путь Процедуры.
-     * @return Функция возвращает объект Процедуры, соответствующий указанному пути. Функция возвращает null, если Процедура не найдена.
-     */
-    public Procedure getByPath(String procedurePath)
-    {
-        for (Procedure p : this.m_proclist)
-        {
-            if (procedurePath.equalsIgnoreCase(p.get_Path()))
-                return p;
-        }
-
-        return null;
-    }
-
-    /**
-     * NT-Получить множество уникальных названий неймспейсов элементов коллекции.
-     * 
-     * @return Функция возвращает множество уникальных названий неймспейсов элементов коллекции.
-     */
-    public HashSet<String> getNamespaces()
-    {
-        HashSet<String> set = new HashSet<String>();
-        // add existing item namespaces
-        for (Procedure p : this.m_proclist)
-            set.add(Utility.GetStringTextNull(p.get_Namespace()));
-
-        return set;
-    }
-
-}
 }
