@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Data.Common;
+using System.Globalization;
 
 namespace Engine.DbSubsystem
 {
@@ -12,38 +11,44 @@ namespace Engine.DbSubsystem
     {
         #region *** Fields ***
 
-        /**
-         * Database file connection string
-         */
+        /// <summary>
+        /// Database file connection string
+        /// </summary>
         protected String m_connectionString;
 
-        /**
-         * Database connection object
-         */
-        protected Connection m_connection;
+        /// <summary>
+        /// Database connection object
+        /// </summary>
+        protected SQLiteConnection m_connection;
 
-        /**
-         * Command execution default timeout
-         */
+        /// <summary>
+        /// Database transaction object
+        /// </summary>
+        protected SQLiteTransaction m_transaction;
+
+        /// <summary>
+        /// Command execution default timeout
+        /// </summary>
         protected int m_Timeout;
 
         #endregion
 
-            
-         /// <summary>
-         /// RT-Default constructor
-         /// </summary>
-         /// <exception cref="Exception">Error on database access occured.</exception>
-        public SqliteDbAdapter() 
+
+        /// <summary>
+        /// NT-Default constructor
+        /// </summary>
+        /// <exception cref="Exception">Error on database access occured.</exception>
+        public SqliteDbAdapter()
         {
 
-        this.m_connection = null;
-        this.m_connectionString = "";// string.Empty;
-        this.m_Timeout = 60;
-        this.ClearCommands();
+            this.m_connection = null;
+            this.m_transaction = null;
+            this.m_connectionString = string.Empty;
+            this.m_Timeout = 60;
+            this.ClearCommands();
 
-        return;
-    }
+            return;
+        }
         /// <summary>
         /// Destructor
         /// </summary>
@@ -54,580 +59,491 @@ namespace Engine.DbSubsystem
             return;
         }
 
-        /#region *** Properties ***
-
-        /**
-         * NT-Get command execution timeout in seconds.
-         * 
-         * @return Returns command execution timeout in seconds.
-         */
-        public int getTimeout()
-    {
-        return this.m_Timeout;
-    }
-
-    /**
-     * NT-Set command execution timeout in seconds.
-     * 
-     * @param sec
-     *            Command execution timeout in seconds.
-     */
-    public void setTimeout(int sec)
-    {
-        this.m_Timeout = sec;
-    }
-
-    /**
-     * NT-Get current connection string value.
-     * 
-     * @return Returns current connection string value.
-     */
-    public String getConnectionString()
-    {
-        return this.m_connectionString;
-    }
-
-    /**
-     * RT- Check is database connection active
-     * 
-     * @return Returns True if connection active.
-     */
-    public boolean isConnectionActive()
-    {
-        boolean result = false;
-        try
+        #region Properties
+        /// <summary>
+        /// Default connection timeout, in seconds
+        /// </summary>
+        public int Timeout
         {
-            if (this.m_connection != null)
-                result = this.m_connection.isValid(m_Timeout);
-        }
-        catch (Exception ex)
-        {
-            result = false;
+            get
+            {
+                return this.m_Timeout;
+            }
+            set
+            {
+                this.m_Timeout = value;
+            }
         }
 
-        return result;
-    }
+        /// <summary>
+        /// NT-Current connection string value.
+        /// </summary>
+        public string ConnectionString
+        {
+            get
+            {
+                return this.m_connectionString;
+            }
+            //set
+            //{
+            //    this.m_connectionString = value;
+            //    this.m_connection = new SQLiteConnection(this.m_connectionString);
+            //}
+        }
+
+        /// <summary>
+        /// NT-Is database connection active
+        /// </summary>
+        public bool isConnectionActive
+        {
+            get
+            {
+                //return this.m_connection != null && ((DbConnection)this.m_connection).State == ConnectionState.Open;
+                bool result = false;
+                try
+                {
+                    if (this.m_connection != null)
+                        result = this.m_connection.isValid(m_Timeout);
+                }
+                catch (Exception ex)
+                {
+                    result = false;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// NT - Is database transaction active
+        /// </summary>
+        public bool isTransactionActive
+        {
+            get
+            {
+                return this.m_transaction != null;
+            }
+        }
         #endregion
 
+
+
         #region *** Service functions ***
-        /**
-         * RT-Clear all member commands
-         * 
-         * @throws Exception
-         *             Function not implemented in this class.
-         */
-        protected void ClearCommands() throws Exception
-    {
-        ; // throw new Exception("Function not implemented in this class.");
-    }
 
-    /**
-     * RT-Open connection to database.
-     * Specified connection string will be stored inside this object for next
-     * using.
-     * 
-     * @param connectionString
-     *            Connection string for database
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void Open(String connectionString) throws Exception
-    {
-        this.m_connectionString = Utility.StringCopy(connectionString);
-        this.Open();
-    }
-
-    /**
-     * NT-Open connection to database, using previous stored connection string.
-     * If connection already opened then return.
-     * 
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void Open() throws Exception
-    {
-        // skip if connection already active
-        if (this.isConnectionActive())
-            return;
-        else
+        /// <summary>
+        /// NT-Clear all member commands
+        /// </summary>
+        protected virtual void ClearCommands()
         {
-            DriverManager.setLoginTimeout(this.m_Timeout);
-            this.m_connection = DriverManager.getConnection(this.m_connectionString);
-            this.m_connection.setAutoCommit(false);
+            //необходимо переопределить эту функцию в производном классе и добавить в нее обнуление объектов команд.
+            //В этом классе таких объектов команд нет, поэтому тут она пустая.
+            throw new Exception("Function not implemented in this class.");
         }
-        //clear command object ref's
-        this.ClearCommands();
-        
-        return;
-    }
 
-    /**
-     * RT- Close connection and reset all resources to initial state.
-     * Connection string not cleared.
-     * 
-     * @throws Exception
-     *             Ошибка при использовании БД.
-     */
-    public void Close() throws Exception
-    {
-        if (this.m_connection == null)
-            return;
-        if (!this.m_connection.isClosed())
-            this.m_connection.close();
-        this.m_connection = null;
-        //clear command object ref's
-        this.ClearCommands();
-
-        return;
-    }
-
-    /**
-     * RT-Create connection string
-     * 
-     * @param dbFilePath
-     *            Database file pathname string
-     * @return Returns connection string
-     */
-    public static String CreateConnectionString(String dbFilePath)
-    {
-        // connection strings:
-        // jdbc:sqlite::memory: - in-memory database
-        // jdbc:sqlite:C:/sqlite/db/chinook.db - windows absolute path
-        // jdbc:sqlite:test.db - test.db in current folder
-        return "jdbc:sqlite:" + dbFilePath;
-    }
-
-    /**
-     * NT-Get string representation of object.
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString()
-    {
-        boolean active = this.isConnectionActive();
-        String cstr = Utility.GetStringTextNull(this.m_connectionString);
-        String result = String.format("SqliteDbAdapter; connection=\"%s\"; active=%s", cstr, active);
-
-        return result;
-    }
-    #endregion
-    #region *** Transaction functions ***
-    /**
-     * NR-Transaction begins on first query
-     * 
-     * @throws Exception
-     *             Функция не может быть реализована, но является частью общего
-     *             интерфейса БД.
-     */
-    public void TransactionBegin() throws Exception
-    {
-        // this.m_transaction = this.m_connection.BeginTransaction();
-        // this.ClearCommands();
-        throw new Exception("Not implemented function");
-}
-
-/**
- * RT- Commit current transaction
- * 
- * @throws Exception
- *             Ошибка при использовании БД.
- */
-public void TransactionCommit() throws Exception
-{
-        this.m_connection.commit();
-        this.ClearCommands();
-        return;
-}
-
-/**
- * NT-Rollback current transaction
- * 
- * @throws Exception
- *             Ошибка при использовании БД.
- */
-public void TransactionRollback() throws Exception
-{
-        this.m_connection.rollback();
-        this.ClearCommands();
-        return;
-}
-
-#endregion
-
-#region *** General adapter functions *** 
-
-/**
- * RT- Execute INSERT UPDATE DELETE query
- * 
- * @param query
- *            SQL query string
- * @param timeout
- *            Execution timeout in seconds.
- * @return Returns number of changed rows or 0 if no changes.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public int ExecuteNonQuery(String query, int timeout) throws SQLException
-{
-    Statement sqLiteCommand = this.m_connection.createStatement();
-    sqLiteCommand.setQueryTimeout(timeout);
-        int result = sqLiteCommand.executeUpdate(query);
-    sqLiteCommand.close();
-
-        return result;
-}
-
-/**
- * NT-Execute SELECT query without arguments.
- * Caller must close Statement after reading result set via accessor
- * ResultSet.getStatement();
- * 
- * @param query
- *            SQL query string
- * @param timeout
- *            Execution timeout in seconds.
- * @return Returns ResultSet for this query.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public ResultSet ExecuteReader(String query, int timeout)
-            throws SQLException
-{
-    Statement sqLiteCommand = this.m_connection.createStatement();
-    sqLiteCommand.setQueryTimeout(timeout);
-    ResultSet result = sqLiteCommand.executeQuery(query);
-        // get Statement to close it later: result.getStatement();
-        return result;
-}
-
-/**
- * NT-Execute SELECT query without arguments.
- * Returns result in first row first column as int.
- * 
- * @param query
- *            SQL query string
- * @param timeout
- *            Execution timeout in seconds.
- * @return Returns result in first row first column as int. Returns -1 if
- *         errors.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public int ExecuteScalar(String query, int timeout) throws SQLException
-{
-    Statement sqLiteCommand = this.m_connection.createStatement();
-    sqLiteCommand.setQueryTimeout(timeout);
-    ResultSet rs = sqLiteCommand.executeQuery(query);
-        int result = -1;
-        // read first row in result
-        // if(rs.first() == true) - throws exception with: ResultSet has mode
-        // FORWARD_ONLY
-        if (rs.next() == true)
+        /// <summary>
+        /// NT-Open connection to database.
+        /// </summary>
+        /// <remarks>
+        /// Specified connection string will be stored inside this object for next using.
+        /// </remarks>
+        /// <param name="connectionString">Connection string for database</param>
+        public void Open(String connectionString)
         {
-        // read first column in result
-        result = rs.getInt(1);// first column = 1!
-    }
-    sqLiteCommand.close();
+            this.m_connectionString = string.Copy(connectionString);
+            this.Open();
 
-        return result;
-}
+            return;
+        }
 
-/**
- * NT-Получить из ридера строку либо нуль как пустую строку.
- * 
- * @param rdr
- *            Объект ридера.
- * @param index
- *            Индекс столбца для ридера, начинается с 1.
- * @return Функция возвращает строку или пустую строку, если исходное
- *         значение было null.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public static String getDbString(ResultSet rdr, int index)
-            throws SQLException
-{
-    String result = rdr.getString(index);
-        if (result == null)
-            result = "";
+        /// <summary>
+        /// NT-Open connection to database, using previous stored connection string.
+        /// </summary>
+        /// <remarks>
+        /// If connection already opened then return.
+        /// </remarks>
+        public virtual void Open()
+        {
+            // Пропустить, если менеджер уже открыт и соединение активно
+            if (this.isConnectionActive)
+                return;
 
-        return result;
-}
+            this.m_connection = new SQLiteConnection(this.m_connectionString);
+            ((DbConnection)this.m_connection).Open();
 
-/**
- * RT-Get last used rowid for table.
- * 
- * @param table
- *            Название таблицы.
- * @param timeout
- *            Таймаут операции, в секундах.
- * @return Returns last used rowid for table.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public int getLastRowId(String table, int timeout) throws SQLException
-{
-    String query = String.format("SELECT \"seq\" FROM \"sqlite_sequence\" WHERE \"name\" = \"%s\";", table);
-        return this.ExecuteScalar(query, timeout);
-}
+            //обнулить объекты команд, если это не первое открытие менеджера
+            this.ClearCommands();
 
-/**
- * RT-Удалить строки с указанным значением столбца из таблицы.
- * 
- * @param table
- *            Название таблицы.
- * @param column
- *            Название столбца.
- * @param val
- *            Числовое значение столбца в таблице.
- * @param timeout
- *            Таймаут операции, в секундах.
- * @return Функция возвращает число удаленных строк.
- * 
- *         Эта универсальная функция позволяет удалить строку таблицы по
- *         значению одного из ее столбцов.
- *         Например, по ID записи.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public int DeleteRow(String table, String column, int val, int timeout)
-            throws SQLException
-{
-    // SQLiteCommand sqLiteCommand = new
-    // SQLiteCommand(String.Format((IFormatProvider)
-    // CultureInfo.InvariantCulture, "DELETE FROM \"{0}\" WHERE (\"{1}\" =
-    // {2});", (object) table, (object) column, (object) val),
-    // this.m_connection, this.m_transaction);
-    // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
-    // return ((DbCommand) sqLiteCommand).ExecuteNonQuery();
-    String query = String.format("DELETE FROM \"%s\" WHERE (\"%s\" = %d);", table, column, val);
-        return this.ExecuteNonQuery(query, timeout);
-}
+            return;
+        }
 
-/**
- * RT-Получить максимальное значение поля столбца таблицы.
- * 
- * @param table
- *            Название таблицы.
- * @param column
- *            Название столбца.
- * @param timeout
- *            Таймаут операции в секундах.
- * @return Возвращает максимальное значение ячеек столбца таблицы или -1 при
- *         ошибке.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public int getTableMaxInt32(String table, String column, int timeout)
-            throws SQLException
-{
-    // SQLiteCommand sqLiteCommand = new
-    // SQLiteCommand(String.Format((IFormatProvider)
-    // CultureInfo.InvariantCulture, "SELECT MAX(\"{0}\") FROM \"{1}\";",
-    // new object[2] {
-    // (object) column,
-    // (object) table
-    // }), this.m_connection, this.m_transaction);
-    // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
-    // int num = -1;
-    // SQLiteDataReader sqLiteDataReader = sqLiteCommand.ExecuteReader();
-    // if (((DbDataReader) sqLiteDataReader).HasRows)
-    // {
-    // ((DbDataReader) sqLiteDataReader).Read();
-    // num = ((DbDataReader) sqLiteDataReader).GetInt32(0);
-    // }
-    // ((DbDataReader) sqLiteDataReader).Close();
-    // return num;
 
-    String query = String.format("SELECT MAX(`%s`) FROM `%s`;", column, table);
-        return this.ExecuteScalar(query, timeout);
+        /// <summary>
+        /// NT- Close connection and reset all resources to initial state.
+        /// </summary>
+        /// <remarks>
+        /// Connection string not cleared.
+        /// </remarks>
+        public virtual void Close()
+        {
+            if (this.m_connection == null)
+                return;
+            if (((DbConnection)this.m_connection).State != ConnectionState.Closed)
+                ((DbConnection)this.m_connection).Close();
+            this.m_connection = (SQLiteConnection)null;
+            //обнулить объекты команд перед закрытием менеджера
+            this.ClearCommands();
 
-}
+            return;
+        }
 
-/**
- * RT-Получить минимальное значение поля столбца таблицы.
- * 
- * @param table
- *            Название таблицы.
- * @param column
- *            Название столбца.
- * @param timeout
- *            Таймаут операции в секундах.
- * @return Возвращает минимальное значение ячеек столбца таблицы или -1 при
- *         ошибке.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public int getTableMinInt32(String table, String column, int timeout)
-            throws SQLException
-{
-    // SQLiteCommand sqLiteCommand = new
-    // SQLiteCommand(String.Format((IFormatProvider)
-    // CultureInfo.InvariantCulture, "SELECT MIN(\"{0}\") FROM \"{1}\";",
-    // new object[2] {
-    // (object) column,
-    // (object) table
-    // }), this.m_connection, this.m_transaction);
-    // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
-    // int num = -1;
-    // SQLiteDataReader sqLiteDataReader = sqLiteCommand.ExecuteReader();
-    // if (((DbDataReader) sqLiteDataReader).HasRows)
-    // {
-    // ((DbDataReader) sqLiteDataReader).Read();
-    // num = ((DbDataReader) sqLiteDataReader).GetInt32(0);
-    // }
-    // ((DbDataReader) sqLiteDataReader).Close();
-    // return num;
+        /// <summary>
+        /// NT-Create connection string
+        /// </summary>
+        /// <param name="dbFile">Database file pathname string</param>
+        /// <param name="readOnly">ReadOnly flag</param>
+        /// <returns>Returns connection string</returns>
+        public static string CreateConnectionString(string dbFile, bool readOnly)
+        {
+            SQLiteConnectionStringBuilder connectionStringBuilder = new SQLiteConnectionStringBuilder();
+            connectionStringBuilder.DataSource = dbFile;
+            connectionStringBuilder.ReadOnly = readOnly;
+            connectionStringBuilder.FailIfMissing = true;
+            return connectionStringBuilder.ConnectionString;
+        }
 
-    String query = String.format("SELECT MIN(`%s`) FROM `%s`;", column, table);
-        return this.ExecuteScalar(query, timeout);
-}
 
-/**
- * RT-Получить общее число записей в таблице
- * 
- * @param table
- *            Название таблицы.
- * @param column
- *            Название столбца.
- * @param timeout
- *            Таймаут операции в секундах.
- * @return Возвращает общее число записей в таблице или -1 при ошибке.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public int GetRowCount(String table, String column, int timeout)
-            throws SQLException
-{
-    // SQLiteCommand sqLiteCommand = new
-    // SQLiteCommand(String.Format((IFormatProvider)
-    // CultureInfo.InvariantCulture, "SELECT COUNT(\"{0}\") FROM \"{1}\";",
-    // new object[2] {
-    // (object) column,
-    // (object) table
-    // }), this.m_connection, this.m_transaction);
-    // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
-    // int num = -1;
-    // SQLiteDataReader sqLiteDataReader = sqLiteCommand.ExecuteReader();
-    // if (((DbDataReader) sqLiteDataReader).HasRows)
-    // {
-    // ((DbDataReader) sqLiteDataReader).Read();
-    // num = ((DbDataReader) sqLiteDataReader).GetInt32(0);
-    // }
-    // ((DbDataReader) sqLiteDataReader).Close();
-    // return num;
 
-    String query = String.format("SELECT COUNT(\"%s\") FROM \"%s\";", column, table);
-        return this.ExecuteScalar(query, timeout);
-}
+        /// <summary>
+        /// NT-Get string representation of object.
+        /// </summary>
+        /// <returns></returns>
+        public override String ToString()
+        {
+            bool active = this.isConnectionActive;
+            String cstr = Utility.StringUtility.GetStringTextNull(this.m_connectionString);
+            String result = String.Format("SqliteDbAdapter; connection=\"{0}\"; active={1}", cstr, active);
 
-/**
- * NT-Получить число записей таблицы с указанным значением столбца
- * 
- * @param table
- *            Название таблицы.
- * @param column
- *            Название столбца.
- * @param val
- *            Значение столбца.
- * @param timeout
- *            Таймаут операции в секундах.
- * @return Возвращает число записей таблицы с указанным значением столбца
- *         или -1 при ошибке.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public int GetRowCount(String table, String column, int val, int timeout)
-            throws SQLException
-{
-    // SQLiteCommand sqLiteCommand = new
-    // SQLiteCommand(String.Format((IFormatProvider)
-    // CultureInfo.InvariantCulture, "SELECT COUNT(\"{0}\") FROM \"{1}\"
-    // WHERE (\"{0}\" = {2});", (object) column, (object) table, (object)
-    // val), this.m_connection, this.m_transaction);
-    // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
-    // int num = -1;
-    // SQLiteDataReader sqLiteDataReader = sqLiteCommand.ExecuteReader();
-    // if (((DbDataReader) sqLiteDataReader).HasRows)
-    // {
-    // ((DbDataReader) sqLiteDataReader).Read();
-    // num = ((DbDataReader) sqLiteDataReader).GetInt32(0);
-    // }
-    // ((DbDataReader) sqLiteDataReader).Close();
-    // return num;
+            return result;
+        }
 
-    String query = String.format("SELECT COUNT(\"%s\") FROM \"%s\" WHERE (\"%s\" = %d);", column, table, column, val);
-        return this.ExecuteScalar(query, timeout);
-}
+        #endregion
+        #region *** Transaction functions ***
 
-/**
- * RT-Проверить существование в таблице записи с указанным идентификатором.
- * 
- * @param table
- *            Название таблицы.
- * @param column
- *            Название столбца идентификаторов записей.
- * @param id
- *            Значение идентификатора записи.
- * @param timeout
- *            Таймаут операции в секундах.
- * @return Возвращает True при существовании записи с указанным ид, иначе
- *         возвращает False.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public boolean IsRowExists(String table, String column, int id, int timeout)
-            throws SQLException
-{
-        return (this.GetRowCount(table, column, id, timeout) > 0);
-}
+        /// <summary>
+        /// NT-Transaction begins on first query.
+        /// </summary>        
+        public void TransactionBegin()
+        {
+            this.m_transaction = this.m_connection.BeginTransaction();
+            this.ClearCommands();
+        }
 
-/**
- * NT-Очистить таблицу БД.
- * 
- * @param table
- *            Название таблицы.
- * @param timeout
- *            Таймаут операции в секундах.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public void TableClear(String table, int timeout) throws SQLException
-{
-    // SQLiteCommand sqLiteCommand = new
-    // SQLiteCommand(String.Format((IFormatProvider)
-    // CultureInfo.InvariantCulture, "DELETE FROM {0};", new object[1] {
-    // (object) table
-    // }), this.m_connection, this.m_transaction);
-    // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
-    // ((DbCommand) sqLiteCommand).ExecuteNonQuery();
+        /// <summary>
+        /// NT-Commit current transaction. Connection must be closed after commit.
+        /// </summary>
+        public void TransactionCommit()
+        {
+            ((DbTransaction)this.m_transaction).Commit();
+            this.ClearCommands();
+            this.m_transaction = (SQLiteTransaction)null;
+        }
 
-    String query = String.format("DELETE FROM \"%s\";", table);
-        this.ExecuteNonQuery(query, timeout);
+        /// <summary>
+        /// NT-Rollback current transaction. Connection must be closed after rollback.
+        /// </summary>
+        public void TransactionRollback()
+        {
+            ((DbTransaction)this.m_transaction).Rollback();
+            this.ClearCommands();
+            this.m_transaction = (SQLiteTransaction)null;
+        }
 
-        return;
-}
+        #endregion
 
-/**
- * RT-Удалить таблицу БД
- * 
- * @param table
- *            Название таблицы.
- * @param timeout
- *            Таймаут операции в секундах.
- * @throws SQLException
- *             Ошибка при использовании БД.
- */
-public void TableDrop(String table, int timeout) throws SQLException
-{
-    String query = String.format("DROP TABLE IF EXISTS \"%s\";", table);
-        this.ExecuteNonQuery(query, timeout);
+        #region *** General adapter functions *** 
+        /// <summary>
+        /// NT-Create new database file
+        /// </summary>
+        /// <param name="filename">File pathname for new database file.</param>
+        public static void DatabaseCreate(string filename)
+        {
+            SQLiteConnection.CreateFile(filename);
+        }
 
-        return;
-}
-#endregion
-    // Service functions =========================
+        /// <summary>
+        /// NT- Execute INSERT UPDATE DELETE query
+        /// </summary>
+        /// <param name="query">SQL query string</param>
+        /// <param name="timeout">Execution timeout in seconds.</param>
+        /// <returns>Returns number of changed rows or 0 if no changes.</returns>
+        public int ExecuteNonQuery(string query, int timeout)
+        {
+            SQLiteCommand sqLiteCommand = new SQLiteCommand(query, this.m_connection, this.m_transaction);
+            ((DbCommand)sqLiteCommand).CommandTimeout = timeout;
+            return ((DbCommand)sqLiteCommand).ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// NT-Execute SELECT query without arguments.
+        /// Caller must close Reader after reading result set.
+        /// </summary>
+        /// <param name="query">SQL query string</param>
+        /// <param name="timeout">Execution timeout in seconds.</param>
+        /// <returns>Returns ResultSet for this query.</returns>
+        public SQLiteDataReader ExecuteReader(string query, int timeout)
+        {
+            SQLiteCommand sqLiteCommand = new SQLiteCommand(query, this.m_connection, this.m_transaction);
+            ((DbCommand)sqLiteCommand).CommandTimeout = timeout;
+            return sqLiteCommand.ExecuteReader();
+        }
+
+        /// <summary>
+        /// NT-Execute SELECT query without arguments.
+        /// Returns result in first row first column as int.
+        /// </summary>
+        /// <param name="query">SQL query string</param>
+        /// <param name="timeout">Execution timeout in seconds.</param>
+        /// <returns>Returns result in first row first column as int. Returns -1 if errors.</returns>
+        public int ExecuteScalar(string query, int timeout)
+        {
+            SQLiteCommand sqLiteCommand = new SQLiteCommand(query, this.m_connection, this.m_transaction);
+            ((DbCommand)sqLiteCommand).CommandTimeout = timeout;
+            int num = -1;
+            SQLiteDataReader sqLiteDataReader = sqLiteCommand.ExecuteReader();
+            if (((DbDataReader)sqLiteDataReader).HasRows)
+            {
+                ((DbDataReader)sqLiteDataReader).Read();
+                num = ((DbDataReader)sqLiteDataReader).GetInt32(0);
+            }
+            ((DbDataReader)sqLiteDataReader).Close();
+            return num;
+        }
+
+        /// <summary>
+        /// NT-Получить из ридера строку либо нуль как пустую строку.
+        /// </summary>
+        /// <param name="rdr">Объект ридера.</param>
+        /// <param name="index">Индекс столбца для ридера</param>
+        /// <returns>Функция возвращает строку или пустую строку, если исходное значение было null.</returns>
+        public static string getDbString(SQLiteDataReader rdr, int index)
+        {
+            if (((DbDataReader)rdr).IsDBNull(index))
+                return string.Empty;
+            return ((DbDataReader)rdr).GetString(index).Trim();
+        }
+
+
+        /// <summary>
+        /// NT-Get last used rowid for table.
+        /// </summary>
+        /// <param name="table">Название таблицы.</param>
+        /// <param name="timeout">Таймаут операции, в секундах.</param>
+        /// <returns>Returns last used rowid for table.</returns>        
+        public int getLastRowId(String table, int timeout)
+        {
+            String query = String.Format("SELECT \"seq\" FROM \"sqlite_sequence\" WHERE \"name\" = \"{0}\";", table);
+            return this.ExecuteScalar(query, timeout);
+        }
+
+        /// <summary>
+        /// NT-Удалить строки с указанным значением столбца из таблицы
+        /// </summary>
+        /// <param name="table">Название таблицы</param>
+        /// <param name="column">Название столбца</param>
+        /// <param name="val">Числовое значение столбца в таблице</param>
+        /// <param name="timeout">Таймаут операции, в секундах</param>
+        /// <returns>Функция возвращает число удаленных строк.</returns>
+        /// <remarks>
+        /// Эта универсальная функция позволяет удалить строку таблицы по значению одного из ее столбцов.
+        /// Например, по ID записи.
+        /// </remarks>
+        public int DeleteRow(string table, string column, int val, int timeout)
+        {
+            String query = string.Format((IFormatProvider)CultureInfo.InvariantCulture, "DELETE FROM \"{0}\" WHERE (\"{1}\" = {2});", (object)table, (object)column, (object)val);
+            SQLiteCommand sqLiteCommand = new SQLiteCommand(query, this.m_connection, this.m_transaction);
+            ((DbCommand)sqLiteCommand).CommandTimeout = timeout;
+            return ((DbCommand)sqLiteCommand).ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// NT-Получить максимальное значение поля столбца таблицы
+        /// </summary>
+        /// <param name="table">Название таблицы</param>
+        /// <param name="column">Название столбца</param>
+        /// <param name="timeout">Таймаут операции в секундах</param>
+        /// <returns>Возвращает максимальное значение ячеек столбца таблицы или -1.</returns>
+        public int getTableMaxInt32(string table, string column, int timeout)
+        {
+            //TODO: remove this comments after function testing
+            // SQLiteCommand sqLiteCommand = new
+            // SQLiteCommand(String.Format((IFormatProvider)
+            // CultureInfo.InvariantCulture, "SELECT MAX(\"{0}\") FROM \"{1}\";",
+            // new object[2] {
+            // (object) column,
+            // (object) table
+            // }), this.m_connection, this.m_transaction);
+            // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
+            // int num = -1;
+            // SQLiteDataReader sqLiteDataReader = sqLiteCommand.ExecuteReader();
+            // if (((DbDataReader) sqLiteDataReader).HasRows)
+            // {
+            // ((DbDataReader) sqLiteDataReader).Read();
+            // num = ((DbDataReader) sqLiteDataReader).GetInt32(0);
+            // }
+            // ((DbDataReader) sqLiteDataReader).Close();
+            // return num;
+
+            String query = String.Format("SELECT MAX(\"{0}\") FROM \"{1}\";", column, table);
+            return this.ExecuteScalar(query, timeout);
+        }
+
+        /// <summary>
+        /// NT-Получить минимальное значение поля столбца таблицы
+        /// </summary>
+        /// <param name="table">Название таблицы</param>
+        /// <param name="column">Название столбца</param>
+        /// <param name="timeout">Таймаут операции в секундах</param>
+        /// <returns>Возвращает минимальное значение ячеек столбца таблицы или -1.</returns>
+        public int getTableMinInt32(string table, string column, int timeout)
+        {
+            //TODO: remove this comments after function testing
+            // SQLiteCommand sqLiteCommand = new
+            // SQLiteCommand(String.Format((IFormatProvider)
+            // CultureInfo.InvariantCulture, "SELECT MIN(\"{0}\") FROM \"{1}\";",
+            // new object[2] {
+            // (object) column,
+            // (object) table
+            // }), this.m_connection, this.m_transaction);
+            // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
+            // int num = -1;
+            // SQLiteDataReader sqLiteDataReader = sqLiteCommand.ExecuteReader();
+            // if (((DbDataReader) sqLiteDataReader).HasRows)
+            // {
+            // ((DbDataReader) sqLiteDataReader).Read();
+            // num = ((DbDataReader) sqLiteDataReader).GetInt32(0);
+            // }
+            // ((DbDataReader) sqLiteDataReader).Close();
+            // return num;
+
+            String query = String.Format("SELECT MIN(\"{0}\") FROM \"{1}\";", column, table);
+            return this.ExecuteScalar(query, timeout);
+        }
+
+        /// <summary>
+        /// NT-Получить общее число записей в таблице
+        /// </summary>
+        /// <param name="table">Название таблицы</param>
+        /// <param name="column">Название столбца</param>
+        /// <param name="timeout">Таймаут операции в секундах</param>
+        /// <returns>Функция возвращает число записей или -1.</returns>
+        public int GetRowCount(string table, string column, int timeout)
+        {
+            //TODO: remove this comments after function testing
+            // SQLiteCommand sqLiteCommand = new
+            // SQLiteCommand(String.Format((IFormatProvider)
+            // CultureInfo.InvariantCulture, "SELECT COUNT(\"{0}\") FROM \"{1}\";",
+            // new object[2] {
+            // (object) column,
+            // (object) table
+            // }), this.m_connection, this.m_transaction);
+            // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
+            // int num = -1;
+            // SQLiteDataReader sqLiteDataReader = sqLiteCommand.ExecuteReader();
+            // if (((DbDataReader) sqLiteDataReader).HasRows)
+            // {
+            // ((DbDataReader) sqLiteDataReader).Read();
+            // num = ((DbDataReader) sqLiteDataReader).GetInt32(0);
+            // }
+            // ((DbDataReader) sqLiteDataReader).Close();
+            // return num;
+
+            String query = String.Format("SELECT COUNT(\"{0}\") FROM \"{1}\";", column, table);
+            return this.ExecuteScalar(query, timeout);
+        }
+
+        /// <summary>
+        /// NT-Получить число записей таблицы с указанным значением столбца
+        /// </summary>
+        /// <param name="table">Название таблицы</param>
+        /// <param name="column">Название столбца</param>
+        /// <param name="val">Значение столбца</param>
+        /// <param name="timeout">Таймаут операции в секундах</param>
+        /// <returns>Функция возвращает число записей или -1.</returns>
+        public int GetRowCount(string table, string column, int val, int timeout)
+        {
+            //TODO: remove this comments after function testing
+            // SQLiteCommand sqLiteCommand = new
+            // SQLiteCommand(String.Format((IFormatProvider)
+            // CultureInfo.InvariantCulture, "SELECT COUNT(\"{0}\") FROM \"{1}\"
+            // WHERE (\"{0}\" = {2});", (object) column, (object) table, (object)
+            // val), this.m_connection, this.m_transaction);
+            // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
+            // int num = -1;
+            // SQLiteDataReader sqLiteDataReader = sqLiteCommand.ExecuteReader();
+            // if (((DbDataReader) sqLiteDataReader).HasRows)
+            // {
+            // ((DbDataReader) sqLiteDataReader).Read();
+            // num = ((DbDataReader) sqLiteDataReader).GetInt32(0);
+            // }
+            // ((DbDataReader) sqLiteDataReader).Close();
+            // return num;
+
+            String query = String.Format("SELECT COUNT(\"{0}\") FROM \"{1}\" WHERE (\"{2}\" = {3});", column, table, column, val);
+            return this.ExecuteScalar(query, timeout);
+        }
+
+        /// <summary>
+        /// NT-Проверить существование в таблице записи с указанным идентификатором.
+        /// </summary>
+        /// <param name="tablename">Название таблицы</param>
+        /// <param name="column">Название столбца идентификаторов записей таблицы</param>
+        /// <param name="idValue">Идентификатор записи таблицы</param>
+        /// <param name="timeout">Таймаут операции в секундах</param>
+        /// <returns>
+        /// Возвращает True при существовании записи с указанным ид, иначе возвращает False.
+        /// </returns>
+        public bool IsRowExists(string tablename, string column, int idValue, int timeout)
+        {
+            return this.GetRowCount(tablename, column, idValue, timeout) > 0;
+        }
+
+        /// <summary>
+        /// NT-Очистить таблицу БД.
+        /// </summary>
+        /// <param name="table">Название таблицы</param>
+        /// <param name="timeout">Таймаут операции в секундах</param>
+        public void TableClear(string table, int timeout)
+        {
+            //TODO: remove this comments after function testing
+            // SQLiteCommand sqLiteCommand = new
+            // SQLiteCommand(String.Format((IFormatProvider)
+            // CultureInfo.InvariantCulture, "DELETE FROM {0};", new object[1] {
+            // (object) table
+            // }), this.m_connection, this.m_transaction);
+            // ((DbCommand) sqLiteCommand).CommandTimeout = timeout;
+            // ((DbCommand) sqLiteCommand).ExecuteNonQuery();
+
+            String query = String.Format("DELETE FROM \"{0}\";", table);
+            this.ExecuteNonQuery(query, timeout);
+
+            return;
+        }
+
+
+        /// <summary>
+        /// RT-Удалить таблицу БД
+        /// </summary>
+        /// <param name="table">Название таблицы.</param>
+        /// <param name="timeout">Таймаут операции в секундах.</param>
+        public void TableDrop(String table, int timeout)
+        {
+            String query = String.Format("DROP TABLE IF EXISTS \"{0}\";", table);
+            this.ExecuteNonQuery(query, timeout);
+
+            return;
+        }
+        #endregion
+
 
     }
 }
