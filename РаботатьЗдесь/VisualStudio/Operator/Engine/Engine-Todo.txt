@@ -357,3 +357,77 @@
 ==============================================================================
 30 сент 2022
 - прочитать и выписать сюда нерешенные задачи из предыдущего текста.
+- к проекту подключена БД SQLITE, референс взят из dll сборки из ..\ЛокальныеИнструменты\sqliteDeploy\appFolder\System.Data.SQLite.dll
+  Это для 2 фреймворка, будет ли работать в 3.5 - я не знаю.
+  - Перед отладкой проекта надо туда скопировать все остальные длл из папки БД, как написано в ее инструкции.
+  - сборку фреймворка 3.5 я пока не нашел, как будет это работать - не знаю. Тут еще много возни.
+  - этот референс удален, взят nuget загруженный из интернета, подключен к проекту.
+    Но если не будетработать, то лучше заново подключить к проекту сборку из ..\ЛокальныеИнструменты\sqliteDeploy\appFolder\System.Data.SQLite.dll
+    Она работать будет, но это по совместимости. Для порядка лучше найти сборку согласно версии фреймворка.
+ - Бд не создана, скрипты sql я не нашел тут, но где-тоони есть вроде бы. 
+   Бд должна создаваться кодом при первом запуске Оператора, но там еще настройки надо брать из файла настроек Оператора, вроде бы.
+   Там надо разбираться, по мере портирования проекта.
+
+
+05 октября 2022
+Список классов по неймспейсам для портирования: TODO: отметить тут уже портированные классы и енумы. И замечания, по классам если они короткие. Если длинные - писать после этого списка.  - 
+- DbSubsystem
+  - OperatordbAdapter - ported
+  - PlacesCollection    - ported
+  - ProcedureCollection - ported
+  - SqliteDbAdapter     - ported
+- LexiconSubsystem
+  - BCSA
+  - DialogConsole
+  - Dialogs
+  - EnumDialogConsoleColor
+  - EnumSpeakDialogResult
+- LogSubsystem
+  - EnumLogMsgClass
+  - EnumLogMsgState
+  - LogManager
+  - LogManager2
+  - LogMessage
+- OperatorEngine
+  - ArgumentCollection
+  - ElementCacheManager
+  - Engine
+  - EngineSubsystem
+  - EntityType
+  - EntityTypesCollection
+  - EnumProcedureResult
+  - EnumRegexType
+  - FileSystemManager
+  - FuncArgument
+  - Item
+  - NamespaceConstant
+  - Place
+  - Procedure
+  - RegexManager
+  - UserQuery
+- ProcedureSubsystem
+  - ImplementationState
+  - LibraryManagerBase
+  - OperatorProcedureAttribute
+  - ProcedureExecutionManager
+- SettingSubsystem
+  - ApplicationSettingBase
+  - ApplicationSettingKeyed
+  - EnumSettingKey
+  - SettingItem
+  - SettingItemCollection
+- Utility
+  - FileUtility
+  - InOutArgument
+  - ItemDictionaryBase
+  - ItemDictionaryByNamespace
+  - OperatorVersion
+  - SingleAppInstance
+  - StringUtility
+  - SystemInfoManager
+  - WindowUtility
+- приложение Operator
+  - Program
+- библиотека процедур GeneralProcedures
+  - LibraryManager
+  - классы кода процедур надо принести из проекта JAVA

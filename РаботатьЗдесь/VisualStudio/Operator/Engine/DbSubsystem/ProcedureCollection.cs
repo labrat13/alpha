@@ -9,6 +9,7 @@ namespace Engine.DbSubsystem
     /// </summary>
     internal class ProcedureCollection
     {
+        //DONE: ported from Java to CS
 
         /// <summary>
         /// Список объектов процедур

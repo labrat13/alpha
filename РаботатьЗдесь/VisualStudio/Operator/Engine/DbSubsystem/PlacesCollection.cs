@@ -9,6 +9,7 @@ namespace Engine.DbSubsystem
     /// </summary>
     internal class PlacesCollection
     {
+        //DONE: ported from Java to CS
 
         /// <summary>
         /// Словарь синонимов сущностей мест

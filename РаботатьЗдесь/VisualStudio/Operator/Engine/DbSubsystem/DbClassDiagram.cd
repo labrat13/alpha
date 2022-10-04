@@ -7,11 +7,32 @@
       <FileName>OperatorEngine\EngineSubsystem.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Engine.DbSubsystem.OperatorDbAdapter" Collapsed="true">
-    <Position X="1" Y="1.75" Width="1.5" />
+  <Class Name="Engine.DbSubsystem.SqliteDbAdapter" Collapsed="true">
+    <Position X="3.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>AIAAAADAMAAAoSAECAgAAEBAAIMAEEIBICAAMgCCAAg=</HashCode>
+      <FileName>DbSubsystem\SqliteDbAdapter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.DbSubsystem.OperatorDbAdapter" Collapsed="true">
+    <Position X="3.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CQAAAQBCIAIAIAAmRgAABAAAEAAgAAREAgAIEwBAwgA=</HashCode>
       <FileName>DbSubsystem\OperatorDbAdapter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.DbSubsystem.PlacesCollection" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAAACAAAAAAAARAAABAQACAAACAAAAEAAAAFAAAA=</HashCode>
+      <FileName>DbSubsystem\PlacesCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.DbSubsystem.ProcedureCollection" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAQAAAAAABAAAAAQACAAASAAAAAAAAABAAAA=</HashCode>
+      <FileName>DbSubsystem\ProcedureCollection.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

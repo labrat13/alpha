@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Data;
 using System.Data.Common;
+using System.Data.SQLite;
 using System.Globalization;
 
 namespace Engine.DbSubsystem
 {
     /// <summary>
-    /// NR-Общая версия адаптера для БД sqlite3
+    /// NT-Общая версия адаптера для БД sqlite3
     /// </summary>
     public class SqliteDbAdapter
     {
+        //DONE: ported from Java to CS
+
         #region *** Fields ***
 
         /// <summary>
@@ -103,7 +107,7 @@ namespace Engine.DbSubsystem
                 try
                 {
                     if (this.m_connection != null)
-                        result = this.m_connection.isValid(m_Timeout);
+                        result = (this.m_connection.State == ConnectionState.Open);
                 }
                 catch (Exception ex)
                 {
@@ -187,7 +191,7 @@ namespace Engine.DbSubsystem
         {
             if (this.m_connection == null)
                 return;
-            if (((DbConnection)this.m_connection).State != ConnectionState.Closed)
+            if (((DbConnection)this.m_connection).State !=  ConnectionState.Closed)
                 ((DbConnection)this.m_connection).Close();
             this.m_connection = (SQLiteConnection)null;
             //обнулить объекты команд перед закрытием менеджера
