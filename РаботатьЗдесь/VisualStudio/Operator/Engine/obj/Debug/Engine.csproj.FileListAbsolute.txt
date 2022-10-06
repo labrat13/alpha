@@ -1,0 +1,2 @@
+C:\Users\1\Documents\gitrepo\alpha\РаботатьЗдесь\VisualStudio\Operator\Engine\obj\Debug\Engine.csproj.AssemblyReference.cache
+C:\Users\1\Documents\gitrepo\alpha\РаботатьЗдесь\VisualStudio\Operator\Engine\obj\Debug\Engine.csproj.CoreCompileInputs.cache

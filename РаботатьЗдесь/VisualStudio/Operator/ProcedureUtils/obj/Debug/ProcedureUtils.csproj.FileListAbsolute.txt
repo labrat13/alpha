@@ -1,0 +1,6 @@
+C:\Users\1\Documents\gitrepo\alpha\РаботатьЗдесь\VisualStudio\Operator\ProcedureUtils\bin\Debug\ProcedureUtils.dll
+C:\Users\1\Documents\gitrepo\alpha\РаботатьЗдесь\VisualStudio\Operator\ProcedureUtils\bin\Debug\ProcedureUtils.pdb
+C:\Users\1\Documents\gitrepo\alpha\РаботатьЗдесь\VisualStudio\Operator\ProcedureUtils\obj\Debug\ProcedureUtils.csproj.AssemblyReference.cache
+C:\Users\1\Documents\gitrepo\alpha\РаботатьЗдесь\VisualStudio\Operator\ProcedureUtils\obj\Debug\ProcedureUtils.csproj.CoreCompileInputs.cache
+C:\Users\1\Documents\gitrepo\alpha\РаботатьЗдесь\VisualStudio\Operator\ProcedureUtils\obj\Debug\ProcedureUtils.dll
+C:\Users\1\Documents\gitrepo\alpha\РаботатьЗдесь\VisualStudio\Operator\ProcedureUtils\obj\Debug\ProcedureUtils.pdb

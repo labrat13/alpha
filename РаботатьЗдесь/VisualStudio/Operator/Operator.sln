@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Создать версию 2022г.txt = Создать версию 2022г.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperatorTest", "OperatorTest\OperatorTest.csproj", "{099730F9-6822-48B3-9C9C-29F1928C29F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{E6A675AC-B7EE-4C12-90F1-B1A84ABD4629}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6A675AC-B7EE-4C12-90F1-B1A84ABD4629}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6A675AC-B7EE-4C12-90F1-B1A84ABD4629}.Release|Any CPU.Build.0 = Release|Any CPU
+		{099730F9-6822-48B3-9C9C-29F1928C29F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{099730F9-6822-48B3-9C9C-29F1928C29F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{099730F9-6822-48B3-9C9C-29F1928C29F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{099730F9-6822-48B3-9C9C-29F1928C29F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
