@@ -40,7 +40,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LibraryManager.cs" />
+    <Compile Include="PlaceProcedures.cs" />
+    <Compile Include="PowerProcedures.cs" />
+    <Compile Include="ProcedureProcedures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingProcedures.cs" />
+    <Compile Include="TestProcedures.cs" />
+    <Compile Include="UnsortedProcedures.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="GeneralProcedures-Readme.txt" />

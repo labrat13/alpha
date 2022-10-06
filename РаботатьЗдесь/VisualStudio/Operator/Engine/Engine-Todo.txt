@@ -372,62 +372,70 @@
 05 октября 2022
 Список классов по неймспейсам для портирования: TODO: отметить тут уже портированные классы и енумы. И замечания, по классам если они короткие. Если длинные - писать после этого списка.  - 
 - DbSubsystem
-  - OperatordbAdapter - ported
-  - PlacesCollection    - ported
-  - ProcedureCollection - ported
-  - SqliteDbAdapter     - ported
-- LexiconSubsystem
-  - BCSA
-  - DialogConsole
-  - Dialogs
-  - EnumDialogConsoleColor
-  - EnumSpeakDialogResult
-- LogSubsystem
-  - EnumLogMsgClass
-  - EnumLogMsgState
-  - LogManager
-  - LogManager2
-  - LogMessage
-- OperatorEngine
-  - ArgumentCollection
-  - ElementCacheManager
-  - Engine
-  - EngineSubsystem
-  - EntityType
-  - EntityTypesCollection
-  - EnumProcedureResult
-  - EnumRegexType
-  - FileSystemManager
-  - FuncArgument
-  - Item
-  - NamespaceConstant
-  - Place
-  - Procedure
-  - RegexManager
-  - UserQuery
-- ProcedureSubsystem
-  - ImplementationState
-  - LibraryManagerBase
-  - OperatorProcedureAttribute
-  - ProcedureExecutionManager
-- SettingSubsystem
-  - ApplicationSettingBase
-  - ApplicationSettingKeyed
-  - EnumSettingKey
-  - SettingItem
-  - SettingItemCollection
-- Utility
-  - FileUtility
-  - InOutArgument
-  - ItemDictionaryBase
-  - ItemDictionaryByNamespace
-  - OperatorVersion
-  - SingleAppInstance
-  - StringUtility
-  - SystemInfoManager
-  - WindowUtility
+  - OperatordbAdapter           - ported, NT
+  - PlacesCollection            - ported, NT
+  - ProcedureCollection         - ported, NT
+  - SqliteDbAdapter             - ported, NT
+- LexiconSubsystem              - need             
+  - BCSA                        - need refactoring для диалога консольной винды
+  - DialogConsole               - need refactoring для диалога консольной винды
+  - Dialogs                     - need refactoring для диалога консольной винды
+  - EnumDialogConsoleColor      - need refactoring для диалога консольной винды
+  - EnumSpeakDialogResult       - need refactoring для диалога консольной винды
+- LogSubsystem                  - need
+  - EnumLogMsgClass             - ported, RT
+  - EnumLogMsgState             - ported, RT, need refactoring - не определена роль этого в системе сообщений лога.         
+  - LogManager                  - need
+  - LogManager2                 - need
+  - LogMessage                  - need
+- OperatorEngine                - need
+  - ArgumentCollection          - ported, NT
+  - ElementCacheManager         - need
+  - Engine                      - need
+  - EngineSubsystem             - ported, NT
+  - EntityType                  - ported, NT
+  - EntityTypesCollection       - ported, NT
+  - EnumProcedureResult         - ported, RT
+  - EnumRegexType               - ported, RT
+  - FileSystemManager           - need
+  - FuncArgument                - ported, NT
+  - Item                        - ported, NT
+  - NamespaceConstant           - ported, NT
+  - Place                       - ported, NT, refactoring
+  - Procedure                   - ported, NT
+  - RegexManager                - need
+  - UserQuery                   - wait for dependency
+- ProcedureSubsystem            - need
+  - ImplementationState         - ported, RT.
+  - LibraryManagerBase          - need
+  - OperatorProcedureAttribute  - ported, NT
+  - ProcedureExecutionManager   - need
+- SettingSubsystem              - need
+  - ApplicationSettingBase      - need
+  - ApplicationSettingKeyed     - need
+  - EnumSettingKey              - need refactoring
+  - SettingItem                 - need
+  - SettingItemCollection       - need
+- Utility                       - 
+  - FileUtility                 - 
+  - InOutArgument               - создан для обхода ограничений JAVA  и вроде бы в проекте не нужен?
+  - ItemDictionaryBase          - ported
+  - ItemDictionaryByNamespace   - ported
+  - OperatorVersion             - ported
+  - SingleAppInstance           - 
+  - StringUtility               - need refactoring
+  - SystemInfoManager           - ported, need refactoring
+  - WindowUtility               - ported
 - приложение Operator
-  - Program
+  - Program                     - need
 - библиотека процедур GeneralProcedures
-  - LibraryManager
-  - классы кода процедур надо принести из проекта JAVA
+  - LibraryManager              - need
+  - PlaceProcedures             - need
+  - ProcedureProcedures         - need
+  - PowerProcedures             - need
+  - SettingProcedures           - need
+  - TestProcedures              - need
+  - UnsortedProcedures          - need
+
+  -------------------------------------------------------------------------------------------
+

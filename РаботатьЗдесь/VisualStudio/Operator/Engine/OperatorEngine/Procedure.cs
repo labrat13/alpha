@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Engine.OperatorEngine
@@ -11,7 +9,7 @@ namespace Engine.OperatorEngine
     public class Procedure :Item
     {
 
-        #region Fields
+        #region *** Fields ***
 
         /// <summary>
         /// порядковый номер проверки в очереди проверок для команды - для поддержки очередность проверки выражений

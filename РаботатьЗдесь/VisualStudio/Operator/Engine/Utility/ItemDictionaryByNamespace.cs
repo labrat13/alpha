@@ -8,15 +8,15 @@ using Engine.SettingSubsystem;
 namespace Engine.Utility
 {
     /// <summary>
-    /// NR-Словарь итемов с группировкой по неймспейсу
+    /// NT-Словарь итемов с группировкой по неймспейсу
     /// </summary>
-    internal class ItemDictionaryByNamespace
+    internal class ItemDictionaryByNamespace : ItemDictionaryBase
     {
 
         /// <summary>
         /// NT-Constructor
         /// </summary>
-        public ItemDictionaryByNamespace() : base()
+        public ItemDictionaryByNamespace(): base()
         {
 
         }
@@ -25,7 +25,7 @@ namespace Engine.Utility
         /// NT- Add setting items from source.
         /// </summary>
         /// <param name="items">List of items to add.</param>
-        public void addItems(LinkedList<Item> items)
+        public void addItems(List<Item> items)
         {
             foreach (Item item in items)
             {
@@ -39,12 +39,10 @@ namespace Engine.Utility
         /// NT- Add setting items from source.
         /// </summary>
         /// <param name="items">List of items to add.</param>
-        public void addSettingItems(LinkedList<SettingItem> items)
+        public void addSettingItems(List<SettingItem> items)
         {
             foreach (Item item in items)
-            {
                 this.addItem(item.Namespace, item);
-            }
 
             return;
         }
@@ -53,7 +51,7 @@ namespace Engine.Utility
         /// NT- Add Procedure items from source.
         /// </summary>
         /// <param name="items">List of items to add.</param>
-        public void addProcedureItems(LinkedList<Procedure> items)
+        public void addProcedureItems(List<Procedure> items)
         {
             foreach (Item item in items)
             {
@@ -67,7 +65,7 @@ namespace Engine.Utility
         /// NT- Add Place items from source.
         /// </summary>
         /// <param name="items">List of items to add.</param>
-        public void addPlaceItems(LinkedList<Place> items)
+        public void addPlaceItems(List<Place> items)
         {
             foreach (Item item in items)
             {

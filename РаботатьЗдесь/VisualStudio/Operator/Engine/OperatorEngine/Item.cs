@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Engine.Utility;
 
@@ -12,7 +10,7 @@ namespace Engine.OperatorEngine
     public class Item
     {
 
-        #region Fields
+        #region *** Fields ***
 
         /// <summary>
         /// Константа для поля m_storage, обозначает, что данный элемент хранится в Бд Оператор.
@@ -93,7 +91,7 @@ namespace Engine.OperatorEngine
 
 
 
-        #region Properties
+        #region *** Properties ***
 
         /// <summary>
         /// первичный ключ таблицы

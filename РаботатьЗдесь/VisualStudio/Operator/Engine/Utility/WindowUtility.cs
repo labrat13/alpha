@@ -133,23 +133,6 @@ namespace Engine.Utility
 
         #endregion
 
-        /// <summary>
-        /// NT-Получить строку версии сборки Оператора
-        /// </summary>
-        /// <returns></returns>
-        internal static string getOperatorVersionString()
-        {
-            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
-
-        /// <summary>
-        /// NT-Получить версию сборки Оператора
-        /// </summary>
-        /// <returns></returns>
-        internal static Version getOperatorVersion()
-        {
-            return Assembly.GetExecutingAssembly().GetName().Version;
-        }
 
     }
 }

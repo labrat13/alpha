@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Engine.LogSubsystem
+﻿namespace Engine.LogSubsystem
 {
     /// <summary>
-    /// NR-Код состояния события лога
+    /// Код состояния события лога
     /// </summary>
     public enum EnumLogMsgState
     {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Engine.Utility
 {
@@ -133,107 +134,101 @@ namespace Engine.Utility
             return (IntPtr.Size == 8);
         }
 
-
-        //TODO: port from Java code this class
-        /**
-     * Get Operating system name
-     * 
-     * @return Operating system name
-     */
+        /// <summary>
+        /// NR-Get Operating system name
+        /// </summary>
+        /// <returns>Operating system name</returns>
         public static String GetOsTitle()
         {
-            return System.getProperty("os.name");
+            return Environment.OSVersion.Platform.ToString();//TODO: выяснить что тут такое
         }
 
-        /**
-         * Get Operating system architecture
-         * 
-         * @return Operating system architecture
-         */
+        /// <summary>
+        /// NR-Get Operating system architecture
+        /// </summary>
+        /// <returns>Operating system architecture</returns>
         public static String GetOsArchTitle()
         {
-            return System.getProperty("os.arch");
+            return Environment.OSVersion.Platform.ToString();//TODO: выяснить что тут такое
         }
 
-        /**
-         * Get Operating system version
-         * 
-         * @return Operating system version
-         */
+        /// <summary>
+        /// Get Operating system version
+        /// </summary>
+        /// <returns>Operating system version</returns>
         public static String GetOsVersionString()
         {
-            return System.getProperty("os.version");
+            return Environment.OSVersion.Version.ToString();
         }
 
-        /**
-         * Get Line separator ("\n" on UNIX)
-         * 
-         * @return Line separator ("\n" on UNIX)
-         */
+        /// <summary>
+        /// Get Operating system version
+        /// </summary>
+        /// <returns>Operating system version</returns>
+        public static String GetOsVersionString2()
+        {
+            return Environment.OSVersion.VersionString;
+        }
+
+        /// <summary>
+        /// NT-Get Line separator ("\n" on UNIX)
+        /// </summary>
+        /// <returns>Line separator ("\n" on UNIX)</returns>
         public static String GetLineSeparator()
         {
-            return System.getProperty("line.separator");
+            return Environment.NewLine;
         }
 
-        /**
-         * Get File separator ("/" on UNIX)
-         * 
-         * @return File separator ("/" on UNIX)
-         */
+
+
+        /// <summary>
+        /// NT-Get File separator ("/" on UNIX)
+        /// </summary>
+        /// <returns>File separator ("/" on UNIX)</returns>
         public static String GetFileSeparator()
         {
-            return System.getProperty("file.separator");
+            return new string(Path.PathSeparator, 1);
         }
 
-        /**
-         * Get Path separator (":" on UNIX)
-         * 
-         * @return Path separator (":" on UNIX)
-         */
-        public static String GetPathSeparator()
-        {
-            return System.getProperty("path.separator");
-        }
-
-        /**
-         * Get User's account name
-         * 
-         * @return User's account name
-         */
+        /// <summary>
+        /// NR-Get User's account name
+        /// </summary>
+        /// <returns>User's account name</returns>
         public static String GetUserTitle()
         {
-            return System.getProperty("user.name");
+            //TODO: get User account name
+            //return System.getProperty("user.name");
+            return null;
         }
 
-        /**
-         * Get User's home directory
-         * 
-         * @return User's home directory
-         */
+
+        /// <summary>
+        /// Get User's home directory path
+        /// </summary>
+        /// <returns>User's home directory</returns>
         public static String GetUserHomeFolderPath()
         {
-            return System.getProperty("user.home");
+            return Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         }
 
-        /**
-         * Get User's current working directory
-         * 
-         * @return User's current working directory
-         */
+        /// <summary>
+        /// Get User's current working directory
+        /// </summary>
+        /// <returns>User's current working directory</returns>
         public static String GetUserCurrentDirectory()
         {
-            return System.getProperty("user.dir");
+            return Environment.CurrentDirectory;
         }
 
-        /**
-         * Get Java Runtime Environment version
-         * 
-         * @return Java Runtime Environment version
-         */
-        public static String GetJREVersion()
-        {
-            return System.getProperty("user.dir");
-        }
+        ///**
+        // * Get Java Runtime Environment version
+        // * 
+        // * @return Java Runtime Environment version
+        // */
+        //public static String GetJREVersion()
+        //{
+        //    return System.getProperty("user.dir");
+        //}
 
 
 

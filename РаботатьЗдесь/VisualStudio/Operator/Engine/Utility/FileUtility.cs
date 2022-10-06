@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -13,58 +14,62 @@ namespace Engine.Utility
     {
         //TODO: port this class from Java
 
-        /**
- * NT-Get file extension from file title string
- * 
- * @param s
- *            Filename without path
- * @return Function returns file extension without leading dot.
- *         Function returns empty string if filename has not extension.
- */
+        /// <summary>
+        /// NT-Get file extension from file title string
+        /// </summary>
+        /// <param name="s">Filename without path</param>
+        /// <returns>
+        /// Function returns file extension without leading dot.
+        /// Function returns empty string if filename has not extension.
+        /// </returns>
         public static String getFileExtension(String s)
         {
-            int pos = s.lastIndexOf(".");
-            if (pos == -1)
-                return "";
-            // если точка - последняя в строке
-            if (s.length() == (pos + 1))
-                return "";
-            // else
-            String result = s.substring(pos + 1);
-            return result;
+            //int pos = s.lastIndexOf(".");
+            //if (pos == -1)
+            //    return "";
+            //// если точка - последняя в строке
+            //if (s.length() == (pos + 1))
+            //    return "";
+            //// else
+            //String result = s.substring(pos + 1);
+            //return result;
+
+            //TODO: Заменить все вызовы функции после портирования проекта.
+            return Path.GetExtension(s);
         }
 
-
-        /**
- * NT- Get filename without last extension par and dot.
- * 
- * @param s
- *            Filename without path
- * @return Function returns filename without last extension and dot.
- */
+        /// <summary>
+        /// NT- Get filename without last extension par and dot.
+        /// </summary>
+        /// <param name="s">Filename without path</param>
+        /// <returns>Function returns filename without last extension and dot.</returns>
         public static String getFilenameWithoutExtension(String s)
         {
-            int pos = s.lastIndexOf(".");
-            if (pos == -1)
-                return s;
-            // else
-            String result = s.substring(0, pos);
-            return result;
+            //int pos = s.lastIndexOf(".");
+            //if (pos == -1)
+            //    return s;
+            //// else
+            //String result = s.substring(0, pos);
+            //return result;
 
+            //TODO: Заменить все вызовы функции после портирования проекта.
+            return Path.GetFileNameWithoutExtension(s);
         }
 
-        /**
-         * NT-Заменить недопустимые символы в названии файла на указанный символ
-         * @param title Название файла без расширения
-         * @param p Символ-замена.
-         * @return Возвращает безопасное название файла
-         */
-        public static String ReplaceInvalidPathChars(String title, String p)
+        /// <summary>
+        /// NT-Заменить недопустимые символы в названии файла на указанный символ
+        /// </summary>
+        /// <param name="title">Название файла без расширения</param>
+        /// <param name="p">Символ-замена.</param>
+        /// <returns>Возвращает безопасное название файла</returns>
+        public static String ReplaceInvalidPathChars(String title, char p)
         {
-            //TODO: перенести эту функцию в более правильное место по семантике.
-            String result = title.replaceAll("[\\\\/:*?\"<>|]", p);
+            Char[] unsafeChars = Path.GetInvalidFileNameChars();
+            StringBuilder sb = new StringBuilder(title);
+            foreach (char c in unsafeChars)
+                sb.Replace(c, p);
 
-            return result;
+            return sb.ToString();
         }
 
 
@@ -85,41 +90,50 @@ namespace Engine.Utility
         }
 
 
-        /** NT-Remove ending dot's from file title string
-         * @param title file title string
-         * @return Fumction returns title without ending dot's
-         */
+        /// <summary>
+        /// NT-Remove ending dot's from file title string
+        /// </summary>
+        /// <param name="title">file title string</param>
+        /// <returns>Fumction returns title without ending dot's</returns>
         public static String RemoveEndingDots(String title)
         {
-            String s = title;
-            while (s.endsWith("."))
-                s = s.substring(0, s.length() - 1);
+            //String s = title;
+            //while (s.endsWith("."))
+            //    s = s.substring(0, s.length() - 1);
+            //return s;
 
-            return s;
+            return title.TrimEnd(' ', '.');
         }
 
-        /** 
-       * NT-проверить, что строка это веб-ссылка
-       * @param addr Проверяемая строка
-       * @return Возвращает True, если строка это веб-ссылка, False в противном случае.
-       */
-        public static boolean isWebUri(String addr)
+        /// <summary>
+        /// Static array of web path prefixes for speed optimization
+        /// </summary>
+        private static String[] webPrefixes = { "http:", "https:", "www.", "ftp:", "sftp:" };
+
+        /// <summary>
+        /// NT-проверить, что строка это веб-ссылка
+        /// </summary>
+        /// <param name="addr">Проверяемая строка</param>
+        /// <returns>Возвращает True, если строка это веб-ссылка, False в противном случае.</returns>
+        public static bool IsWebUri(String addr)
         {
-            return (addr.startsWith("http:")
-                    || addr.startsWith("https:")
-                    || addr.startsWith("www.")
-                    || addr.startsWith("ftp:")
-                    || addr.startsWith("sftp:"));
+            foreach (String s in webPrefixes)
+            {
+                if (addr.StartsWith(s))
+                    return true;
+            }
+
+            return false;
         }
 
-        /** 
-         * NT-проверить, что строка это сетевой путь файла
-         * @param addr Проверяемая строка
-         * @return Возвращает True, если строка это веб-ссылка, False в противном случае.
-         */
-        public static boolean isFileUri(String addr)
+        /// <summary>
+        /// NT-проверить, что строка это сетевой путь файла
+        /// </summary>
+        /// <param name="addr">Проверяемая строка</param>
+        /// <returns>Возвращает True, если строка это веб-ссылка, False в противном случае.</returns>
+        public static bool isFileUri(String addr)
         {
-            return (addr.startsWith("file:"));
+            return (addr.StartsWith("file:"));
         }
 
         /** 

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
 namespace Engine.LexiconSubsystem
 {
     /// <summary>
-    /// NR - Анализатор команды - для исполнения сложных и составных команд.
+    /// NT - Анализатор команды - для исполнения сложных и составных команд.
+    /// Менеджер всей подсистемы Lexicon.
     /// </summary>
     internal class BCSA : Engine.OperatorEngine.EngineSubsystem
     {
@@ -28,7 +30,21 @@ namespace Engine.LexiconSubsystem
         /// <exception cref="Exception">Exception at Function must be overridden</exception>
         protected override void onOpen()
         {
-            throw new Exception("Function must be overridden");//TODO: Add code here
+            // init array Dialogs.ExitAppCommands from settings file string
+            // это не потребуется очищать при завершении данной подсистемы.
+            String words = this.m_Engine.get_EngineSettings().getValue(EnumSettingKey.ExitAppCommands);
+            if (Utility.StringUtility.StringIsNullOrEmpty(words))
+            {
+                String msg = String.Format("Ошибка! В файле настроек отсутствует необходимое поле \"{0}\" или значение для него", EnumSettingKey.ExitAppCommands.getTitle());
+                throw new Exception(msg);
+            }
+            String[] sar = Utility.StringUtility.SplitCommaDelimitedString(words);
+            Dialogs.ExitAppCommands = sar;
+
+            // set ready flag
+            this.m_Ready = true;
+
+            return;
         }
 
         /// <summary>
@@ -37,196 +53,118 @@ namespace Engine.LexiconSubsystem
         /// <exception cref="Exception">Exception at Function must be overridden</exception>
         protected override void onClose()
         {
-            throw new Exception("Function must be overridden");//TODO: Add code here
-        }
-        #endregion
-        /**
-     * Backreference to Engine object
-     */
-        protected Engine m_Engine;
-
-        /**
-         * This subsystem is ready to serve
-         */
-        protected boolean m_Ready;
-
-        /**
-         * Default constructor
-         * 
-         * @param en
-         *            Engine object reference
-         */
-        public BCSA(Engine en)
-        {
-            this.m_Engine = en;
-            // this subsystem not ready
+            // Cleanup log subsystem here
+            if (this.m_Ready == true)
+            {
+                // TODO: add cleanup code here
+            }
+            // clear ready flag
             this.m_Ready = false;
 
             return;
         }
+        #endregion
 
-        /**
-         * Log subsystem is ready to serve
-         * 
-         * @return Function returns state of readiness of subsystem.
-         */
-        public boolean isReady()
+
+
+
+        //    /**
+        //     * NT-Разобрать входной запрос команды, построить граф исполнения и
+        //     * исполнить команду
+        //     * 
+        //     * @param engine
+        //     *            Объект движка
+        //     * @param query
+        //     *            Текст исходного запроса
+        //     * @return Функция возвращает код результата исполнения процедуры
+        //     * @throws Exception
+        //     *             Error on DoQuery()
+        //     */
+        //    public static EnumProcedureResult ProcessQuery(Engine engine, String query)
+        //            throws Exception
+        //    {
+        //        // сейчас тупо исполним весь запрос целиком
+        //        EnumProcedureResult result = engine.DoQuery(query);
+        //
+        //        // а вообще это неправильно - для составных команд надо:
+        //        // 1. попытаться найти для нее процедуру-исполнителя как есть. Но найти
+        //        // и не исполнять пока!
+        //        // 2. если не нашлось, то пытаться разделить запрос на части по смыслу,
+        //        // и пытаться найти для них процедуру-исполнителя. Но найти и не
+        //        // исполнять пока!
+        //        // 3. если не нашлось процедуры хотя бы для одной из частей запроса,
+        //        // исполнять команду нельзя!
+        //        // В итоге, это все не вписывается в существующую архитектуру системы.
+        //        // Надо все переделывать для поддержки составных команд.
+        //        // а тут - пока - можно приводить глаголы в команде к первичной форме:
+        //        // спи = спать, найди = найти.
+        //        // Вот и вся интеллектуальная обработка тут.
+        //
+        //        return result;
+        //
+        //    }
+
+        #region Функции для Русского языка
+
+        /// <summary>
+        /// Русский язык для конверсий и зависимых от языка операций
+        /// </summary>  
+        /// <remarks>
+        /// Настройки пользователя локальной системы перекрывают типовую культуру.
+        /// Если нужно игнорировать пользовательские изменения культуры, замените true на false.
+        /// </remarks>
+        public static CultureInfo RuCulture = new CultureInfo("ru-RU", true);
+
+
+        /// <summary>
+        /// Буквы русского алфавита маленькие (Строчные)
+        /// </summary>
+        private const String RussianAlphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+
+        /// <summary>
+        /// Буквы русского алфавита большие (Прописные)
+        /// </summary>
+        private const String RussianAlphabetShift = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+
+
+
+        /// <summary>
+        /// NT-Вернуть True, если первые три символа - не русскоязычные.
+        /// </summary>
+        /// <param name="query">Текст запроса</param>
+        /// <returns> Функция возвращает True, если первые три символа - не русскоязычные.</returns>    
+        public static bool IsNotRussianFirst(String query)
         {
-            return this.m_Ready;
+            // Это функция для распознавания русскоязычной команды. Против текстов
+            // для командной строки, подобных "wget -c -nc www.xxx.com"
+            // Если команда русскоязычная, она должна начинаться с глагола или
+            // подобного русского слова.
+            // Значит, если первые три символа - русские, то весь текст -
+            // русскоязычная команда.
+            // А если нет - то это команда для терминала.
+            // Но я точно не представляю себе эту ситуацию, так что почему два
+            // символа, а не один или три?
+            String q = query.Trim();
+            if (q.Length == 1)
+                return !IsRussianLetter(q[0]);
+            else if (q.Length > 1)
+                return (!(IsRussianLetter(q[0]) && IsRussianLetter(q[1])));
+            else return true;// вернуть флаг, что буквы не русские
+
         }
 
-        /**
-         * NT-Init subsystem
-         * 
-         * @throws Exception
-         *             Any errors here
-         */
-        public void Open() throws Exception
+        /// <summary>
+        /// NT-Возвращает True если проверяемый символ - русская буква
+        /// </summary>
+        /// <param name="p">Проверяемый символ</param>
+        /// <returns>Возвращает True если проверяемый символ - русская буква</returns>
+        private static bool IsRussianLetter(char p)
         {
-            // init array Dialogs.ExitAppCommands from settings file string
-            // это не потребуется очищать при завершении данной подсистемы.
-            String words = this.m_Engine.get_EngineSettings().getValue(EnumSettingKey.ExitAppCommands);
-        if (Utility.StringIsNullOrEmpty(words))
-        {
-            String msg = String.format("Ошибка! В файле настроек отсутствует необходимое поле \"%s\" или значение для него", EnumSettingKey.ExitAppCommands.getTitle());
-            throw new Exception(msg);
-    }
-    String[] sar = Utility.SplitCommaDelimitedString(words);
-    Dialogs.ExitAppCommands = sar;
-
-        // set ready flag
-        this.m_Ready = true;
-
-        return;
-    }
-
-    /**
-     * NR- Close subsystem
-     * 
-     * @throws Exception
-     *             Any errors here
-     */
-    public void Close() throws Exception
-    {
-        // Cleanup log subsystem here
-        if (this.m_Ready == true)
-        {
-            // TODO: add cleanup code here
+            return ((RussianAlphabet.IndexOf(p) != -1) || (RussianAlphabetShift.IndexOf(p) != -1));
         }
-        // clear ready flag
-        this.m_Ready = false;
+        #endregion
 
-        return;
+
+
     }
-
-    //    /**
-    //     * NT-Разобрать входной запрос команды, построить граф исполнения и
-    //     * исполнить команду
-    //     * 
-    //     * @param engine
-    //     *            Объект движка
-    //     * @param query
-    //     *            Текст исходного запроса
-    //     * @return Функция возвращает код результата исполнения процедуры
-    //     * @throws Exception
-    //     *             Error on DoQuery()
-    //     */
-    //    public static EnumProcedureResult ProcessQuery(Engine engine, String query)
-    //            throws Exception
-    //    {
-    //        // сейчас тупо исполним весь запрос целиком
-    //        EnumProcedureResult result = engine.DoQuery(query);
-    //
-    //        // а вообще это неправильно - для составных команд надо:
-    //        // 1. попытаться найти для нее процедуру-исполнителя как есть. Но найти
-    //        // и не исполнять пока!
-    //        // 2. если не нашлось, то пытаться разделить запрос на части по смыслу,
-    //        // и пытаться найти для них процедуру-исполнителя. Но найти и не
-    //        // исполнять пока!
-    //        // 3. если не нашлось процедуры хотя бы для одной из частей запроса,
-    //        // исполнять команду нельзя!
-    //        // В итоге, это все не вписывается в существующую архитектуру системы.
-    //        // Надо все переделывать для поддержки составных команд.
-    //        // а тут - пока - можно приводить глаголы в команде к первичной форме:
-    //        // спи = спать, найди = найти.
-    //        // Вот и вся интеллектуальная обработка тут.
-    //
-    //        return result;
-    //
-    //    }
-
-    // #region Функции для Русского языка
-
-    /**
-     * Русский язык для конверсий и зависимых от языка операций
-     */
-    public static final Locale  RuCulture            = new Locale("ru", "RU");
-
-    /**
-     * Буквы русского алфавита маленькие (Строчные)
-     */
-    private static final String RussianAlphabet      = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
-
-    /**
-     * Буквы русского алфавита большие (Прописные)
-     */
-    private static final String RussianAlphabetShift = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
-
-    /**
-     * NT-Вернуть True, если первые три символа - не русскоязычные.
-     * 
-     * @param query
-     *            Текст запроса
-     * @return Функция возвращает True, если первые три символа - не
-     *         русскоязычные.
-     */
-    public static boolean IsNotRussianFirst(String query)
-    {
-        // Это функция для распознавания русскоязычной команды. Против текстов
-        // для командной строки, подобных "wget -c -nc www.xxx.com"
-        // если команда русскоязычная, она должна начинаться с глагола или
-        // подобного русского слова.
-        // Предположительно, длиной не менее 3 символов.
-        // Значит, если первые три символа - русские, то весь текст -
-        // русскоязычная команда.
-        // А если нет - то это команда для терминала.
-        // Но я точно не представляю себе эту ситуацию, так что почему два
-        // символа, а не один или три?
-        String q = query.trim();
-        if (q.length() < 2)
-            return true;// вернуть истину, поскольку если букв
-                        // всего 1, то это точно не русские
-        return (!(IsRussianLetter(q.charAt(0)) && IsRussianLetter(q.charAt(1))));
-    }
-
-    /**
-     * NT-Возвращает True если проверяемый символ - русская буква
-     * 
-     * @param p
-     *            Проверяемый символ
-     * @return Возвращает True если проверяемый символ - русская буква
-     */
-    private static boolean IsRussianLetter(char p)
-    {
-        int pi = (int)p;
-        return ((RussianAlphabet.indexOf(pi) != -1) || (RussianAlphabetShift.indexOf(pi) != -1));
-    }
-    // #endregion
-
-    /**
-     * RT-Форматировать дату и время в русской культуре/
-     * Пример: воскресенье, 26 апреля 2020г. 01:03:18
-     * 
-     * @param dt
-     *            дата и время
-     * @return Функция возвращает строку даты и времени.
-     */
-    public static String CreateLongDatetimeString(LocalDateTime dt)
-    {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("cccc, dd LLLL yyyy'г. 'HH:mm:ss", BCSA.RuCulture);
-
-        return dtf.format(dt);
-    }
-
-}
 }

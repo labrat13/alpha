@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Engine.OperatorEngine
 {
@@ -10,7 +7,6 @@ namespace Engine.OperatorEngine
     /// </summary>
     public class FuncArgument
     {
-
 
         #region *** Fields ***        
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Engine.LexiconSubsystem;
 
 namespace Engine.Utility
 {
@@ -10,7 +11,7 @@ namespace Engine.Utility
     /// </summary>
     public class StringUtility
     {
-        //TODO: port this class from Java
+        //DONE: port this class from Java - но есть тодо и недоделки.
 
         /// <summary>
         /// NT-проверяет что список не содержит такой строки
@@ -39,19 +40,6 @@ namespace Engine.Utility
         /// <returns>Возвращает true, если значение допустимо в качестве Double, false в противном случае.</returns>
         public static bool IsValidFloatFormat(string str, System.Globalization.CultureInfo cultureInfo)
         {
-            //bool result = false;
-            //try
-            //{
-            //    //это должно парситься в Double
-            //    double d = Double.Parse(str, cultureInfo);
-            //        result = true;
-            //}
-            //catch
-            //{
-            //    result = false;
-            //}
-            //return result;
-
             Double t;
             return Double.TryParse(str, out t);
         }
@@ -82,11 +70,11 @@ namespace Engine.Utility
 
 
 
-      /// <summary>
-      /// NT-Check String.IsNullOrEmpty()
-      /// </summary>
-      /// <param name="s">string object</param>
-      /// <returns>Returns true if string is null or empty. Returns false otherwise</returns>
+        /// <summary>
+        /// NT-Check String.IsNullOrEmpty()
+        /// </summary>
+        /// <param name="s">string object</param>
+        /// <returns>Returns true if string is null or empty. Returns false otherwise</returns>
         public static bool StringIsNullOrEmpty(String s)
         {
             //TODO: заменить это во всех местах, где оно встречается, эту функцию удалить.
@@ -94,219 +82,190 @@ namespace Engine.Utility
         }
 
 
-         /// <summary>
-         /// Compare two strings
-         /// </summary>
-         /// <param name="s1">String</param>
-         /// <param name="s2">String</param>
-         /// <returns>Returns True if strings are equal, returns False otherwise.</returns>
+        /// <summary>
+        /// Compare two strings
+        /// </summary>
+        /// <param name="s1">String</param>
+        /// <param name="s2">String</param>
+        /// <returns>Returns True if strings are equal, returns False otherwise.</returns>
         public static bool StringEquals(String s1, String s2)
         {
             //TODO: заменить это во всех местах, где оно встречается, эту функцию удалить.
             return s1.Equals(s2, StringComparison.Ordinal);
         }
 
-        /**
-         * NT-Create copy of specified string
-         * 
-         * @param s
-         *            Образец для копирования.
-         * @return Функция возвращает копию образца.
-         */
+        /// <summary>
+        /// NT-Create copy of specified string
+        /// </summary>
+        /// <param name="s">Образец для копирования.</param>
+        /// <returns>Функция возвращает копию образца.</returns>
         public static String StringCopy(String s)
         {
-            String result = new String(s);
+            ////TODO: заменить все вызовы в коде проекта на String.Copy(s) после окончания портирования
+            String result = String.Copy(s);
             return result;
         }
 
-        /**
- * NT-Return formatted string for DateTime.Now
- * 
- * @return Return formatted string for DateTime.Now
- */
 
+        #region *** DateTime formatting ***
+        /// <summary>
+        /// NT-Return formatted string for DateTime.Now
+        /// </summary>
+        /// <returns>Return formatted string for DateTime.Now</returns>
         public static String DateTimeNowToString()
         {
-            LocalDateTime dt = LocalDateTime.now();
+            DateTime dt = DateTime.Now;
 
             return DateTimeToString(dt);
         }
-
-        /**
-         * NT-Return formatted string for specified LocalDateTime object.
-         * 
-         * @param dt
-         *            LocalDateTime object.
-         * @return Return formatted string for specified LocalDateTime object.
-         */
-        public static String DateTimeToString(LocalDateTime dt)
+        /// <summary>
+        ///  NT-Return formatted string for specified DateTime object.
+        /// </summary>
+        /// <param name="dt">LocalDateTime object.</param>
+        /// <returns>Return formatted string for specified DateTime object.</returns>
+        public static String DateTimeToString(DateTime dt)
         {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss", BCSA.RuCulture);
-            return dtf.format(dt);
+            return dt.ToString("dd.MM.yyyy HH:mm:ss", BCSA.RuCulture);
         }
 
-        /**
- * NT-Return part of filename string for specified LocalDateTime object.
- * 
- * @param dt
- *            LocalDateTime object.
- * @return Return part of filename for specified LocalDateTime object.
- */
-        public static String DateTimeToFileNameString(LocalDateTime dt)
+        /// <summary>
+        /// NT-Return part of filename string for specified LocalDateTime object.
+        /// </summary>
+        /// <param name="dt">DateTime object.</param>
+        /// <returns>Return part of filename for specified DateTime object.</returns>
+        public static String DateTimeToFileNameString(DateTime dt)
         {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMdd_HHmmss", BCSA.RuCulture);
-            return dtf.format(dt);
+            return dt.ToString("yyMMdd_HHmmss", BCSA.RuCulture);
         }
 
-        /**
-         * NT-Получить строку версии сборки Оператора
-         * 
-         * @return Returns Operator version string
-         */
-        public static String getOperatorVersionString()
+        /// <summary>
+        /// RT-Форматировать дату и время в русской культуре.
+        /// Пример: воскресенье, 26 апреля 2020г. 01:03:18
+        /// </summary>
+        /// <param name="dt">дата и время</param>
+        /// <returns>Функция возвращает строку даты и времени.</returns>
+        public static String CreateLongDatetimeString(DateTime dt)
         {
-            return Engine.EngineVersionString;
+            return dt.ToString("dddd, d MMMM yyyy'г. 'HH:mm:ss", BCSA.RuCulture);
         }
+        #endregion
 
-        /**
-         * NT-Remove empty string items from source array
-         * 
-         * @param sar
-         *            Source array with empty or null items
-         * @return Result array without empty or null items
-         */
+        ///**
+        // * NT-Получить строку версии сборки Оператора
+        // * 
+        // * @return Returns Operator version string
+        // */
+        //public static String getOperatorVersionString()
+        //{
+        //    return Engine.EngineVersionString;
+        //}
+
+        /// <summary>
+        /// NT-Remove empty string items from source array
+        /// </summary>
+        /// <param name="sar">Source array with empty or null items</param>
+        /// <returns>Result array without empty or null items</returns>
         public static String[] RemoveEmptyItems(String[] sar)
         {
-            int count = 0;
-            // find size of result array
-            for (String s : sar)
-                if (!Utility.StringIsNullOrEmpty(s))
-                    count++;
+            List<String> result = new List<string>();
             // create result array
-            String[] result = new String[count];
-            // fill array
-            count = 0;
-            for (String s : sar)
-                if (!Utility.StringIsNullOrEmpty(s))
-                {
-                    result[count] = s;
-                    count++;
-                }
+            foreach (String s in sar)
+                if (!String.IsNullOrEmpty(s))
+                    result.Add(s);
 
-            return result;
+            return result.ToArray();
         }
 
+        //TODO: выбрать все использования и написать правильный код этой функции.
+        ///**
+        // * NT-Split string by regex and optional remove empty elements from result
+        // * array
+        // * 
+        // * @param text
+        // *            Source string
+        // * @param regex
+        // *            regex string as described in String.split() function
+        // *            documentation.
+        // *            " " result " ";
+        // *            "k" "m " result "[km]" and so on...
+        // * @param RemoveEmptyItems
+        // *            if True - remove empty items from result array.
+        // * @return Returns array of string's
+        // */
+        //public static String[] StringSplit(
+        //        String text,
+        //        String regex,
+        //        boolean RemoveEmptyItems)
+        //{
+        //    String[] sar = text.split(regex);
 
-        /**
-         * NT-Split string by regex and optional remove empty elements from result
-         * array
-         * 
-         * @param text
-         *            Source string
-         * @param regex
-         *            regex string as described in String.split() function
-         *            documentation.
-         *            " " result " ";
-         *            "k" "m " result "[km]" and so on...
-         * @param RemoveEmptyItems
-         *            if True - remove empty items from result array.
-         * @return Returns array of string's
-         */
-        public static String[] StringSplit(
-                String text,
-                String regex,
-                boolean RemoveEmptyItems)
+        //    if (RemoveEmptyItems)
+        //        return Utility.RemoveEmptyItems(sar);
+        //    else return sar;
+        //}
+
+
+        /// <summary>
+        /// Delimiter char static array for optimize speed
+        /// </summary>
+        private static char[] splitChars1 = { ',', ';' };
+        /// <summary>
+        /// NT-Разделить строку ключевых слов на отдельные слова по , и ;
+        /// </summary>
+        /// <param name="text">Входная строка</param>
+        /// <returns>Возвращает список ключевых слов, очищенных от разделителей и пробельных символов по краям.</returns>
+        public static List<String> SplitCommaDelimitedString2(String text)
         {
-            String[] sar = text.split(regex);
-
-            if (RemoveEmptyItems)
-                return Utility.RemoveEmptyItems(sar);
-            else return sar;
-        }
-
-        /**
-         * NT-Разделить строку ключевых слов на отдельные слова по , и ;
-         * 
-         * @param text
-         *            Входная строка
-         * @return Возвращает массив ключевых слов, очищенных от разделителей и пробельных символов по краям.
-         */
-        public static String[] SplitCommaDelimitedString(String text)
-        {
-            // 1. split text to array
-            String[] sar = text.split("[,;]");
+            // 1. split text to array with allow empty items
+            String[] sar = text.Split(splitChars1, StringSplitOptions.None);
             // 2. trim each string in array
-            LinkedList<String> li = new LinkedList<String>();
+            List<String> li = new List<String>();
             String t;
-            for (String s : sar)
+            foreach (String s in sar)
             {
-                // 3. put each string in array to output list
-                if (s == null)
+                // 3. put each string in array to output list if not empty
+                t = s.Trim();
+                if (t.Length == 0)
                     continue;
-                t = s.trim();
-                if (t.isEmpty())
-                    continue;
-                li.add(t);
-            }
-            // 4. return list as array
-            return li.toArray(new String[li.size()]);
-        }
-
-        /**
- * NT-Разделить строку ключевых слов на отдельные слова по , и ;
- * 
- * @param text
- *            Входная строка
- * @return Возвращает список ключевых слов, очищенных от разделителей и пробельных символов по краям.
- */
-        public static LinkedList<String> SplitCommaDelimitedString2(String text)
-        {
-            // 1. split text to array
-            String[] sar = text.split("[,;]");
-            // 2. trim each string in array
-            LinkedList<String> li = new LinkedList<String>();
-            String t;
-            for (String s : sar)
-            {
-                // 3. put each string in array to output list
-                if (s == null)
-                    continue;
-                t = s.trim();
-                if (t.isEmpty())
-                    continue;
-                li.add(t);
+                li.Add(t);
             }
             // 4. return list as array
             return li;
         }
 
-        /**
-         * NT-Faster split string at first match delimiter string
-         * 
-         * @param text
-         *            Source string
-         * @param delimiter
-         *            Delimiter string as "="
-         * @return Returns array of 2 parts: before and after delimiter. Returns null if delimiter not found.
-         */
-        public static String[] StringSplitFirstMatch(String text, String delimiter)
+        //TODO: Заменить все случаи на вызовы SplitCommaDelimitedString2(text); после портирования проекта.
+        /// <summary>
+        /// NT-Разделить строку ключевых слов на отдельные слова по , и ;
+        /// </summary>
+        /// <param name="text">Входная строка</param>
+        /// <returns>Возвращает массив ключевых слов, очищенных от разделителей и пробельных символов по краям.</returns>
+        public static String[] SplitCommaDelimitedString(String text)
+        {
+            List<String> result = SplitCommaDelimitedString2(text);
+            // 4. return list as array
+            return result.ToArray();
+        }
+
+
+        /// <summary>
+        /// NT-Faster split string at first match delimiter string
+        /// </summary>
+        /// <param name="text">Source string</param>
+        /// <param name="delimiter">Delimiter string like "="</param>
+        /// <param name="comp">String comparison mode</param>
+        /// <returns>Returns array of 2 parts: before and after delimiter. Returns null if delimiter not found.</returns>
+        public static String[] StringSplitFirstMatch(String text, String delimiter, StringComparison comp)
         {
             String[] result = null;
 
-            int start = text.indexOf(delimiter);
-            int delimiterLength = delimiter.length();
+            int start = text.IndexOf(delimiter, comp);
+            int delimiterLength = delimiter.Length;
             if (start >= 0)
             {
                 result = new String[2];
-                result[0] = text.substring(0, start);
-                result[1] = text.substring(start + delimiterLength);
+                result[0] = text.Substring(0, start);
+                result[1] = text.Substring(start + delimiterLength);
             }
-            // else if(start == 0)
-            // {
-            // result = new String[2];
-            // result[0] = "";
-            // result[1] = text.substring(start+delimiterLength);
-            // }
             else result = null;
 
             return result;
@@ -316,34 +275,22 @@ namespace Engine.Utility
 
 
 
-        /**
-    * NT-Проверить что указанный массив содержит указанную строку.
-    * 
-    * @param array
-    *            Массив строк.
-    * @param sample
-    *            Строка-образец для поиска.
-    * @param ignoreCase
-    *            Игнорировать регистр символов строки.
-    * @return Возвращает True, если массив содержит указанную строку; False в
-    *         противном случае.
-    */
-        public static boolean arrayContainsStringOrdinal(
+
+        /// <summary>
+        /// NT-Проверить что указанный массив содержит указанную строку.
+        /// </summary>
+        /// <param name="array">Массив строк.</param>
+        /// <param name="sample">Строка-образец для поиска.</param>
+        /// <param name="ignoreCase">Игнорировать регистр символов строки.</param>
+        /// <returns>Возвращает True, если массив содержит указанную строку; False в противном случае.</returns>
+        public static bool arrayContainsStringOrdinal(
                 String[] array,
                 String sample,
-                boolean ignoreCase)
+                bool ignoreCase)
         {
-            for (String s : array)// as foreach
-                if (ignoreCase == true)
-                {
-                    if (sample.equalsIgnoreCase(s))
-                        return true;
-                }
-                else
-                {
-                    if (sample.compareTo(s) == 0)
-                        return true;
-                }
+            foreach (String s in array)
+                if (String.Compare(s, sample, ignoreCase) == 0)
+                    return true;
 
             return false;
         }
@@ -352,28 +299,32 @@ namespace Engine.Utility
 
 
 
-        /** 
-         * NT-Превратить логическое значение в русскоязычное Да или Нет.
-         * @param flag Логическое значение.
-         * @return Функция возвращает русскоязычное значение логического значения.
-         */
-        public static String BoolToДаНет(boolean flag)
+        //TODO: перенести в BCSA после портирования.
+        /// <summary>
+        /// NT-Превратить логическое значение в русскоязычное Да или Нет.
+        /// </summary>
+        /// <param name="flag">Логическое значение.</param>
+        /// <returns>Функция возвращает русскоязычное значение логического значения.</returns>
+        public static String BoolToДаНет(bool flag)
         {
             if (flag == true) return "Да";
             else return "Нет";
         }
 
-        /** NT-Распарсить строку в целое число.
-         * @param str входная строка
-         * @return Функция возвращает объект числа, если удалось его распарсить.
-         * Функция возвращает null при любой ошибке парсинга.
-         */
-        public static Integer tryParseInteger(String str)
+        /// <summary>
+        /// NT-Распарсить строку в целое число.
+        /// </summary>
+        /// <param name="str">входная строка</param>
+        /// <returns>
+        /// Функция возвращает Nullable(Int32) объект числа, если удалось его распарсить.
+        /// Функция возвращает null при любой ошибке парсинга.
+        /// </returns>
+        public static Int32? tryParseInteger(String str)
         {
-            Integer result = null;
+            Int32? result = null;
             try
             {
-                result = new Integer(str);
+                result = Int32.Parse(str, BCSA.RuCulture);
             }
             catch (Exception ex)
             {
@@ -382,20 +333,6 @@ namespace Engine.Utility
 
             return result;
         }
-
-
-      
-
-        /////////////////////////////////////////
-        ///
-
-   
-
-
-
-
-
-
 
 
 

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Engine.OperatorEngine;
 
 namespace Engine.Utility
@@ -12,29 +10,29 @@ namespace Engine.Utility
     internal class ItemDictionaryBase
     {
         // TODO: попробовать позже реализовать этот класс как шаблон<T>
-        //TODO: переделать класс на List объект везде.
 
-            /// <summary>
-            /// Dictionary of lists
-            /// </summary>
-        protected Dictionary<String, LinkedList<Item>> m_items;
 
-        /**
-         * Collection has been modified
-         */
+        /// <summary>
+        /// Dictionary of lists
+        /// </summary>
+        protected Dictionary<String, List<Item>> m_items;
+
+        /// <summary>
+        ///  Collection has been modified
+        /// </summary>
         protected bool m_Modified;
 
-        // *** Constructors ***
+        #region *** Constructors ***
 
-        /**
-         * NT-Constructor
-         */
+        /// <summary>
+        /// NT-Constructor
+        /// </summary>
         public ItemDictionaryBase()
         {
-            this.m_items = new Dictionary<String, LinkedList<Item>>();
+            this.m_items = new Dictionary<String, List<Item>>();
             this.m_Modified = false;
         }
-
+        #endregion
         #region *** Properties ***
         /// <summary>
         /// Collection is modified
@@ -52,7 +50,7 @@ namespace Engine.Utility
         /// NR-Return string representation to object.
         /// </summary>
         /// <returns></returns>
-    public override String ToString()
+        public override String ToString()
         {
             // TODO Auto-generated method stub
             return base.ToString();
@@ -64,10 +62,8 @@ namespace Engine.Utility
         public void Clear()
         {
             // перечислить списки и очистить каждый из них
-            foreach (LinkedList<Item> it in this.m_items.Values)
-            {
+            foreach (List<Item> it in this.m_items.Values)
                 it.Clear();
-            }
             // очистить словарь
             this.m_items.Clear();
             // set modified flag
@@ -78,11 +74,11 @@ namespace Engine.Utility
 
 
 
-/// <summary>
-/// NT-Check key is present
-/// </summary>
-/// <param name="key">key string value</param>
-/// <returns>Returns true if key present in collection, false otherwise.</returns>
+        /// <summary>
+        /// NT-Check key is present
+        /// </summary>
+        /// <param name="key">key string value</param>
+        /// <returns>Returns true if key present in collection, false otherwise.</returns>
         public bool hasKey(String key)
         {
             return this.m_items.ContainsKey(key);
@@ -106,10 +102,10 @@ namespace Engine.Utility
             return ar;
         }
 
-            /// <summary>
-            /// NT-Get count of used keys.
-            /// </summary>
-            /// <returns>Function returns count of used keys.</returns>
+        /// <summary>
+        /// NT-Get count of used keys.
+        /// </summary>
+        /// <returns>Function returns count of used keys.</returns>
         public int getKeyCount()
         {
             return this.m_items.Count;
@@ -119,31 +115,34 @@ namespace Engine.Utility
         /// NT-Get all items from collection as list.
         /// </summary>
         /// <returns>Function returns all items from collection as list</returns>
-            public List<Item> getAllItems()
+        public List<Item> getAllItems()
         {
             List<Item> result = new List<Item>();
             // мержим все значения-списки в выходной список.
-            foreach (LinkedList<Item> li in this.m_items.Values)
+            foreach (List<Item> li in this.m_items.Values)
                 if ((li != null) && (li.Count > 0))
                     result.AddRange(li);
             // возвращаем выходной список
             return result;
         }
 
-            /// <summary>
-            /// NR-Get item array by title
-            /// </summary>
-            /// <param name="key">Dictionary key</param>
-            /// <param name="sorted">Optionally, sort keys.</param>
-            /// <returns>Returns Item list, or returns null if key not exists in collection.</returns>
+        /// <summary>
+        /// NT-Get item array by title
+        /// </summary>
+        /// <param name="key">Dictionary key</param>
+        /// <param name="sorted">Optionally, sort keys.</param>
+        /// <returns>Returns Item list, or returns null if key not exists in collection.</returns>
         public List<Item> getItems(String key, bool sorted)
         {
-            LinkedList<Item> result = this.m_items[key];
+            if (!this.m_items.ContainsKey(key))
+                return null;
+            //else
+            List<Item> result = this.m_items[key];
             if (result == null)
                 return null;
-
+            //TODO: а по какому параметру сортировать? Пока по Title, но это не правильно?
             if (sorted == true)
-                List.sort(result);
+                result.Sort(Item.SortByTitle);
 
             return result;
         }
@@ -155,32 +154,38 @@ namespace Engine.Utility
         /// <returns>Returns Item object, or returns null if key not exists in collection.</returns>
         public Item getFirstItem(String key)
         {
-            LinkedList<Item> result = this.m_items[key];
+            if (!this.m_items.ContainsKey(key))
+                return null;
+            //else
+            List<Item> result = this.m_items[key];
 
             if (result == null)
                 return null;
             if (result.Count < 1)
                 return null;
-            else return result.First();
+            else return result[0];
         }
 
-            /// <summary>
-            /// NT-Add new item to collection.
-            /// </summary>
-            /// <param name="key">Item field value as key</param>
-            /// <param name="item">Item object.</param>
+        /// <summary>
+        /// NT-Add new item to collection.
+        /// </summary>
+        /// <param name="key">Item field value as key</param>
+        /// <param name="item">Item object.</param>
         public void addItem(String key, Item item)
         {
             // get copy of title string
             String tl = String.Copy(key);
             // get list by key
-            LinkedList<Item> lsi = this.m_items[tl];
-            // if list == null, create it and add to dictionary
-            if (lsi == null)
+
+            List<Item> lsi = null;
+            // if key not exists, create it and add to dictionary
+            if (!this.m_items.ContainsKey(key))
             {
-                lsi = new LinkedList<Item>();
+                lsi = new List<Item>();
                 this.m_items.Add(tl, lsi);
             }
+            else
+                lsi = this.m_items[key];
             // add item to list
             lsi.Add(item);
 
@@ -190,42 +195,46 @@ namespace Engine.Utility
             return;
         }
 
-          
 
-            /// <summary>
-            /// NT-Remove list of items from collection
-            /// </summary>
-            /// <param name="key">Dictionary key.</param>
+
+        /// <summary>
+        /// NT-Remove list of items from collection
+        /// </summary>
+        /// <param name="key">Dictionary key.</param>
         public void removeItems(String key)
         {
-            // remove list of items by title
-            this.m_items.Remove(key);
-            // set modified flag
-            this.m_Modified = true;
+            // remove list of items by title, if key exists
+            bool modif = this.m_items.Remove(key);
+
+            // set modified flag if collection has been modified
+            if (modif == true)
+                this.m_Modified = true;
 
             return;
         }
 
-    /// <summary>
-    /// NT - remove specified item object
-    /// </summary>
-    /// <param name="key">Dictionary key.</param>
-    /// <param name="item">Объект, уже находящийся в этой коллекции.</param>
-    /// <returns>Функция возвращает true, если объект был удален; функция возвращает false, если объект не был найден.</returns>
-    /// <exception cref="Exception">Если ключ отсутствует в словаре коллекции.</exception>
-        public bool removeItem(String key, Item item) 
+        /// <summary>
+        /// NT - remove specified item object
+        /// </summary>
+        /// <param name="key">Dictionary key.</param>
+        /// <param name="item">Объект, уже находящийся в этой коллекции.</param>
+        /// <returns>Функция возвращает true, если объект был удален; функция возвращает false, если объект не был найден.</returns>
+        /// <exception cref="Exception">Если ключ отсутствует в словаре коллекции.</exception>
+        public bool removeItem(String key, Item item)
         {
-            LinkedList<Item> list = this.m_items[key];
-        if (list == null)
-            throw new Exception(String.Format("Ключ \"s\" отсутствует в словаре", key));
-        // remove item from list
-        bool result = list.Remove(item);
-        if (result == true)
-            // set modified flag
-            this.m_Modified = true;
+            if (!this.m_items.ContainsKey(key))
+                throw new Exception(String.Format("Ключ \"{0}\" отсутствует в словаре", key));
+            //else
+            List<Item> list = this.m_items[key];
 
-        return result;
+            // remove item from list
+            bool result = list.Remove(item);
+            // set modified flag if collection has been modified
+            if (result == true)
+                this.m_Modified = true;
+
+            return result;
+        }
+        #endregion
     }
-    #endregion
-}
 }
