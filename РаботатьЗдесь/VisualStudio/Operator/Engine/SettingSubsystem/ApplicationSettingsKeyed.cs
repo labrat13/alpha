@@ -8,7 +8,7 @@ namespace Engine.SettingSubsystem
     /// <summary>
     /// NR - Класс настроек приложения, использующий EnumSettingKey в качестве ключей настроек.
     /// </summary>
-    internal class ApplicationSettingsKeyed :ApplicationSettingsBase
+    public class ApplicationSettingsKeyed :ApplicationSettingsBase
     {
         // TODO: тут может быть неиспользуемых функций несколько. Следует ли их закомментировать после релиза?
         // А то что-то сейчас совсем не думается, так я набор функций и не проработал в подсистеме настроек этой.

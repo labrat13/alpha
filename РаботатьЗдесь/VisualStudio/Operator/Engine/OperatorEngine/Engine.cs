@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Engine.DbSubsystem;
+using Engine.LexiconSubsystem;
+using Engine.LogSubsystem;
+using Engine.ProcedureSubsystem;
+using Engine.SettingSubsystem;
+using Engine.Utility;
 
 namespace Engine.OperatorEngine
 {
@@ -16,101 +22,73 @@ namespace Engine.OperatorEngine
     /// </summary>
     public class Engine : EngineSubsystem
     {
-        /// <summary>
-        /// NR - Конструктор
-        /// </summary>
-        public Engine() : base(null)
-        {
-            //TODO: Add code here
-        }
-
-        #region  *** Override this from EngineSubsystem parent class ***
-        /// <summary>
-        /// NR - Initialize Subsystem. This function must be overrided in child classes.
-        /// </summary>
-        /// <exception cref="Exception">Exception at Function must be overridden</exception>
-        protected override void onOpen()
-        {
-            throw new Exception("Function must be overridden");//TODO: Add code here
-        }
-
-        /// <summary>
-        /// NR - De-initialize Subsystem. This function must be overrided in child classes.
-        /// </summary>
-        /// <exception cref="Exception">Exception at Function must be overridden</exception>
-        protected override void onClose()
-        {
-            throw new Exception("Function must be overridden");//TODO: Add code here
-        }
-        #endregion
-
         //TODO: Port this class from Java code
 
-        /**
-    * Строка названия Оператора для платформы Linux Java
-    */
-        public final static String ApplicationTitle = "Operator";
 
-        /**
-         * Строка версии Оператора для платформы Linux Java
-         */
-        public final static String EngineVersionString = "1.0.0.0";
 
-        /**
-         * Статический объект версии движка для платформы Linux Java
-         */
-        public static Version EngineVersion = Version.tryParse(EngineVersionString);
+        #region *** Constants and Fields ***
 
-        // TODO: Заменить все обращения к logWriter на вызовы функций менеджера лога
-        /**
-         * Менеджер подсистемы лога
-         */
+    /// <summary>
+    /// Строка названия Оператора для платформы Windows
+    /// </summary>
+        public const String ApplicationTitle = "Operator";
+
+         /// <summary>
+         /// Строка версии Оператора для платформы Windows
+         /// </summary>
+        public const String EngineVersionString = "1.1.0.0";
+
+         /// <summary>
+         /// Статический объект версии движка для платформы Windows 
+         /// </summary>
+        public static OperatorVersion EngineVersion = OperatorVersion.tryParse(EngineVersionString);
+
+         /// <summary>
+         /// Менеджер подсистемы лога
+         /// </summary>
         private LogManager m_logman;
 
-        /**
-         * Объект адаптера БД Оператора.
-         * Кешированный адаптер БД содержит коллекции элементов и сам их обслуживает.
-         */
+         /// <summary>
+         /// Объект адаптера БД Оператора.
+         /// </summary>
         private OperatorDbAdapter m_db;
         // TODO: Объект реализован частично. Исправить весь код для него.
 
-        /**
-         * Объект консоли Оператора. Выделен чтобы упорядочить код работающий с консолью, так как он вызывается из сборок процедур, создаваемых сторонними
-         * разработчиками.
-         */
+        /// <summary>
+        /// Объект консоли Оператора. Выделен чтобы упорядочить код работающий с консолью, так как
+        /// он вызывается из сборок процедур, создаваемых сторонними разработчиками.
+        /// </summary>
         private DialogConsole m_OperatorConsole;
         // TODO: Объект реализован частично. Исправить весь код для него.
 
-        /**
-         * Объект настроек Оператора
-         */
+         /// <summary>
+         /// Объект настроек Оператора
+         /// </summary>
         private ApplicationSettingsKeyed m_Settings;
 
-        /**
-         * Объект менеджера исполнения Процедур
-         */
+        /// <summary>
+        /// Объект менеджера исполнения Процедур
+        /// </summary>
         private ProcedureExecutionManager m_PEM;
 
-        /**
-         * Объект Менеджера кэша Мест и Процедур Оператора
-         */
+        /// <summary>
+        ///  Объект Менеджера кэша Мест и Процедур Оператора
+        /// </summary>
         private ElementCacheManager m_ECM;
 
-        /**
-         * Объект семантического анализатора
-         */
+        /// <summary>
+        /// Объект семантического анализатора
+        /// </summary>
         private BCSA m_BCSA;
+#endregion
 
-        /**
-         * NT-Стандартный конструктор
-         * 
-         * @throws Exception
-         *             Ошибка при создании объекта Движка.
-         */
-        public Engine() throws Exception
+        /// <summary>
+        /// NT-Стандартный конструктор
+        /// </summary>
+        public Engine() : base(null)
         {
         // create log manager object
-        this.m_logman = new LogManager2(this);
+        this.m_logman = new LogManager(this);
         // создать объект консоли Оператора
         this.m_OperatorConsole = new DialogConsole(this);
         // create engine settings object
@@ -127,199 +105,189 @@ namespace Engine.OperatorEngine
         return;
     }
 
-    // #region Properties
-    /**
-     * NT- Get log manager object
-     * 
-     * @return Функция возвращает log manager object
-     */
-    public LogManager getLogManager()
+
+        #region  *** Override this from EngineSubsystem parent class ***
+        /// <summary>
+        /// NR - Initialize Subsystem. This function must be overrided in child classes.
+        /// </summary>
+        /// <exception cref="Exception">Exception at Function must be overridden</exception>
+        protected override void onOpen()
+        {
+            // this.m_OperatorConsole.PrintTextLine("Operator loading...", EnumDialogConsoleColor.Сообщение);
+
+            // 1. check operator folder exist
+            if (FileSystemManager.isAppFolderExists() == false)
+            {
+                String msg1 = "Ошибка: Каталог Оператор не найден: " + FileSystemManager.getAppFolderPath();
+                String msg2 = "Будет создан новый каталог Оператор с настройками по умолчанию.";
+                this.m_OperatorConsole.PrintTextLine(msg1, EnumDialogConsoleColor.Предупреждение);
+                this.m_OperatorConsole.PrintTextLine(msg2, EnumDialogConsoleColor.Предупреждение);
+                FileSystemManager.CreateOperatorFolder();
+            }
+
+            // 2. open engine log session
+            // this.m_logman.AddMessage(new
+            // LogMessage(EnumLogMsgClass.SessionStarted, EnumLogMsgState.OK,
+            // "Session opened"));
+            // - это уже сделано в this.m_logman.Open();
+            this.m_logman.Open();
+
+            // 3. load engine settings
+            // Если файл настроек не обнаружен, вывести сообщение об этом и
+            // создать новый файл настроек с дефолтовыми значениями.
+            String settingsFilePath = FileSystemManager.getAppSettingsFilePath();
+            if (!FileSystemManager.isAppSettingsFileExists())
+            {
+                String msg3 = "Файл настроек " + settingsFilePath + " не найден! Будет создан файл с настройками по умолчанию.";
+                this.m_logman.AddMessage(EnumLogMsgClass.Default, EnumLogMsgState.Fail, msg3);
+                this.m_OperatorConsole.PrintTextLine(msg3, EnumDialogConsoleColor.Предупреждение);
+                this.m_Settings.Reset();
+                this.m_Settings.Store(settingsFilePath);
+            }
+            else this.m_Settings.Load(settingsFilePath);
+
+            // 4. init database
+            // заполнить кеш-коллекции процедур и мест данными из БД
+            // CachedDbAdapter делает это сам
+
+            // если новой бд нет в каталоге приложения, создаем ее.
+            String dbFile = FileSystemManager.getAppDbFilePath();
+            String connectionString = OperatorDbAdapter.CreateConnectionString(dbFile);
+            if (FileSystemManager.isAppDbFileExists() == false)
+            {
+                // print warning about database
+                String msg4 = "Файл базы данных " + dbFile + " не найден! Будет создан новый пустой файл базы данных.";
+                this.m_logman.AddMessage(EnumLogMsgClass.Default, EnumLogMsgState.Fail, msg4);
+                this.m_OperatorConsole.PrintTextLine(msg4, EnumDialogConsoleColor.Предупреждение);
+                // TODO: тут лучше попытаться загрузить бекап-копию БД, после
+                // предупреждения о отсутствии основного файла.
+                // Но эту копию надо сначала создать.
+
+                // create new database here. Open, write, close.
+                OperatorDbAdapter.CreateNewDatabase(this, dbFile);
+                // но работать с пустой БД - начинать все сначала.
+            }
+            // else
+            // open existing database and close - as test
+            this.m_db.Open(connectionString);
+            this.m_db.Close();
+            // Использовать адаптер так, чтобы он открывал БД только на
+            // время чтения или записи, а не держал ее постоянно открытой.
+            // Так меньше вероятность повредить бд при глюках линукса.
+
+            // 5. Open PEM
+            // TODO: дополнить код здесь полезными проверками
+            this.AddMessageToConsoleAndLog("Загрузка Библиотек Процедур..", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.SubsystemEvent_Procedure, EnumLogMsgState.Default);
+            this.m_PEM.Open();// TODO: this function not completed now.
+            this.AddMessageToConsoleAndLog("Загрузка Библиотек Процедур завершена.", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.SubsystemEvent_Procedure, EnumLogMsgState.Default);
+            this.m_OperatorConsole.PrintEmptyLine();
+            // 6. Open ECM
+            // TODO: дополнить код здесь полезными проверками
+            this.m_ECM.Open();// TODO: this function not completed now.
+
+            // 7. Open BCSA
+            this.m_BCSA.Open();// TODO: this function not completed now.
+
+            return;
+        }
+
+        /// <summary>
+        /// NR - De-initialize Subsystem. This function must be overrided in child classes.
+        /// </summary>
+        /// <exception cref="Exception">Exception at Function must be overridden</exception>
+        protected override void onClose()
+        {
+            // закрыть BCSA
+            if (this.m_BCSA != null)
+                this.m_BCSA.Close();
+            // закрыть ECM
+            if (this.m_ECM != null)
+                this.m_ECM.Close();
+            // закрыть PEM
+            if (this.m_PEM != null)
+                this.m_PEM.Close();
+            // Закрыть БД если еще не закрыта
+            if (this.m_db != null)
+                this.m_db.Close();
+            // close settings object
+            this.m_Settings.StoreIfModified();
+            // close log session - последним элементом
+            this.m_logman.Close();
+            this.m_logman = null;
+
+            return;
+        }
+        #endregion
+
+      #region *** Properties ***
+
+        ///<summary>
+        ///NT- Get log manager object
+        /// </summary> 
+        public LogManager LogManager
     {
-        return this.m_logman;
+        get { return this.m_logman; }
     }
 
-    /**
-     * NT-Получить объект адаптера БД Оператора.
-     * 
-     * @return Функция возвращает Объект адаптера БД Оператора.
-     */
-    public OperatorDbAdapter get_Database()
+
+    /// <summary>
+    /// NT-Получить объект адаптера БД Оператора.
+    /// </summary>
+    public OperatorDbAdapter Database
     {
-        return this.m_db;
+            get { return this.m_db; }
     }
 
-    /**
-     * NT-Получить объект консоли Оператора. Должен быть доступен из сторонних сборок.
-     * 
-     * @return Функция возвращает Объект консоли Оператора.
-     */
-    public DialogConsole get_OperatorConsole()
+    /// <summary>
+    /// NT-Получить объект консоли Оператора. Должен быть доступен из сторонних сборок.
+    /// </summary>
+    public DialogConsole OperatorConsole
     {
-        return this.m_OperatorConsole;
+            get { return this.m_OperatorConsole; }
     }
 
-    /**
-     * NT-Получить объект настроек движка Оператора.
-     * 
-     * @return Функция возвращает объект настроек движка Оператора.
-     */
-    public ApplicationSettingsKeyed get_EngineSettings()
+
+    /// <summary>
+    /// NT-Получить объект настроек движка Оператора.
+    /// </summary>
+    public ApplicationSettingsKeyed EngineSettings
     {
-        return this.m_Settings;
+            get { return this.m_Settings; }
     }
 
-    /**
-     * NT-Получить объект кеш-коллекции Процедур и Мест Оператора.
-     * 
-     * @return Возвращает объект кеш-коллекции Процедур и Мест Оператора.
-     */
-    public ElementCacheManager get_ECM()
+
+    /// <summary>
+    ///  NT-Получить объект кеш-коллекции Процедур и Мест Оператора.
+    /// </summary>
+    internal ElementCacheManager ECM
     {
-        return this.m_ECM;
+            get { return this.m_ECM; }
     }
 
-    /**
-     * NT-Получить объект Менеджера Библиотек Процедур.
-     * 
-     * @return Функция возвращает объект Менеджера Библиотек Процедур.
-     */
-    public ProcedureExecutionManager get_PEM()
+    /// <summary>
+    ///  NT-Получить объект Менеджера Библиотек Процедур.
+    /// </summary>
+    public ProcedureExecutionManager PEM
     {
-        return this.m_PEM;
+            get { return this.m_PEM; }
     }
 
-    /**
-     * NT- получить объект семантического анализатора запросов.
-     * 
-     * @return Функция возвращает объект семантического анализатора запросов.
-     */
-    public BCSA get_BCSA()
+    /// <summary>
+    /// NT- получить объект семантического анализатора запросов.
+    /// </summary>
+    internal BCSA BCSA
     {
-        return this.m_BCSA;
+            get { return this.m_BCSA; }
     }
-    // #endregion
+     #endregion
 
     // Функции инициализации и завершения движка =================
 
-    /**
-     * NT- Инициализация механизма
-     * 
-     * @throws Exception
-     *             Ошибка при инициализации Движка.
-     */
-    public void Init() throws Exception
-    {
-        // this.m_OperatorConsole.PrintTextLine("Operator loading...", EnumDialogConsoleColor.Сообщение);
-
-        // 1. check operator folder exist
-        if (FileSystemManager.isAppFolderExists() == false)
-        {
-            String msg1 = "Ошибка: Каталог Оператор не найден: " + FileSystemManager.getAppFolderPath();
-            String msg2 = "Будет создан новый каталог Оператор с настройками по умолчанию.";
-            this.m_OperatorConsole.PrintTextLine(msg1, EnumDialogConsoleColor.Предупреждение);
-            this.m_OperatorConsole.PrintTextLine(msg2, EnumDialogConsoleColor.Предупреждение);
-            FileSystemManager.CreateOperatorFolder();
-        }
-
-        // 2. open engine log session
-        // this.m_logman.AddMessage(new
-        // LogMessage(EnumLogMsgClass.SessionStarted, EnumLogMsgState.OK,
-        // "Session opened"));
-        // - это уже сделано в this.m_logman.Open();
-        this.m_logman.Open();
-
-        // 3. load engine settings
-        // Если файл настроек не обнаружен, вывести сообщение об этом и
-        // создать новый файл настроек с дефолтовыми значениями.
-        String settingsFilePath = FileSystemManager.getAppSettingsFilePath();
-        if (!FileSystemManager.isAppSettingsFileExists())
-        {
-            String msg3 = "Файл настроек " + settingsFilePath + " не найден! Будет создан файл с настройками по умолчанию.";
-            this.m_logman.AddMessage(EnumLogMsgClass.Default, EnumLogMsgState.Fail, msg3);
-            this.m_OperatorConsole.PrintTextLine(msg3, EnumDialogConsoleColor.Предупреждение);
-            this.m_Settings.Reset();
-            this.m_Settings.Store(settingsFilePath);
-        }
-        else this.m_Settings.Load(settingsFilePath);
-
-        // 4. init database
-        // заполнить кеш-коллекции процедур и мест данными из БД
-        // CachedDbAdapter делает это сам
-
-        // если новой бд нет в каталоге приложения, создаем ее.
-        String dbFile = FileSystemManager.getAppDbFilePath();
-        String connectionString = OperatorDbAdapter.CreateConnectionString(dbFile);
-        if (FileSystemManager.isAppDbFileExists() == false)
-        {
-            // print warning about database
-            String msg4 = "Файл базы данных " + dbFile + " не найден! Будет создан новый пустой файл базы данных.";
-            this.m_logman.AddMessage(EnumLogMsgClass.Default, EnumLogMsgState.Fail, msg4);
-            this.m_OperatorConsole.PrintTextLine(msg4, EnumDialogConsoleColor.Предупреждение);
-            // TODO: тут лучше попытаться загрузить бекап-копию БД, после
-            // предупреждения о отсутствии основного файла.
-            // Но эту копию надо сначала создать.
-
-            // create new database here. Open, write, close.
-            OperatorDbAdapter.CreateNewDatabase(this, dbFile);
-            // но работать с пустой БД - начинать все сначала.
-        }
-        // else
-        // open existing database and close - as test
-        this.m_db.Open(connectionString);
-        this.m_db.Close();
-        // Использовать адаптер так, чтобы он открывал БД только на
-        // время чтения или записи, а не держал ее постоянно открытой.
-        // Так меньше вероятность повредить бд при глюках линукса.
-
-        // 5. Open PEM
-        // TODO: дополнить код здесь полезными проверками
-        this.AddMessageToConsoleAndLog("Загрузка Библиотек Процедур..", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.SubsystemEvent_Procedure, EnumLogMsgState.Default);
-        this.m_PEM.Open();// TODO: this function not completed now.
-        this.AddMessageToConsoleAndLog("Загрузка Библиотек Процедур завершена.", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.SubsystemEvent_Procedure, EnumLogMsgState.Default);
-        this.m_OperatorConsole.PrintEmptyLine();
-        // 6. Open ECM
-        // TODO: дополнить код здесь полезными проверками
-        this.m_ECM.Open();// TODO: this function not completed now.
-
-        // 7. Open BCSA
-        this.m_BCSA.Open();// TODO: this function not completed now.
-
-        return;
-    }
-
-    /**
-     * NT-Close engine
-     * 
-     * @throws Exception
-     *             Ошибка при освобождении ресурсов.
-     */
-    public void Exit() throws Exception
-    {
-        // закрыть BCSA
-        if (this.m_BCSA != null)
-            this.m_BCSA.Close();
-        // закрыть ECM
-        if (this.m_ECM != null)
-            this.m_ECM.Close();
-        // закрыть PEM
-        if (this.m_PEM != null)
-            this.m_PEM.Close();
-        // Закрыть БД если еще не закрыта
-        if (this.m_db != null)
-            this.m_db.Close();
-        // close settings object
-        this.m_Settings.StoreIfModified();
-        // close log session - последним элементом
-        this.m_logman.Close();
-        this.m_logman = null;
-
-        return;
-    }
 
     // *************************************************************
     // *** Safe access to Log ***
 
-    /**
+    
      * NT-append new message object to log
      * 
      * @param c
@@ -332,12 +300,11 @@ namespace Engine.OperatorEngine
      *             Error on writing to log file.
      * @throws XMLStreamException
      *             Error on writing to log file.
-     */
+     
     protected void safeAddLogMsg(
             EnumLogMsgClass c,
             EnumLogMsgState s,
             String text)
-            throws IOException, XMLStreamException
     {
         // проверить существование движка и лога, и затем добавить сообщение в
         // лог.
@@ -347,14 +314,14 @@ namespace Engine.OperatorEngine
         return;
     }
 
-    /**
+    
      * NT-Write exception to engine log if available
      * 
      * @param en
      *            Engine object
      * @param e
      *            Exception object
-     */
+     
     public static void LoggingException(Engine en, Exception e)
     {
         try
@@ -373,14 +340,14 @@ namespace Engine.OperatorEngine
         return;
     }
 
-    /**
+    
      * NT-Check log is available
      * 
      * @param en
      *            Engine object
      * @return Function returns True if log writing is available, returns False
      *         otherwise.
-     */
+     
     public static boolean isLogReady(Engine en)
     {
         if (en == null)
@@ -393,14 +360,14 @@ namespace Engine.OperatorEngine
         return l.isReady();
     }
 
-    /**
+    
      * NT-Add exception message to Log and Console.
      * 
      * @param msg
      *            Message title.
      * @param ex
      *            Exception object.
-     */
+     
     public void PrintExceptionMessageToConsoleAndLog(String msg, Exception ex)
     {
         this.m_OperatorConsole.PrintExceptionMessage(msg, ex);
@@ -409,7 +376,7 @@ namespace Engine.OperatorEngine
         return;
     }
 
-    /**
+    
      * NT-Вывести сообщение на консоль и в лог.
      * 
      * @param text
@@ -422,7 +389,7 @@ namespace Engine.OperatorEngine
      *            Состояние сообщения Лога.
      * @throws Exception
      *             Ошибка при работе Лога.
-     */
+     
     public void AddMessageToConsoleAndLog(
             String text,
             EnumDialogConsoleColor color,
@@ -433,7 +400,7 @@ namespace Engine.OperatorEngine
         this.m_logman.AddMessage(cls, state, text);
     }
 
-    /**
+    
      * NT-Извлечь значение Настройки из ФайлНастроекОператора или ТаблицаНастроекОператора, иначе вывести сообщение о ее отсутствии.
      * 
      * @param setting
@@ -445,7 +412,7 @@ namespace Engine.OperatorEngine
      *             Ошибка при работе с файлом настроек.
      * 
      *             Эта функция может использоваться в коде Процедур из Библиотек Процедур.
-     */
+     
     public String getSettingOrMessage(EnumSettingKey setting, String operation)
             throws Exception
     {
@@ -466,7 +433,7 @@ namespace Engine.OperatorEngine
         return newQuery;
     }
 
-    /**
+    
      * NT - Получить значение настройки из ФайлНастроекОператора или ТаблицаНастроекОператора.
      * 
      * @param setting
@@ -476,7 +443,7 @@ namespace Engine.OperatorEngine
      *         Функция возвращает пустую строку, если значение настройки не указано.
      * 
      *         Эта функция может использоваться в коде Процедур из Библиотек Процедур.
-     */
+     
     public String getSettingFromFileOrTable(EnumSettingKey setting)
     {
         // Файл настроек всегда должен проверяться раньше, чем таблица настроек.
@@ -495,12 +462,12 @@ namespace Engine.OperatorEngine
 
     // #region Основной цикл исполнения механизма
 
-    /**
+    
      * NR-Основной цикл исполнения механизма
      * 
      * @throws Exception
      *             Ошибка при работе ЦиклИсполненияЗапросов.
-     */
+     
     public void CommandLoop() throws Exception
     {
 
@@ -596,7 +563,7 @@ namespace Engine.OperatorEngine
         return;
     }
 
-    /**
+    
      * NR- Запустить исполнение запроса и вернуть результат
      * 
      * @param query
@@ -604,7 +571,7 @@ namespace Engine.OperatorEngine
      * @return Функция возвращает код результата исполнения Процедуры.
      * @throws Exception
      *             Исключение при ошибке.
-     */
+     
     private EnumProcedureResult DoCommandExecution(String query)
             throws Exception
     {
@@ -657,13 +624,13 @@ exitCode = DoPostProcessing(exitCode);// готово
         return exitCode;
     }
 
-    /**
+    
      * NT-Пре-процессинг введенного пользователем запроса.
      * 
      * @param userQuery
      *            Объект введенного пользователем запроса.
      * @return Функция возвращает код результата исполнения Процедуры, выбранной как пред-обработка поступившего запроса.
-     */
+     
     private EnumProcedureResult DoPreProcessing(UserQuery userQuery)
 {
     // Тут если текст запроса = тексту одной из встроенных команд, то
@@ -679,7 +646,7 @@ exitCode = DoPostProcessing(exitCode);// готово
     return EnumProcedureResult.Success;
 }
 
-/**
+
  * NT-Выполнить пост-обработку результата исполнения Процедуры.
  * 
  * @param code
@@ -687,7 +654,7 @@ exitCode = DoPostProcessing(exitCode);// готово
  * @return Функция возвращает код результата исполнения Процедуры, выбранной как пост-обработка результата предыдущей Процедуры.
  * @throws Exception
  *             Ошибка при работе с файлом настроек.
- */
+ 
 private EnumProcedureResult DoPostProcessing(EnumProcedureResult code)
             throws Exception
 {
@@ -727,13 +694,13 @@ private EnumProcedureResult DoPostProcessing(EnumProcedureResult code)
         else return code;
 }
 
-/**
+
  * NT-Исполнить запрос через ЦиклПеребораПроцедур.
  * 
  * @param userQuery
  *            Текущий текст запроса.
  * @return Функция возвращает код результата исполнения Процедуры.
- */
+ 
 private EnumProcedureResult DoProcedureLoopExecution(UserQuery userQuery)
 {
     // запустить цикл выборки Процедур для Запроса и исполнить Процедуру.
@@ -779,7 +746,7 @@ result = EnumProcedureResult.Success;
 return result;
     }
 
-    /**
+    
      * NT- Execute Procedure
      * 
      * @param userQuery
@@ -793,7 +760,7 @@ return result;
      * @return Функция возвращает код результата исполнения Процедуры.
      * @throws Exception
      *             Исключение при ошибке.
-     */
+     
     private EnumProcedureResult DoProcedureExecute(
             UserQuery userQuery,
             String regex,
@@ -824,7 +791,7 @@ return result;
 
 }
 
-/**
+
  * NT- Запустить Процедуру из локальной БиблиотекаПроцедурОператора.
  * 
  * @param userQuery
@@ -834,7 +801,7 @@ return result;
  * @param args
  *            Коллекция аргументов.
  * @return Функция возвращает результат выполнения процедуры.
- */
+ 
 private EnumProcedureResult DoLocalAssembly(
         UserQuery userQuery,
         Procedure p,
@@ -878,12 +845,12 @@ private EnumProcedureResult DoLocalAssembly(
     return result;
 }
 
-/**
+
  * NT-Открыть пустой Терминал по пути LoneTerminal из ФайлНастроекОператора.
  * 
  * @return Функция возвращает EnumProcedureResult.Success при успехе.
  *         Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка.
- */
+ 
 public EnumProcedureResult StartAloneTerminal()
 {
     // Еще, для программ нужен рабочий каталог. Для wget подойдет каталог Downloads, для других программ - другие варианты желательны.
@@ -920,14 +887,14 @@ public EnumProcedureResult StartAloneTerminal()
     return result;
 }
 
-/**
+
  * NT-Открыть Терминал и перенаправить в него текущий текст запроса.
  * 
  * @param userQuery
  *            Текущий текст запроса
  * @return Функция возвращает EnumProcedureResult.Success при успехе.
  *         Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка.
- */
+ 
 private EnumProcedureResult DoCommandEnglishTerminal(UserQuery userQuery)
 {
     // образец: private EnumProcedureResult ExecuteWithTerminal(String query)
@@ -969,14 +936,14 @@ private EnumProcedureResult DoCommandEnglishTerminal(UserQuery userQuery)
     return result;
 }
 
-/**
+
  * NT-Исполнить ShellExecute по пути ShellExecuteCommand из ФайлНастроекОператора.
  * 
  * @param arg
  *            URI-путь к запускаемому объекту. Пример: file:///home/jsmith/Documents/Путь%20с%20пробелами.txt
  * @return Функция возвращает EnumProcedureResult.Success при успехе.
  *         Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка.
- */
+ 
 public EnumProcedureResult StartShellExecute(String arg)
 {
     EnumProcedureResult result = EnumProcedureResult.Success;
@@ -1003,14 +970,14 @@ public EnumProcedureResult StartShellExecute(String arg)
     return result;
 }
 
-/**
+
  * NT-Исполнить команду по пути ForCommandTerminal из ФайлНастроекОператора.
  * 
  * @param arg
  *            URI-путь к запускаемому объекту. Пример: file:///home/jsmith/Documents/Путь%20с%20пробелами.txt
  * @return Функция возвращает EnumProcedureResult.Success при успехе.
  *         Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка.
- */
+ 
 public EnumProcedureResult StartCommandTerminalExecute(String arg)
 {
     EnumProcedureResult result = EnumProcedureResult.Success;
@@ -1037,7 +1004,7 @@ public EnumProcedureResult StartCommandTerminalExecute(String arg)
     return result;
 }
 
-/**
+
  * NT-Запустить команду через механизм ShellExecute.
  * 
  * @param p
@@ -1046,7 +1013,7 @@ public EnumProcedureResult StartCommandTerminalExecute(String arg)
  * @param args
  *            Коллекция аргументов.
  * @return Функция возвращает результат выполнения процедуры.
- */
+ 
 private EnumProcedureResult DoShellExecute(
         Procedure p,
         ArgumentCollection args)
@@ -1099,13 +1066,13 @@ private EnumProcedureResult DoShellExecute(
     return result;
 }
 
-/**
+
  * NT-Исполнить Процедуру без аргументов.
  * 
  * @param userQuery
  *            Путь к Процедуре.
  * @return Функция возвращает код результата исполнения Процедуры.
- */
+ 
 private EnumProcedureResult DoSimpleProcedureExecution(UserQuery userQuery)
 {
     EnumProcedureResult result = EnumProcedureResult.Success;
@@ -1157,13 +1124,13 @@ private EnumProcedureResult DoSimpleProcedureExecution(UserQuery userQuery)
     return result;
 }
 
-/**
+
  * NT- выполнить стартовую процедуру
  * 
  * @return Вернуть код результата для правильного перехода в вызывающем алгоритме.
  * @throws Exception
  *             Исключение при ошибке.
- */
+ 
 private int CommandStartupProcedure() throws Exception
 {
     // - TODO: С30 Событие начала стартапа.
@@ -1248,7 +1215,7 @@ private int CommandStartupProcedure() throws Exception
         return 0;
 }
 
-/**
+
  * NT-Выполнить процедуру завершения Оператор.
  * 
  * @param pr
@@ -1256,7 +1223,7 @@ private int CommandStartupProcedure() throws Exception
  * @return Вернуть код результата для правильного перехода в вызывающем алгоритме.
  * @throws Exception
  *             Исключение при ошибке.
- */
+ 
 private int CommandFinishProcedure(EnumProcedureResult pr) throws Exception
 {
     // - TODO: С35 Событие начала финиша.
@@ -1417,9 +1384,9 @@ private void describeProcedureResult(EnumProcedureResult result)
     return;
 }
 
-/**
+
  * NT-Обработать событие "Не удалось подобрать процедуру для исполнения запроса"
- */
+ 
 private void EventCommandNotExecuted()
 {
     // TODO: добавить эту функцию -ивент в документацию по работе движка.
@@ -1431,7 +1398,7 @@ private void EventCommandNotExecuted()
     return;
 }
 
-/**
+
  * NT-Собрать нормальный регекс для процедуры
  * 
  * @param p
@@ -1439,7 +1406,7 @@ private void EventCommandNotExecuted()
  * @return Функция возвращает Нормальный регекс для указанной Процедуры.
  * @throws Exception
  *             Procedure has invalid regex string.
- */
+ 
 private String MakeNormalRegex(Procedure p) throws Exception
 {
     String result = null;
@@ -1462,14 +1429,14 @@ private String MakeNormalRegex(Procedure p) throws Exception
 return result;
     }
 
-    /**
+    
      * NT-Сопоставить данные аргументов и места из коллекции мест, насколько это возможно.
      * 
      * @param args
      *            Коллекция аргументов.
      * @throws Exception
      *             Исключение при ошибке.
-     */
+     
     private void TryAssignPlaces(ArgumentCollection args) throws Exception
 {
 

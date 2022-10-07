@@ -17,12 +17,12 @@ namespace Engine.SettingSubsystem
         /**
          * Application settings file name
          */
-        public final static String AppSettingsFileName = "settings.txt";
+        public const String AppSettingsFileName = "settings.txt";
 
         /**
          * Line separator
          */
-        protected final static String lineSeparator = System.lineSeparator();
+        protected static String lineSeparator = Utility.SystemInfoManager.GetLineSeparator();
 
         // А тут эту коллекцию наружу выдавать не будем - все ее функции повторим тут в классе, чтобы иметь весь интерфейс в этом классе, а не разбивать по
         // вложенным объектам.

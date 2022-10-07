@@ -5,7 +5,7 @@ namespace Engine.Utility
     /// <summary>
     /// NT - Самодельный класс версии
     /// </summary>
-    internal class OperatorVersion
+    public class OperatorVersion
     {
 
         /// <summary>

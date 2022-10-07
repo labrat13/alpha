@@ -1,53 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
+using System.Xml;
+using Engine.Utility;
 
 namespace Engine.LogSubsystem
 {
-    /*
- * Для каждого сеанса лога - свой файл лога, а не все в один файл лога.
- * А более старые файлы лога удалять при превышении их количества?
- * TODO: Это не отработано в виндовс-прототипе!
- */
+
+    // Для каждого сеанса лога - свой файл лога, а не все в один файл лога.
+    // А более старые файлы лога удалять при превышении их количества?
+    // TODO: Это не отработано в виндовс-прототипе!
 
     /// <summary>
-    /// NR - Менеджер лога Оператор
+    /// NT-Менеджер лога Оператор with XML writer.
     /// </summary>
-    /// <remarks>Простой менеджер быстро создает XML-теги текстом без экранирования символов.</remarks>
+    /// <remarks> 
+    /// Более медленная версия с экранированием недопустимых символов.
+    /// Немного другой формат сообщения - текст расположен в элементе иначе.</remarks>
     public class LogManager : Engine.OperatorEngine.EngineSubsystem
     {
-
-        /// <summary>
-        /// NR - Конструктор
-        /// </summary>
-        /// <param name="engine">Ссылка на объект движка.</param>
-        public LogManager(OperatorEngine.Engine engine) : base(engine)
-        {
-            //TODO: Add code here
-        }
-
-
-        #region  *** Override this from EngineSubsystem parent class ***
-        /// <summary>
-        /// NR - Initialize Subsystem. This function must be overrided in child classes.
-        /// </summary>
-        /// <exception cref="Exception">Exception at Function must be overridden</exception>
-        protected override void onOpen()
-        {
-            throw new Exception("Function must be overridden");//TODO: Add code here
-        }
-
-        /// <summary>
-        /// NR - De-initialize Subsystem. This function must be overrided in child classes.
-        /// </summary>
-        /// <exception cref="Exception">Exception at Function must be overridden</exception>
-        protected override void onClose()
-        {
-            throw new Exception("Function must be overridden");//TODO: Add code here
-        }
-        #endregion
-
         // TODO: Надо описать подсистему лога в документации проекта!
         // TODO: Надо добавить функцию регулирования размера каталога файлов лога.
         // - когда ее запускать? Подсчет размера каталога лога - долгое дело?
@@ -62,242 +33,209 @@ namespace Engine.LogSubsystem
         // - - LogFileSizeLimitMB = 4096
         // Надо чтобы это все работало для производных классов, они и будут далее использоваться.
 
-        /**
-         * Application log folder path
-         */
-        protected final static String AppLogFolderPath = FileSystemManager.getAppLogFolderPath();
+        #region *** Constants and Fields ***
+        /// <summary>
+        /// Log writer object
+        /// </summary>
+        protected XmlWriter m_Writer;
+
+        /// <summary>
+        /// Application log folder path
+        /// </summary>
+        protected static String AppLogFolderPath = Engine.OperatorEngine.FileSystemManager.getAppLogFolderPath();
         // SystemInfoManager.GetUserHomeFolderPath() + File.separator + "Operator" + File.separator + "logs";
         // = FileSystemManager.AppLogFolderPath; - заменено на время отладки,
         // поскольку Engine класс не готов.
+        #endregion
 
-        /**
-         * Line break symbol "/n"
-         */
-        protected final static String LineSeparator = System.lineSeparator();
-
-        /**
-         * Log writer object
-         */
-        protected OutputStreamWriter m_Writer;
-
-        /**
-         * Backreference to Engine object
-         */
-        protected Engine m_Engine;
-
-        /**
-         * Log subsystem is ready to serve
-         */
-        protected boolean m_Ready;
-
-        /**
-         * Default constructor
-         * 
-         * @param en
-         *            Engine object reference
-         */
-        public LogManager(Engine en)
+        /// <summary>
+        /// NT-Param constructor.
+        /// </summary>
+        /// <param name="engine">Ссылка на объект движка</param>
+        public LogManager(Engine.OperatorEngine.Engine engine) : base(engine)
         {
-            this.m_Engine = en;
             this.m_Writer = null;
-            // log subsystem not ready
-            this.m_Ready = false;
         }
 
-        /**
-         * RT-Log subsystem is ready to serve
-         * 
-         * @return Функция возвращает значение флага готовности.
-         */
-        public boolean isReady()
-        {
-            return this.m_Ready;
-        }
 
-        /**
-         * NT-Initialize log subsystem and open log session
-         * 
-         * @throws Exception
-         *             "Session already exists" or "Error on writing to log file."
-         * 
-         */
-        public void Open() throws Exception
+        #region  *** Override this from EngineSubsystem parent class ***
+        /// <summary>
+        /// NT-Initialize log subsystem here and open log session
+        /// </summary>
+        /// <exception cref="Exception">"Session already exists" or "Error on writing to log file."</exception>
+        protected override void onOpen()
         {
             // Если каталог лога не найден - создать новый каталог лога и файл лога
             // в нем.
             // 1. create file if not exists
             // - if log folder not exists, try create it.
             // - if log folder not writable, throw exception.
-            File logFolder = new File(LogManager.AppLogFolderPath);
-        if (!logFolder.exists())
-            logFolder.mkdir();
-        // 2. create filename as log-datetime.xml
-        String filename = logFolder.getPath() + FileSystemManager.FileSeparator + this.makeNewFileName();// session_timestamp.xml
-        File logfile = new File(filename);
-        // если файл сессии уже существует, выбросить исключение об этом
-        if (logfile.exists())
-            throw new Exception("Session already exists");
-        // open or create file with StreamWriter with UTF-8 encoding and path
-        // Operator/logs directory/
-        // 4. create writer object
-        FileOutputStream os = new FileOutputStream(logfile.getPath(), false);
-        OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
-        // И вывести стандартный заголовок XML файла: <?xml version="1.0"
-        // encoding="UTF-8" standalone="yes" ?>
-        // 5. write log file header
-        osw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>");
-        osw.write(LineSeparator);
-        // Вывести открытие сессии <session> как корень документа.
-        osw.write("<session>");
-        osw.write(LineSeparator);
-        // store to class field
-        this.m_Writer = osw;
-        // 6. write session start message
-        this.AddMessage(EnumLogMsgClass.SessionStarted, EnumLogMsgState.OK, "Session opened");
-        // set ready flag
-        this.m_Ready = true;
+            DirectoryInfo logFolder = new DirectoryInfo(LogManager.AppLogFolderPath);
+            if (!logFolder.Exists)
+                logFolder.Create();
+            // 2. create filename as log-datetime.xml
+            String filename = Path.Combine(AppLogFolderPath, this.makeNewFileName());// session_timestamp.xml
+            FileInfo logfile = new FileInfo(filename);
+            // если файл сессии уже существует, выбросить исключение об этом
+            if (logfile.Exists)
+                throw new Exception("Session already exists");
 
-        return;
-    }
+            // open or create file with StreamWriter with UTF-8 encoding and path Operator/logs directory/
+            // 4. create writer object
+            // И вывести стандартный заголовок XML файла: <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+            XmlWriterSettings sett = new XmlWriterSettings();
+            sett.Indent = true;
+            sett.CloseOutput = true;
+            XmlWriter writer = XmlWriter.Create(filename, sett);
 
-    /**
-     * NT-Close log session
-     * 
-     * @throws IOException
-     *             Error on writing to log file
-     * @throws XMLStreamException
-     *             Error on writing to log file.
-     */
-    public void Close() throws IOException, XMLStreamException
-    {
-        // Cleanup log subsystem here
-        if (this.m_Ready == true)
+            //  5. write log file header
+            // writer.WriteStartDocument(); - не требуется?
+            writer.WriteComment("Operator Log file");
+            // Вывести открытие сессии <session> как корень документа.
+            writer.WriteStartElement("session");
+            // store to class field
+            this.m_Writer = writer;
+            //// set ready flag
+            //this.m_Ready = true; - set by caller function
+            // write session start message
+            this.AddMessage(EnumLogMsgClass.SessionStarted, EnumLogMsgState.OK, "Session opened");
+
+            return;
+        }
+
+        /// <summary>
+        /// NT-Close log session
+        /// </summary>
+        protected override void onClose()
         {
-        // write session finish message
-        this.AddMessage(EnumLogMsgClass.SessionFinished, EnumLogMsgState.OK, "Session closed");
-        // Вывести закрытие сессии </session>.
-        this.m_Writer.write("</session>");
-        this.m_Writer.write(LineSeparator);
-    }
-        // clear ready flag
-        this.m_Ready = false;
-        // Закрыть StreamWriter
-        if (this.m_Writer != null)
+            // Cleanup log subsystem here
+            if (this.m_Ready == true)
+            {
+                // write session finish message
+                this.AddMessage(EnumLogMsgClass.SessionFinished, EnumLogMsgState.OK, "Session closed");
+                // Вывести закрытие сессии </session>.
+                this.m_Writer.WriteEndElement();
+                //this.m_Writer.WriteEndDocument(); - не требуется?
+                this.m_Writer.Flush();
+            }
+            //// clear ready flag - done by caller function
+            //this.m_Ready = false;
+            // Закрыть StreamWriter
+            if (this.m_Writer != null)
+            {
+                this.m_Writer.Close();
+                this.m_Writer = null;
+            }
+
+            return;
+        }
+        #endregion
+
+
+        /// <summary>
+        /// NT-Append new message object to log
+        /// </summary>
+        /// <param name="msg">New message object.</param>
+        public void AddMessage(LogMessage msg)
         {
-        this.m_Writer.close();
-        this.m_Writer = null;
-    }
+            // skip writing if subsystem not ready
+            if (this.m_Ready == false)
+                return;
+            // write msg line
+            this.m_Writer.WriteStartElement("msg");
+            this.m_Writer.WriteAttributeString("t", StringUtility.DateTimeToString(msg.MsgTimestamp));
+            this.m_Writer.WriteAttributeString("c", msg.MsgClass.ToString());
+            this.m_Writer.WriteAttributeString("s", msg.MsgState.ToString());
+            this.m_Writer.WriteString(msg.MsgText);
+            this.m_Writer.WriteEndElement();
+            //this.m_Writer.writeCharacters(LineSeparator);// TODO: add new line
+            // flush to file
+            this.m_Writer.Flush();
 
-        return;
-    }
+            return;
+        }
 
-    /**
-     * NT-Append new message object to log
-     * 
-     * @param msg
-     *            New message object.
-     * @throws IOException
-     *             Error on writing to log file.
-     * @throws XMLStreamException
-     *             Error on writing to log file.
-     */
-    public void AddMessage(LogMessage msg)
-            throws IOException, XMLStreamException
-    {
-        String s = msg.ToXmlString();
-        this.m_Writer.write(s);
-        this.m_Writer.write(LineSeparator);
-        this.m_Writer.flush();
-
-        return;
-    }
-
-    /**
-     * NT-append new message object to log
-     * 
-     * @param c
-     *            Event class code
-     * @param s
-     *            Event state code
-     * @param text
-     *            Event text description
-     * @throws IOException
-     *             Error on writing to log file.
-     * @throws XMLStreamException
-     *             Error on writing to log file.
-     */
-    public void AddMessage(EnumLogMsgClass c, EnumLogMsgState s, String text)
-            throws IOException, XMLStreamException
-    {
-        LogMessage msg = new LogMessage(c, s, text);
-        this.AddMessage(msg);
-
-        return;
-    }
-
-    /**
-     * NT-Create new log file name for new session
-     * 
-     * @return Function returns new log file name/
-     */
-    protected String makeNewFileName()
-    {
-        LocalDateTime dt = LocalDateTime.now();
-        String p = Utility.DateTimeToFileNameString(dt);
-
-        return "session_" + p + ".xml";
-    }
-
-    /**
-     * NT-Add log message about exception. This function not thrown (suppress) any exceptions.
-     * 
-     * @param e
-     *            Exception object to log
-     */
-    public void AddExceptionMessage(Exception e)
-    {
-        try
+        /// <summary>
+        ///  NT-append new message object to log
+        /// </summary>
+        /// <param name="c">Event class code</param>
+        /// <param name="s">Event state code</param>
+        /// <param name="text">Event text description</param>
+        /// <exception cref="IOException"> Error on writing to log file.</exception>
+        public void AddMessage(EnumLogMsgClass c, EnumLogMsgState s, String text)
         {
-            LogMessage msg = new LogMessage(EnumLogMsgClass.ExceptionRaised, EnumLogMsgState.Fail, e.toString());
+            LogMessage msg = new LogMessage(c, s, text);
             this.AddMessage(msg);
-        }
-        catch (Exception ex)
-        {
-            ;// add debug breakpoint here;
-        }
-        return;
-    }
 
-    /**
-     * NT-Add log message about exception. This function not thrown (suppress) any exceptions.
-     * 
-     * @param title
-     *            Вводный текст сообщения. Если пустая строка, то используется "Ошибка".
-     * @param ex
-     *            Объект исключения.
-     */
-    public void AddExceptionMessage(String title, Exception ex)
-    {
-        try
-        {
-            StringBuilder sb = new StringBuilder(title);
-            // добавим разделительный пробел
-            sb.append(' ');
-            // добавим название исключения
-            sb.append(ex.getClass().getName());
-            // добавим текст исключения
-            sb.append(": ");
-            sb.append(ex.toString());
-            //
-            LogMessage msg = new LogMessage(EnumLogMsgClass.ExceptionRaised, EnumLogMsgState.Fail, sb.toString());
-            this.AddMessage(msg);
+            return;
         }
-        catch (Exception e)
-        {
-            ;// add debug breakpoint here;
-        }
-        return;
-    }
 
-}
+        /// <summary>
+        /// NT-Create new log file name for new session
+        /// </summary>
+        /// <returns>Function returns new log file name</returns>
+        protected String makeNewFileName()
+        {
+            DateTime dt = DateTime.Now;
+            String p = StringUtility.DateTimeToFileNameString(dt);
+
+            return "session_" + p + ".xml";
+        }
+
+        /// NT-Add log message about exception. This function not thrown (suppress) any exceptions.
+        /// </summary>
+        /// <param name="e">Exception object to log
+        /// <summary></param>
+        public void AddExceptionMessage(Exception e)
+        {
+            try
+            {
+                LogMessage msg = new LogMessage(EnumLogMsgClass.ExceptionRaised, EnumLogMsgState.Fail, e.ToString());
+                this.AddMessage(msg);
+            }
+            catch (Exception ex)
+            {
+                ;// add debug breakpoint here;
+            }
+            return;
+        }
+
+        /// <summary>
+        /// NT-Add log message about exception. This function not thrown (suppress) any exceptions.
+        /// </summary>
+        /// <param name="title">Вводный текст сообщения. Если пустая строка, то используется "Ошибка".</param>
+        /// <param name="ex">Объект исключения.</param>
+        public void AddExceptionMessage(String title, Exception ex)
+        {
+            try
+            {
+                //Текст сообщения: Если пустая строка, то используется "Ошибка".
+                String t = "Ошибка: ";
+                if (!String.IsNullOrEmpty(title))
+                    t = title;
+                StringBuilder sb = new StringBuilder(t);
+                // добавим разделительный пробел
+                sb.Append(' ');
+                // добавим название исключения
+                sb.Append(ex.GetType().Name);
+                // добавим текст исключения
+                sb.Append(": ");
+                sb.Append(ex.ToString());
+                //
+                LogMessage msg = new LogMessage(EnumLogMsgClass.ExceptionRaised, EnumLogMsgState.Fail, sb.ToString());
+                this.AddMessage(msg);
+            }
+            catch (Exception e)
+            {
+                ;// add debug breakpoint here;
+            }
+            return;
+        }
+
+
+
+
+
+
+    }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Engine.Utility
 {
@@ -10,7 +12,7 @@ namespace Engine.Utility
     /// NT-Определить, работает ли уже другой экзмпляр приложения. И если нет, была ли его работа завершена некорректно.
     /// </summary>
     /// <remarks>
-    ///  * Механизм основан на создании пустого файла блокировки, обычно в рабочем каталоге приложения/проекта.
+    ///  Механизм основан на создании пустого файла блокировки, обычно в рабочем каталоге приложения/проекта.
     /// - Если файл блокировки отсутствует, то нет ранее запущенного экземпляра приложения, и его работа была завершена корректно.
     /// - Если файл блокировки присутствует, то:
     ///   - Если файл блокирован от чтения-записи, то существует ранее запущенный экземпляр приложения. 
@@ -76,95 +78,88 @@ namespace Engine.Utility
 
         // *** Service functions ***
         /**
-         * NT-Try lock application before start application routine.
+         * NR-Try lock application before start application routine.
          * 
          * @param lockfilepath Locking file pathname.
          * @throws IOException Error on locking application.
          * @throws InterruptedException Unknown error.
          */
-        public static void lockInstance(String lockfilepath) throws IOException, InterruptedException
-    {
-
-
-        bool isExists = false;
-        bool isLocked = false;
-        //wait random time
-        waitRandom(3000.0d);
-
-        File fi = new File(lockfilepath);
-        //store filepath to variable
-        m_lockFilePathName = new String(lockfilepath);
-        // set flags
-        isExists = true;
-        if (fi.exists() == false)
+        public static void lockInstance(String lockfilepath)
         {
-            isExists = false;
-            fi.createNewFile();
+            bool isExists = false;
+            bool isLocked = false;
+            //wait random time 50..3000ms
+            waitRandom(3000);
+
+                    FileInfo fi = new FileInfo(lockfilepath);
+                    //store filepath to variable
+                    m_lockFilePathName = String.Copy(lockfilepath);
+                    // set flags
+                    isExists = true;
+                    if (fi.Exists == false)
+                   {
+                        isExists = false;
+                        fi.createNewFile();
+                    }
+            //    // set lock
+            //    m_raf = new RandomAccessFile(fi, "rw");
+            //    m_fl = m_raf.getChannel().tryLock();
+            //        if (m_fl == null)
+            //        {
+            //            isLocked = true;
+            //        }
+            //        else
+            //{
+            //    isLocked = false;
+            //}
+            //// calculate
+            //if (isExists == false)
+            //{
+            //    m_hasDuplicate = false;
+            //    m_needRestoreData = false;
+            //}
+            //else
+            //{
+            //    // flag isExists = true
+            //    if (isLocked == false)
+            //    {
+            //        m_hasDuplicate = false;
+            //        m_needRestoreData = true;
+            //    }
+            //    else
+            //    {
+            //        m_hasDuplicate = true;
+            //        m_needRestoreData = false;
+            //    }
+
+            //}
+
+            return;
         }
-    // set lock
-    m_raf = new RandomAccessFile(fi, "rw");
-    m_fl = m_raf.getChannel().tryLock();
-        if (m_fl == null)
+
+
+        /// <summary>
+        /// NT - Current thread sleep for 50..maxMs milliseconds.
+        /// </summary>
+        /// <param name="maxMs">Maximum amount of milliseconds for sleep.</param>
+        private static void waitRandom(int maxMs)
         {
-            isLocked = true;
+            Random r = new Random(Environment.TickCount);
+            int ms = r.Next(50, maxMs);
+
+            Thread.Sleep(ms);
+
+            return;
         }
-        else
-{
-    isLocked = false;
-}
-// calculate
-if (isExists == false)
-{
-    m_hasDuplicate = false;
-    m_needRestoreData = false;
-}
-else
-{
-    // flag isExists = true
-    if (isLocked == false)
-    {
-        m_hasDuplicate = false;
-        m_needRestoreData = true;
-    }
-    else
-    {
-        m_hasDuplicate = true;
-        m_needRestoreData = false;
-    }
 
-}
-
-return;
-    }
-
-
-     *NT - Current thread sleep for 50..maxMs milliseconds.
-     * @param maxMs Maximum amount of milliseconds for sleep.
-     * @throws InterruptedException Unknown error.
-     */
-
-
-
-    private static void waitRandom(double maxMs) throws InterruptedException
-{
-    Random r = new Random(System.nanoTime());
-
-Double d = r.nextDouble() * maxMs;
-d = d + 50.0;//min pause is 50 milliseconds
-long ms = d.longValue();
-Thread.sleep(ms);
-
-return;
-    }
-
-    /**
-     * NT-Unlock application at exit application routine.
-     * 
-     * @throws IOException
-     *             Error on unlocking
-     */
-    public static void unlockInstance() throws IOException
-{
+        /**
+         * NT-Unlock application at exit application routine.
+         * 
+         * @throws IOException
+         *             Error on unlocking
+         */
+        public static void unlockInstance() throws IOException
+        {
         if (m_fl != null)
         {
         m_fl.release();
@@ -176,8 +171,8 @@ return;
         m_raf.close();
         m_raf = null;
     }
-    //delete lock file at exit application
-    File f = new File(m_lockFilePathName);
+//delete lock file at exit application
+File f = new File(m_lockFilePathName);
 if (f.exists())
     f.delete();
 

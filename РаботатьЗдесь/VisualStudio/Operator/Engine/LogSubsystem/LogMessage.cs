@@ -1,239 +1,163 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using Engine.Utility;
 
 namespace Engine.LogSubsystem
 {
     /// <summary>
     /// NT-Объект сообщения лога
     /// </summary>
-    internal class LogMessage
+    public class LogMessage
     {
-        /**
-    * Event timestamp
-    */
-        protected LocalDateTime m_MsgStamp;
+        #region *** Constants and Fields ***
+        /// <summary>
+        /// Event timestamp
+        /// </summary>
+        protected DateTime m_MsgStamp;
 
-        /**
-         * Event class code
-         */
+
+        /// <summary>
+        /// Event class code
+        /// </summary>
         protected EnumLogMsgClass m_MsgClass;
 
-        /**
-         * Event state code
-         */
+        /// <summary>
+        /// Event state code
+        /// </summary>
         protected EnumLogMsgState m_MsgState;
 
-        /**
-         * Event description text
-         */
+        /// <summary>
+        /// Event description text
+        /// </summary>
         protected String m_MsgText;
 
-        /**
-         * Default constructor
-         */
+        #endregion
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public LogMessage()
         {
             this.m_MsgClass = EnumLogMsgClass.Default;
             this.m_MsgState = EnumLogMsgState.Default;
-            this.m_MsgText = "";// or buffered - Utility.StringCopy(text);
-            this.m_MsgStamp = LocalDateTime.now();
+            this.m_MsgText = "";
+            this.m_MsgStamp = DateTime.Now;
         }
 
-        /**
-         * NT-Parameter constructor
-         * 
-         * @param c
-         *            Event class code
-         * @param s
-         *            Event state code
-         * @param text
-         *            Event text description
-         */
+        /// <summary>
+        /// NT-Parameter constructor
+        /// </summary>
+        /// <param name="c">Event class code</param>
+        /// <param name="s">Event state code</param>
+        /// <param name="text">Event text description</param>
         public LogMessage(EnumLogMsgClass c, EnumLogMsgState s, String text)
         {
             this.m_MsgClass = c;
             this.m_MsgState = s;
-            this.m_MsgText = text;// or buffered - Utility.StringCopy(text);
-            this.m_MsgStamp = LocalDateTime.now();
+            this.m_MsgText = String.Copy(text);
+            this.m_MsgStamp = DateTime.Now;
 
             return;
         }
 
-        /**
-         * NT-Parameter constructor
-         * 
-         * @param t
-         *            Event timestamp as come from LocalDateTime.now()
-         * @param c
-         *            Event class code
-         * @param s
-         *            Event state code
-         * @param text
-         *            Event text description
-         */
-        public LogMessage(LocalDateTime t,
+        /// <summary>
+        /// NT-Parameter constructor
+        /// </summary>
+        /// <param name="t">Event timestamp as come from DateTime.Now</param>
+        /// <param name="c">Event class code</param>
+        /// <param name="s">Event state code</param>
+        /// <param name="text">Event text description</param>
+        public LogMessage(DateTime t,
                 EnumLogMsgClass c,
                 EnumLogMsgState s,
                 String text)
         {
             this.m_MsgClass = c;
             this.m_MsgState = s;
-            this.m_MsgText = text;// or buffered - Utility.StringCopy(text);
+            this.m_MsgText = String.Copy(text);
             this.m_MsgStamp = t;
 
             return;
         }
 
-        /**
-         * NT-Get event description text
-         * 
-         * @return event description text
-         */
-        public String getMsgText()
+        #region *** Properties ***
+        /// <summary>
+        /// Event timestamp
+        /// </summary>
+        public DateTime MsgTimestamp
         {
-            return m_MsgText;
+            get { return this.m_MsgStamp; }
+            set { this.m_MsgStamp = value; }
         }
-
-        /**
-         * NT-Set event description text
-         * 
-         * @param msgText
-         *            event description text
-         */
-        public void setMsgText(String msgText)
+        /// <summary>
+        /// Event class code
+        /// </summary>
+        public EnumLogMsgClass MsgClass
         {
-            this.m_MsgText = msgText;
+            get { return this.m_MsgClass; }
+            set { this.m_MsgClass = value; }
         }
-
-        /**
-         * NT-Get event state code
-         * 
-         * @return event state code
-         */
-        public EnumLogMsgState getMsgState()
+        /// <summary>
+        /// Event state code
+        /// </summary>
+        public EnumLogMsgState MsgState
         {
-            return m_MsgState;
+            get { return this.m_MsgState; }
+            set { this.m_MsgState = value; }
         }
-
-        /**
-         * NT-Set event state code
-         * 
-         * @param msgState
-         *            the event state code to set
-         */
-        public void setMsgState(EnumLogMsgState msgState)
+        /// <summary>
+        /// Event description text
+        /// </summary>
+        public String MsgText
         {
-            this.m_MsgState = msgState;
+            get { return this.m_MsgText; }
+            set { this.m_MsgText = value; }
         }
+        #endregion
 
-        /**
-         * NT-Get event class code
-         * 
-         * @return the event class code
-         */
-        public EnumLogMsgClass getMsgClass()
-        {
-            return m_MsgClass;
-        }
-
-        /**
-         * NT-Set event class code
-         * 
-         * @param msgClass
-         *            the event class code to set
-         */
-        public void setMsgClass(EnumLogMsgClass msgClass)
-        {
-            this.m_MsgClass = msgClass;
-        }
-
-        /**
-         * NT-Get event timestamp value
-         * 
-         * @return the event timestamp value
-         */
-        public LocalDateTime getMsgStamp()
-        {
-            return m_MsgStamp;
-        }
-
-        /**
-         * NT-Set event timestamp value
-         * 
-         * @param msgStamp
-         *            the event timestamp value to set
-         */
-        public void setMsgStamp(LocalDateTime msgStamp)
-        {
-            this.m_MsgStamp = msgStamp;
-        }
-
-        /**
-         * NT- String for debugging
-         * 
-         * @see java.lang.Object#toString()
-         */
-        @Override
-    public String toString()
+        /// <summary>
+        /// NT- String for debugging
+        /// </summary>
+        /// <returns></returns>
+        public override String ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.append("LogMessage [m_MsgStamp=");
-            builder.append(this.m_MsgStamp);
-            builder.append(", m_MsgClass=");
-            builder.append(this.m_MsgClass);
-            builder.append(", m_MsgState=");
-            builder.append(this.m_MsgState);
-            builder.append(", m_MsgText=");
-            builder.append(this.m_MsgText);
-            builder.append("]");
+            builder.Append("LogMessage [MsgStamp=");
+            builder.Append(this.m_MsgStamp);
+            builder.Append(", MsgClass=");
+            builder.Append(this.m_MsgClass);
+            builder.Append(", MsgState=");
+            builder.Append(this.m_MsgState);
+            builder.Append(", MsgText=");
+            builder.Append(this.m_MsgText);
+            builder.Append("]");
 
-            return builder.toString();
+            return builder.ToString();
         }
 
-        /**
-         * NT-Create xml string to write to log file
-         * 
-         * @return Function returns Xml string without /n
-         */
+        /// <summary>
+        ///  NT-Create xml string to write to log file
+        /// </summary>
+        /// <returns>Function returns Xml string without /n</returns>
         public String ToXmlString()
         {
             // sample line: <msg t="msg stamp" c="0" s="0" text="msg text" />
             StringBuilder builder = new StringBuilder();
-            builder.append("<msg t=\"");
-            builder.append(Utility.DateTimeToString(this.m_MsgStamp));
-            builder.append("\" c=\"");
-            builder.append(this.m_MsgClass.toString());
-            builder.append("\" s=\"");
-            builder.append(this.m_MsgState.toString());
-            builder.append("\" text=\"");
-            builder.append(this.m_MsgText);
-            builder.append("\" />");
+            builder.Append("<msg t=\"");
+            builder.Append(StringUtility.DateTimeToString(this.m_MsgStamp));
+            builder.Append("\" c=\"");
+            builder.Append(this.m_MsgClass.ToString());
+            builder.Append("\" s=\"");
+            builder.Append(this.m_MsgState.ToString());
+            builder.Append("\" text=\"");
+            builder.Append(this.m_MsgText);
+            builder.Append("\" />");
 
-            return builder.toString();
+            return builder.ToString();
         }
 
-        /**
-         * NT-Write message to specified writer as xml element.
-         * 
-         * @param writer
-         *            Log writer to write to.
-         * @throws XMLStreamException
-         *             Throw exception if error on writing.
-         */
-        public void WriteXmlWriter(XMLStreamWriter writer) throws XMLStreamException
-        {
-            writer.writeStartElement("msg");
-        writer.writeAttribute("t", Utility.DateTimeToString(this.m_MsgStamp));
-        writer.writeAttribute("c", this.m_MsgClass.toString());
-        writer.writeAttribute("s", this.m_MsgState.toString());
-        writer.writeCharacters(this.m_MsgText);
-        writer.writeEndElement();
 
-        return;
+
+
     }
-
-
-}
 }

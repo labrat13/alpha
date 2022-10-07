@@ -8,7 +8,7 @@ namespace Engine.LexiconSubsystem
     /// <summary>
     /// Представляет консоль Оператора для всех процедур и внутренних функций движка и всего приложения.
     /// </summary>
-    internal class DialogConsole
+    public class DialogConsole
     {
         // TODO: Доделать и отладить функции Terminal терминала - а то сейчас они не все
         // работают.

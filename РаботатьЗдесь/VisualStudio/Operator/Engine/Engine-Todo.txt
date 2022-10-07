@@ -385,9 +385,9 @@
 - LogSubsystem                  - need
   - EnumLogMsgClass             - ported, RT
   - EnumLogMsgState             - ported, RT, need refactoring - не определена роль этого в системе сообщений лога.         
-  - LogManager                  - need
-  - LogManager2                 - need
-  - LogMessage                  - need
+  - LogManager                  - deleted, replaced from LogManager2 class
+  - LogManager2                 - ported, renamed to LogManager, NT
+  - LogMessage                  - ported, NT
 - OperatorEngine                - need
   - ArgumentCollection          - ported, NT
   - ElementCacheManager         - need
@@ -397,7 +397,7 @@
   - EntityTypesCollection       - ported, NT
   - EnumProcedureResult         - ported, RT
   - EnumRegexType               - ported, RT
-  - FileSystemManager           - need
+  - FileSystemManager           - ported, NT
   - FuncArgument                - ported, NT
   - Item                        - ported, NT
   - NamespaceConstant           - ported, NT
@@ -422,7 +422,7 @@
   - ItemDictionaryBase          - ported
   - ItemDictionaryByNamespace   - ported
   - OperatorVersion             - ported
-  - SingleAppInstance           - 
+  - SingleAppInstance           - need refactoring - file locking 
   - StringUtility               - need refactoring
   - SystemInfoManager           - ported, need refactoring
   - WindowUtility               - ported

@@ -62,7 +62,7 @@
     <Compile Include="LexiconSubsystem\EnumSpeakDialogResult.cs" />
     <Compile Include="LogSubsystem\EnumLogMsgClass.cs" />
     <Compile Include="LogSubsystem\EnumLogMsgState.cs" />
-    <Compile Include="LogSubsystem\LogManager2.cs" />
+    <Compile Include="LogSubsystem\LogManager.cs" />
     <Compile Include="LogSubsystem\LogMessage.cs" />
     <Compile Include="OperatorEngine\FileSystemManager.cs" />
     <Compile Include="OperatorEngine\FuncArgument.cs" />
@@ -70,7 +70,6 @@
     <Compile Include="OperatorEngine\RegexManager.cs" />
     <Compile Include="SettingSubsystem\EnumSettingKey.cs" />
     <Compile Include="LexiconSubsystem\BCSA.cs" />
-    <Compile Include="LogSubsystem\LogManager.cs" />
     <Compile Include="OperatorEngine\ArgumentCollection.cs" />
     <Compile Include="OperatorEngine\Engine.cs" />
     <Compile Include="OperatorEngine\EngineSubsystem.cs" />
