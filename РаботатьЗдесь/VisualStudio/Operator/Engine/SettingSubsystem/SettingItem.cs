@@ -2,35 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Engine.Utility;
 
 namespace Engine.SettingSubsystem
 {
     /// <summary>
-    /// NR - Представляет элемент данных в файле настроек приложения.
+    /// NT - Представляет элемент данных в файле настроек приложения.
     /// </summary>
     /// <remarks>
     /// Элемент данных содержит название-ключ, текстовое значение и текстовое описание.
     /// Текстовое описание должно выводиться на одной строке комментария, если оно однострочное, или на нескольких строках, если оно многострочное.
     /// На следующей строке должно выводиться пара ключ-значение и затем следующая строка должна быть пустой.
+    /// Допускается иметь несколько элементов данных с одинаковым ключом, в этом случае они образуют список значений.
     /// </remarks>
     public class SettingItem : OperatorEngine.Item
     {
-        //TODO: Add code here
 
-        // DONE: убедиться, что при извлечении из файла настроек итемы получают источник = ФайлНастроек
-        // DONE: убедиться, что при извлечении из БД итемы получают источник = Database
+        // TODO: убедиться, что при извлечении из файла настроек итемы получают источник = ФайлНастроек
+        // TODO: убедиться, что при извлечении из БД итемы получают источник = Database
 
-            /// <summary>
-            /// NT-Default constructor
-            /// </summary>
+        /// <summary>
+        /// NT-Default constructor
+        /// </summary>
         public SettingItem() : base()
         {
         }
 
-         /// <summary>
-         /// NT-Конструктор копирования.
-         /// </summary>
-         /// <param name="p">Копируемый объект.</param>         
+        /// <summary>
+        /// NT-Конструктор копирования.
+        /// </summary>
+        /// <param name="p">Копируемый объект.</param>         
         public SettingItem(SettingItem p)
         {
             this.m_descr = (p.m_descr);
@@ -40,22 +41,22 @@ namespace Engine.SettingSubsystem
             this.m_title = (p.m_title);
             this.m_tableid = p.m_tableid;
             this.m_readOnly = (p.m_readOnly);
-            
+
             return;
         }
 
-            /// <summary>
-            /// NT - Constructor from EnumSettingKey.
-            /// </summary>
-            /// <param name="key">EnumSettingKey member.</param>
-            /// <param name="value">Setting value as string.</param>
-        public SettingItem(EnumSettingKey key, String value)
+        /// <summary>
+        /// NT - Constructor from EnumSettingKey.
+        /// </summary>
+        /// <param name="key">SettingKey member.</param>
+        /// <param name="value">Setting value as string.</param>
+        public SettingItem(SettingKey key, String value)
         {
             this.m_tableid = 0;
-            this.m_title = key.getTitle();
-            this.m_descr = key.getDescription();
+            this.m_title = key.Title;
+            this.m_descr = key.Description;
             this.m_path = value;
-            this.m_namespace = key.getNamespace();
+            this.m_namespace = key.Namespace;
 
             return;
         }
@@ -77,7 +78,7 @@ namespace Engine.SettingSubsystem
 
             return;
         }
-          
+
         /// <summary>
         /// NT-Parameter constructor - for Database Item.
         /// </summary>
@@ -104,11 +105,11 @@ namespace Engine.SettingSubsystem
             return;
         }
 
-         /// <summary>
-         /// NT-Return string for debug
-         /// </summary>
-         /// <returns></returns>
-    public override String ToString()
+        /// <summary>
+        /// NT-Return string for debug
+        /// </summary>
+        /// <returns></returns>
+        public override String ToString()
         {
             return base.getSingleLineProperties();
         }
@@ -119,7 +120,7 @@ namespace Engine.SettingSubsystem
         /// <returns>Функция возвращает однострочное описание Настройки в формате "Команда "Значение" из "Хранилище"."Название": Описание."</returns>        
         public String toSingleDescriptionString()
         {
-            return String.format("Команда \"%s\" из \"%s\".\"%s\": %s.", this.m_path.trim(), this.m_storage.trim(), this.m_title.trim(), this.m_descr.trim());
+            return String.Format("Команда \"{0}\" из \"{1}\".\"{2}\": {3}.", this.m_path.Trim(), this.m_storage.Trim(), this.m_title.Trim(), this.m_descr.Trim());
         }
 
         /// <summary>
@@ -130,75 +131,50 @@ namespace Engine.SettingSubsystem
         {
             return this.m_path;
         }
-          
-         /// <summary>
-         /// NT- Set value.
-         /// </summary>
-         /// <param name="val">Value as String.</param>
+
+        /// <summary>
+        /// NT- Set value.
+        /// </summary>
+        /// <param name="val">Value as String.</param>
         public void setValue(String val)
         {
             this.m_path = val;
         }
 
         /// <summary>
-        /// NR- Get value
+        /// NT- Get value
         /// </summary>
         /// <returns>Returns Value as Integer; returns null if Value has invalid format.</returns>
-        public Int32 getValueAsInteger()
+        public Int32? getValueAsInteger()
         {
-            Int32 result = null;
-
-            try
-            {
-                result = Integer.valueOf(this.m_path);
-            }
-            catch (Exception e)
-            {
-                result = null;
-            }
-
-            return result;
+            return StringUtility.tryParseInteger(this.m_path);
         }
 
-        /**
-         * NR- Get value
-         * 
-         * @return Returns Value as Boolean; returns null if Value has invalid format.
-         */
-        public Boolean getValueAsBoolean()
+        /// <summary>
+        /// Gets the value as boolean.
+        /// </summary>
+        /// <returns>Returns Value as Boolean; returns null if Value has invalid format.</returns>
+        public Boolean? getValueAsBoolean()
         {
-            Boolean result = null;
-
-            try
-            {
-                result = Boolean.valueOf(this.m_path);
-            }
-            catch (Exception e)
-            {
-                result = null;
-            }
-
-            return result;
+            return StringUtility.tryParseBoolean(this.m_path);
         }
 
-            /// <summary>
-            /// NT-Settings value as Boolean
-            /// </summary>
-            /// <param name="value">the value to set</param>
+        /// <summary>
+        /// NT-Settings value as Boolean
+        /// </summary>
+        /// <param name="value">the value to set</param>
         public void setValue(bool value)
         {
             this.m_path = value.ToString();
         }
 
-        /**
-         * NR-Settings value as Integer
-         * 
-         * @param value
-         *            the value to set
-         */
-        public void setValue(Integer value)
+        /// <summary>
+        /// NT-Settings value as Int32
+        /// </summary>
+        /// <param name="value">the value to set</param>
+        public void setValue(Int32 value)
         {
-            this.m_path = value.toString();
+            this.m_path = value.ToString();
         }
 
     }

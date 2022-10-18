@@ -68,7 +68,6 @@
     <Compile Include="OperatorEngine\FuncArgument.cs" />
     <Compile Include="OperatorEngine\NamespaceConstants.cs" />
     <Compile Include="OperatorEngine\RegexManager.cs" />
-    <Compile Include="SettingSubsystem\EnumSettingKey.cs" />
     <Compile Include="LexiconSubsystem\BCSA.cs" />
     <Compile Include="OperatorEngine\ArgumentCollection.cs" />
     <Compile Include="OperatorEngine\Engine.cs" />
@@ -86,6 +85,7 @@
     <Compile Include="SettingSubsystem\ApplicationSettingsKeyed.cs" />
     <Compile Include="SettingSubsystem\SettingItem.cs" />
     <Compile Include="SettingSubsystem\SettingItemCollection.cs" />
+    <Compile Include="SettingSubsystem\SettingKey.cs" />
     <Compile Include="Utility\FileUtility.cs" />
     <Compile Include="Utility\InOutArgument.cs" />
     <Compile Include="Utility\ItemDictionaryBase.cs" />

@@ -410,12 +410,12 @@
   - LibraryManagerBase          - need
   - OperatorProcedureAttribute  - ported, NT
   - ProcedureExecutionManager   - need
-- SettingSubsystem              - need
+- SettingSubsystem              - need  TODO: перепроектировать подсистему настроек под особенности Шарпа.
   - ApplicationSettingBase      - need
   - ApplicationSettingKeyed     - need
-  - EnumSettingKey              - need refactoring
-  - SettingItem                 - need
-  - SettingItemCollection       - need
+  - EnumSettingKey              - заменен на класс SettingKey, используется вместо енума. 
+  - SettingItem                 - ported, NT
+  - SettingItemCollection       - ported, NT, 
 - Utility                       - 
   - FileUtility                 - 
   - InOutArgument               - создан для обхода ограничений JAVA  и вроде бы в проекте не нужен?

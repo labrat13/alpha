@@ -127,6 +127,25 @@ namespace Engine.Utility
         }
 
         /// <summary>
+        /// NT-Получить множество уникальных названий неймспейсов элементов коллекции.
+        /// </summary>
+        /// <remarks>
+        /// Названия неймспейсов учитывают регистр символов: NameSpace != naMespace.
+        /// </remarks>
+        /// <returns>Функция возвращает множество уникальных названий неймспейсов элементов коллекции.</returns>
+        public HashSet<String> getNamespaces()
+        {
+            HashSet<String> set = new HashSet<String>();
+            // add existing item namespaces
+            foreach (List<Item> li in this.m_items.Values)
+                if ((li != null) && (li.Count > 0))
+                    foreach (Item p in li)
+                        set.Add(StringUtility.GetStringTextNull(p.Namespace));
+
+            return set;
+        }
+
+        /// <summary>
         /// NT-Get item array by title
         /// </summary>
         /// <param name="key">Dictionary key</param>

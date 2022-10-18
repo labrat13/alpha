@@ -334,7 +334,29 @@ namespace Engine.Utility
             return result;
         }
 
+        /// <summary>
+        /// NT-Распарсить строку в логическое значение.
+        /// </summary>
+        /// <param name="str">входная строка</param>
+        /// <returns>
+        /// Функция возвращает Nullable(bool) объект значения, если удалось его распарсить.
+        /// Функция возвращает null при любой ошибке парсинга.
+        /// </returns>
+        public static Boolean? tryParseBoolean(String str)
+        {
+            //TODO: добавить распознавание значений Да и Нет в любом регистре.
+            Boolean? result = null;
+            try
+            {
+                result = Boolean.Parse(str );
+            }
+            catch (Exception ex)
+            {
+                result = null;
+            }
 
+            return result;
+        }
 
     }
 }
