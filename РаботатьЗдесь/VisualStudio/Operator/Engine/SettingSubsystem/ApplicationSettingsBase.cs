@@ -1,49 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Engine.OperatorEngine;
+using Engine.Utility;
 
 namespace Engine.SettingSubsystem
 {
     /// <summary>
-    /// NR - Представляет базовый класс файла настроек приложения.
+    /// NT - Представляет базовый класс файла настроек приложения.
+    /// Функции должны быть реализованы в производном классе.
     /// </summary>
     public class ApplicationSettingsBase : Engine.OperatorEngine.EngineSubsystem
     {
-        // *** Constants and Fields ***
+        #region *** Constants and Fields ***
 
         // Я тут долго и безуспешно пробовал варианты, в итоге, решил задать имя и расширение файла в коде и не менять его, независимо от реального формата файла
         // настроек.
-        /**
-         * Application settings file name
-         */
+
+        //TODO: check entire class tree for architecture errors!
+
+        /// <summary>
+        /// Application settings file name
+        /// </summary>
         public const String AppSettingsFileName = "settings.txt";
 
-        /**
-         * Line separator
-         */
-        protected static String lineSeparator = Utility.SystemInfoManager.GetLineSeparator();
+        /// <summary>
+        /// The line separator
+        /// </summary>
+        protected static readonly String lineSeparator = Utility.SystemInfoManager.GetLineSeparator();
 
         // А тут эту коллекцию наружу выдавать не будем - все ее функции повторим тут в классе, чтобы иметь весь интерфейс в этом классе, а не разбивать по
         // вложенным объектам.
-        /**
-         * Collection for application settings
-         */
+
+        /// <summary>
+        /// Collection for application settings
+        /// </summary>
         protected SettingItemCollection m_Items;
 
-        /**
- * Settings file pathname
- */
+        /// <summary>
+        /// Settings file pathname
+        /// </summary>
         protected String m_filepath;
 
-
+        #endregion
         /// <summary>
         /// NR - Конструктор
         /// </summary>
         /// <param name="engine">Ссылка на объект движка.</param>
         public ApplicationSettingsBase(OperatorEngine.Engine engine) : base(engine)
         {
-            //TODO: Add code here
+            this.m_Items = new SettingItemCollection();
+            this.m_filepath = String.Empty;
+
+            return;
         }
 
 
@@ -69,283 +76,232 @@ namespace Engine.SettingSubsystem
 
         // *** Constructors ***
 
-        /**
-         * Paramether constructor.
-         * 
-         * @param engine
-         *            Engine object backreference.
-         */
-        public ApplicationSettingsBase(Engine engine)
-        {
-            this.m_Engine = engine;
-            this.m_Items = new SettingItemCollection();
-            this.m_filepath = null;
 
-            return;
-        }
-
-        // *** Properties ***
-
+        #region *** Properties ***
+        #endregion
         // *** Service functions ***
 
-        /**
-         * NT-Get string representation of object for debug
-         */
-        @Override
-    public String toString()
+        /// <summary>
+        /// NT-Get string representation of object for debug
+        /// </summary>
+        /// <returns></returns>
+        public override String ToString()
         {
-            return String.format("%i ключей из файла %s", this.m_Items.getTitleCount(), OperatorEngine.Utility.GetStringTextNull(this.m_filepath));
+            return String.Format("{0} ключей из файла {1}", this.m_Items.getTitleCount(), StringUtility.GetStringTextNull(this.m_filepath));
         }
 
-        // *** Work functions ***
+        #region *** Work functions ***
 
-        /**
-         * NT-Check setting is present
-         * 
-         * @param title
-         *            Setting title as key
-         * @return Returns true if setting present in collection, false otherwise.
-         */
-        public boolean hasSetting(String title)
+        /// <summary>
+        /// NT-Check setting is present
+        /// </summary>
+        /// <param name="title">Setting title as key.</param>
+        /// <returns>
+        ///   Returns true if setting present in collection, false otherwise.
+        /// </returns>
+        public bool hasSetting(String title)
         {
             return this.m_Items.hasTitle(title);
         }
 
-        /**
-         * NT-Get array of used titles.
-         * 
-         * @param sorted
-         *            Sort keys.
-         * @return Function returns array of used keyname strings.
-         */
-        public String[] getKeyArray(boolean sorted)
+        /// <summary>
+        /// NT-Get array of used titles.
+        /// </summary>
+        /// <param name="sorted">Sort keys.</param>
+        /// <returns>Function returns array of used keyname strings.</returns>
+        public String[] getKeyArray(bool sorted)
         {
             return this.m_Items.getTitles(sorted);
         }
 
-        /**
-         * NR-Reset settings to default values
-         * 
-         * @throws Exception
-         *             Error on reset settings collection
-         */
-        public void Reset() throws Exception
+
+        /// <summary>
+        /// NR-Reset settings to default values
+        /// </summary>
+        /// <exception cref="Exception">This function must be overridden in child classes</exception>
+        public virtual void Reset()
         {
-        throw new Exception("This function must be overridden in child classes");
-    }
+            throw new Exception("This function must be overridden in child classes");
+        }
 
-    /**
-     * NT-Load or reload settings from file
-     * 
-     * @throws Exception
-     *             Error's on read settings file.
-     */
-    public void Load() throws Exception
-    {
-        // open current file and read all items to dictionary
-        this.Load(this.m_filepath);
-    }
 
-    /**
-     * NR-Load or reload settings from file
-     * 
-     * @param filepath
-     *            Settings file path
-     * @throws Exception
-     *             Error's on read settings file.
-     */
-    public void Load(String filepath) throws Exception
-    {
-        throw new Exception("This function must be overridden in child classes");
-}
+        /// <summary>
+        /// NT-Load or reload settings from file
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public void Load()
+        {
+            // open current file and read all items to dictionary
+            //должно быть реализовано в производном классе
+            this.Load(this.m_filepath);
+        }
 
-/**
- * NT- Write settings to file
- * 
- * @throws Exception
- *             Error's on write settings file.
- */
-public void Store() throws Exception
-{
-        // open current file, write all items from dictionary to file and close
-        // file.
-        this.Store(this.m_filepath);
 
-        return;
-}
+        /// <summary>
+        /// NR-Load or reload settings from file
+        /// </summary>
+        /// <param name="filepath">Settings file path</param>
+        /// <exception cref="Exception">This function must be overridden in child classes</exception>
+        public virtual void Load(String filepath)
+        {
+            throw new Exception("This function must be overridden in child classes");
+        }
 
-/**
- * NT- Write settings to file - if modified only
- * 
- * @throws Exception
- *             Error's on write settings file.
- */
-public void StoreIfModified() throws Exception
-{
-        if (this.m_Items.isModified() == true)
+        /// <summary>
+        /// NT- Write settings to file
+        /// </summary>
+        public void Store()
+        {
+            // open current file, write all items from dictionary to file and close file.
+            //должно быть реализовано в производном классе
             this.Store(this.m_filepath);
 
-        return;
-}
+            return;
+        }
 
-/**
- * NR- Write settings to file
- * 
- * @param filepath
- *            Settings file path
- * @throws Exception
- *             Error's on write settings file.
- */
-public void Store(String filepath) throws Exception
-{
-        throw new Exception("This function must be overridden in child classes");
-    }
 
-    // *** Collection functions ***
+        /// <summary>
+        /// NT- Write settings to file - if modified only
+        /// </summary>
+        public void StoreIfModified()
+        {
+            if (this.m_Items.isModified == true)
+                this.Store(this.m_filepath);
 
-    /**
-     * Collection has been modified
-     * 
-     * @return the modified
-     */
-    public boolean isModified()
-{
-    return this.m_Items.isModified();
-}
+            return;
+        }
 
-/**
- * Collection has been modified
- * 
- * @param modified
- *            the modified to set
- */
-public void setModified(boolean modified)
-{
-    this.m_Items.setModified(modified);
-}
 
-/**
- * NT-Get settings item array by title
- * 
- * @param title
- *            Setting item title as key
- * @param sorted
- *            Sort items by title.
- * @return Returns SettingsItem[] array, or returns null if title not exists in
- *         collection.
- */
-public SettingItem[] getItems(String title, boolean sorted)
-{
-    return this.m_Items.getItems(title, sorted);
-}
+        /// <summary>
+        /// NR- Write settings to file
+        /// </summary>
+        /// <param name="filepath">Settings file path</param>
+        /// <exception cref="Exception">This function must be overridden in child classes</exception>
+        public virtual void Store(String filepath)
+        {
+            throw new Exception("This function must be overridden in child classes");
+        }
+        #endregion
 
-/**
- * NT-Добавить элемент, используя поле Title в качестве ключа для словаря.
- * 
- * @param item
- *            Добавляемый элемент.
- */
-public void addItem(SettingItem item)
-{
-    // set item storage title
-    item.set_Storage(Item.StorageKeyForSettingFileItem);
-    // add
-    this.m_Items.addItem(item);
+        #region *** Collection functions ***
 
-    return;
-}
+        /// <summary>
+        /// Collection has been modified
+        /// </summary>
+        /// <returns></returns>
+        public bool isModified
+        {
+            get { return this.m_Items.isModified; }
+            set { this.m_Items.isModified = value; }
+        }
 
-/**
- * NT-Add new settings item in collection.
- * 
- * @param group
- *            Setting item namespace as group.
- * @param title
- *            Setting item title as key.
- * @param value
- *            Setting item value as String.
- * @param descr
- *            Setting item description as multiline String.
- */
-public void addItem(String group, String title, String value, String descr)
-{
-    SettingItem item = new SettingItem(group, title, value, descr);
-    // set item storage title
-    item.set_Storage(Item.StorageKeyForSettingFileItem);
-    // add
-    this.m_Items.addItem(item);
 
-    return;
-}
+        /// <summary>
+        /// NT-Get settings item array by title
+        /// </summary>
+        /// <param name="title">Setting item title as key</param>
+        /// <param name="sorted">Sort items by title.</param>
+        /// <returns>Returns SettingsItem[] array, or returns null if title not exists in collection.</returns>
+        public SettingItem[] getItems(String title, bool sorted)
+        {
+            //TODO: зачем сортировать по названию тут - они же все одинаковые?
+            return this.m_Items.getItems(title, sorted);
+        }
 
-/**
- * NT-Add new settings item in collection.
- * 
- * @param group
- *            Setting item namespace as group.
- * @param title
- *            Setting item title as key.
- * @param value
- *            Setting item value as Integer.
- * @param descr
- *            Setting item description as multiline String.
- */
-public void addItem(String group, String title, Integer value, String descr)
-{
-    String val = value.toString();
-    this.addItem(group, title, val, descr);
+        /// <summary>
+        /// NT-Добавить элемент, используя поле Title в качестве ключа для словаря.
+        /// </summary>
+        /// <param name="item">Добавляемый элемент.</param>
+        public void addItem(SettingItem item)
+        {
+            // set item storage title
+            item.Storage = Item.StorageKeyForSettingFileItem;
+            // add
+            this.m_Items.addItem(item);
 
-    return;
-}
+            return;
+        }
 
-/**
- * NT-Add new settings item in collection.
- * 
- * @param group
- *            Setting item namespace as group.
- * @param title
- *            Setting item title as key.
- * @param value
- *            Setting item value as Boolean.
- * @param descr
- *            Setting item description as multiline String.
- */
-public void addItem(String group, String title, Boolean value, String descr)
-{
-    String val = value.toString();
-    this.addItem(group, title, val, descr);
 
-    return;
-}
+        /// <summary>
+        /// NT-Add new settings item in collection.
+        /// </summary>
+        /// <param name="group">Setting item namespace as group.</param>
+        /// <param name="title">Setting item title as key.</param>
+        /// <param name="value">Setting item value as String.</param>
+        /// <param name="descr">Setting item description as multiline String.</param>
+        public void addItem(String group, String title, String value, String descr)
+        {
+            SettingItem item = new SettingItem(group, title, value, descr);
+            // set item storage title
+            item.Storage = Item.StorageKeyForSettingFileItem;
+            // add
+            this.m_Items.addItem(item);
 
-/**
- * NT-Remove from collection all items under specified title
- * 
- * @param title
- *            Setting item title as key
- */
-public void removeItems(String title)
-{
-    this.m_Items.removeItems(title);
+            return;
+        }
 
-    return;
-}
 
-/**
- * NT - remove specified item object
- * 
- * @param item
- *            Объект, уже находящийся в этой коллекции.
- * @return Функция возвращает true, если объект был удален; функция возвращает false, если объект не был найден.
- * @throws Exception
- *             Если ключ отсутствует в словаре коллекции.
- */
-public boolean removeItem(SettingItem item) throws Exception
-{
-        return this.m_Items.removeItem(item);
-}
+        /// <summary>
+        /// NT-Add new settings item in collection.
+        /// </summary>
+        /// <param name="group">Setting item namespace as group.</param>
+        /// <param name="title">Setting item title as key.</param>
+        /// <param name="value">Setting item value as Int32.</param>
+        /// <param name="descr">Setting item description as multiline String.</param>
+        /// <returns></returns>
+        public void addItem(String group, String title, Int32 value, String descr)
+        {
+            String val = value.ToString();
+            this.addItem(group, title, val, descr);
 
-    // *** End of file ***
+            return;
+        }
+
+
+        /// <summary>
+        ///  NT-Add new settings item in collection.
+        /// </summary>
+        /// <param name="group">Setting item namespace as group.</param>
+        /// <param name="title">Setting item title as key.</param>
+        /// <param name="value">Setting item value as Boolean.</param>
+        /// <param name="descr">Setting item description as multiline String.</param>
+        /// <returns></returns>
+        public void addItem(String group, String title, Boolean value, String descr)
+        {
+            String val = value.ToString();
+            this.addItem(group, title, val, descr);
+
+            return;
+        }
+
+
+        /// <summary>
+        /// NT-Remove from collection all items under specified title
+        /// </summary>
+        /// <param name="title">Setting item title as key</param>
+        /// <returns></returns>
+        public void removeItems(String title)
+        {
+            this.m_Items.removeItems(title);
+
+            return;
+        }
+
+
+        /// <summary>
+        /// NT - remove specified item object
+        /// </summary>
+        /// <param name="item">Объект, уже находящийся в этой коллекции.</param>
+        /// <returns>Функция возвращает true, если объект был удален; функция возвращает false, если объект не был найден.</returns>
+        /// <exception cref="Exception">Если ключ отсутствует в словаре коллекции.</exception>
+        public bool removeItem(SettingItem item)
+        {
+            return this.m_Items.removeItem(item);
+        }
+        #endregion
+        // *** End of file ***
 
 
     }

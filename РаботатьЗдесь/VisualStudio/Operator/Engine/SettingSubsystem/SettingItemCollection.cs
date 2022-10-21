@@ -8,7 +8,11 @@ namespace Engine.SettingSubsystem
     /// <summary>
     /// NT-Класс коллекции элементов настроек.
     /// </summary>
-    internal class SettingItemCollection
+    /// <remarks>
+    /// Класс включает в себя словарь списков элементов настроек.
+    /// Может хранить несколько элементов настроек под одним ключом.
+    /// </remarks>
+    public class SettingItemCollection
     {
         #region *** Constants and Fields ***
 
@@ -138,7 +142,7 @@ namespace Engine.SettingSubsystem
         /// <returns>Returns SettingsItem[] array, or returns null if title not exists in collection.</returns>
         public SettingItem[] getItems(String title, bool sorted)
         {
-            //TODO: что тут сортировать по алфавиту, если поиск по ключу-названию выдает только элеменоты с одинаковыми названиями?
+            //TODO: что тут сортировать по алфавиту, если поиск по ключу-названию выдает только элементы с одинаковыми названиями?
             List<Item> its = this.m_items.getItems(title, sorted);
             if (its == null)
                 return null;

@@ -106,6 +106,68 @@ namespace Engine.OperatorEngine
     }
 
 
+
+        #region *** Properties ***
+
+        ///<summary>
+        ///NT- Get log manager object
+        /// </summary> 
+        public LogManager LogManager
+        {
+            get { return this.m_logman; }
+        }
+
+        /// <summary>
+        /// NT-Получить объект адаптера БД Оператора.
+        /// </summary>
+        public OperatorDbAdapter Database
+        {
+            get { return this.m_db; }
+        }
+
+        /// <summary>
+        /// NT-Получить объект консоли Оператора. Должен быть доступен из сторонних сборок.
+        /// </summary>
+        public DialogConsole OperatorConsole
+        {
+            get { return this.m_OperatorConsole; }
+        }
+
+        /// <summary>
+        /// NT-Получить объект настроек движка Оператора.
+        /// </summary>
+        public ApplicationSettingsKeyed EngineSettings
+        {
+            get { return this.m_Settings; }
+        }
+
+        /// <summary>
+        ///  NT-Получить объект кеш-коллекции Процедур и Мест Оператора.
+        /// </summary>
+        internal ElementCacheManager ECM
+        {
+            get { return this.m_ECM; }
+        }
+
+        /// <summary>
+        ///  NT-Получить объект Менеджера Библиотек Процедур.
+        /// </summary>
+        public ProcedureExecutionManager PEM
+        {
+            get { return this.m_PEM; }
+        }
+
+        /// <summary>
+        /// NT- получить объект семантического анализатора запросов.
+        /// </summary>
+        internal BCSA BCSA
+        {
+            get { return this.m_BCSA; }
+        }
+        #endregion
+
+        // Функции инициализации и завершения движка =================
+
         #region  *** Override this from EngineSubsystem parent class ***
         /// <summary>
         /// NR - Initialize Subsystem. This function must be overrided in child classes.
@@ -135,6 +197,9 @@ namespace Engine.OperatorEngine
             // 3. load engine settings
             // Если файл настроек не обнаружен, вывести сообщение об этом и
             // создать новый файл настроек с дефолтовыми значениями.
+            //TODO: файл настроек управляется подсистемой настроек, и путь к нему должен создаваться там, и проверяется наличие файла  - там.
+            //Но ему нужен каталог, в котором хранится файл, вот каталог надо брать из FileSystemManager и здесь отправлять его в подсистему настроек
+            //как часть открытия сеанса подсистемы настроек и сеанса Движка.
             String settingsFilePath = FileSystemManager.getAppSettingsFilePath();
             if (!FileSystemManager.isAppSettingsFileExists())
             {
@@ -219,117 +284,41 @@ namespace Engine.OperatorEngine
         }
         #endregion
 
-      #region *** Properties ***
-
-        ///<summary>
-        ///NT- Get log manager object
-        /// </summary> 
-        public LogManager LogManager
-    {
-        get { return this.m_logman; }
-    }
-
-
-    /// <summary>
-    /// NT-Получить объект адаптера БД Оператора.
-    /// </summary>
-    public OperatorDbAdapter Database
-    {
-            get { return this.m_db; }
-    }
-
-    /// <summary>
-    /// NT-Получить объект консоли Оператора. Должен быть доступен из сторонних сборок.
-    /// </summary>
-    public DialogConsole OperatorConsole
-    {
-            get { return this.m_OperatorConsole; }
-    }
-
-
-    /// <summary>
-    /// NT-Получить объект настроек движка Оператора.
-    /// </summary>
-    public ApplicationSettingsKeyed EngineSettings
-    {
-            get { return this.m_Settings; }
-    }
-
-
-    /// <summary>
-    ///  NT-Получить объект кеш-коллекции Процедур и Мест Оператора.
-    /// </summary>
-    internal ElementCacheManager ECM
-    {
-            get { return this.m_ECM; }
-    }
-
-    /// <summary>
-    ///  NT-Получить объект Менеджера Библиотек Процедур.
-    /// </summary>
-    public ProcedureExecutionManager PEM
-    {
-            get { return this.m_PEM; }
-    }
-
-    /// <summary>
-    /// NT- получить объект семантического анализатора запросов.
-    /// </summary>
-    internal BCSA BCSA
-    {
-            get { return this.m_BCSA; }
-    }
-     #endregion
-
-    // Функции инициализации и завершения движка =================
-
-
     // *************************************************************
-    // *** Safe access to Log ***
-
-    
-     * NT-append new message object to log
-     * 
-     * @param c
-     *            Event class code
-     * @param s
-     *            Event state code
-     * @param text
-     *            Event text description
-     * @throws IOException
-     *             Error on writing to log file.
-     * @throws XMLStreamException
-     *             Error on writing to log file.
-     
+    #region *** Safe access to Log ***
+        //TODO: эту подсистему лога надо перепроектировать - и свойства событий неправильные, и доступ к ней тоже кривой.
+/// <summary>
+/// NR-append new message object to log
+/// </summary>
+/// <param name="c">Event class code</param>
+/// <param name="s">Event state code</param>
+/// <param name="text">Event text description</param>
     protected void safeAddLogMsg(
             EnumLogMsgClass c,
             EnumLogMsgState s,
             String text)
     {
-        // проверить существование движка и лога, и затем добавить сообщение в
-        // лог.
-        if (Engine.isLogReady(this))
-            this.getLogManager().AddMessage(c, s, text);
+        // проверить существование движка и лога, и затем добавить сообщение в лог.
+        if (OperatorEngine.Engine.isLogReady(this))
+            this.LogManager.AddMessage(c, s, text);
 
         return;
     }
 
-    
-     * NT-Write exception to engine log if available
-     * 
-     * @param en
-     *            Engine object
-     * @param e
-     *            Exception object
-     
+          
+    /// <summary>
+    /// NR-Write exception to engine log if available
+    /// </summary>
+    /// <param name="en">Engine object</param>
+    /// <param name="e">Exception object</param>
     public static void LoggingException(Engine en, Exception e)
     {
         try
         {
             // get log manager
-            LogManager l = en.getLogManager();
+            LogManager l = en.LogManager;
             // check log ready and write exception object
-            if (l.isReady())
+            if (l.isReady)
                 l.AddExceptionMessage(e);
         }
         catch (Exception e2)
@@ -340,34 +329,32 @@ namespace Engine.OperatorEngine
         return;
     }
 
-    
-     * NT-Check log is available
-     * 
-     * @param en
-     *            Engine object
-     * @return Function returns True if log writing is available, returns False
-     *         otherwise.
-     
-    public static boolean isLogReady(Engine en)
+
+    /// <summary>
+    /// NR-Check log is available
+    /// </summary>
+    /// <param name="en">Engine object</param>
+    /// <returns>
+    ///   Function returns True if log writing is available, returns False otherwise.
+    /// </returns>
+    public static bool isLogReady(Engine en)
     {
         if (en == null)
             return false;
         // get log manager
-        LogManager l = en.getLogManager();
+        LogManager l = en.LogManager;
         if (l == null)
             return false;
         // check log ready
-        return l.isReady();
+        return l.isReady;
     }
 
-    
-     * NT-Add exception message to Log and Console.
-     * 
-     * @param msg
-     *            Message title.
-     * @param ex
-     *            Exception object.
-     
+                
+/// <summary>
+/// NR-Add exception message to Log and Console.
+/// </summary>
+/// <param name="msg">Message title.</param>
+/// <param name="ex">Exception object.</param>
     public void PrintExceptionMessageToConsoleAndLog(String msg, Exception ex)
     {
         this.m_OperatorConsole.PrintExceptionMessage(msg, ex);
@@ -376,49 +363,39 @@ namespace Engine.OperatorEngine
         return;
     }
 
-    
-     * NT-Вывести сообщение на консоль и в лог.
-     * 
-     * @param text
-     *            Текст сообщения.
-     * @param color
-     *            Класс сообщения Консоли.
-     * @param cls
-     *            Класс сообщения Лога.
-     * @param state
-     *            Состояние сообщения Лога.
-     * @throws Exception
-     *             Ошибка при работе Лога.
-     
+/// <summary>
+/// NR-Вывести сообщение на консоль и в лог.
+/// </summary>
+/// <param name="text">Текст сообщения.</param>
+/// <param name="color">Класс сообщения Консоли.</param>
+/// <param name="cls">Класс сообщения Лога.</param>
+/// <param name="state">Состояние сообщения Лога.</param>
     public void AddMessageToConsoleAndLog(
             String text,
             EnumDialogConsoleColor color,
             EnumLogMsgClass cls,
-            EnumLogMsgState state) throws Exception
+            EnumLogMsgState state)
     {
         this.m_OperatorConsole.PrintTextLine(text, color);
         this.m_logman.AddMessage(cls, state, text);
     }
+    #endregion
 
-    
-     * NT-Извлечь значение Настройки из ФайлНастроекОператора или ТаблицаНастроекОператора, иначе вывести сообщение о ее отсутствии.
-     * 
-     * @param setting
-     *            Ключ Настройки.
-     * @param operation
-     *            Название выполняемой операции для использования в текстах сообщений.
-     * @return Функция возвращает значение настройки или null.
-     * @throws Exception
-     *             Ошибка при работе с файлом настроек.
-     * 
-     *             Эта функция может использоваться в коде Процедур из Библиотек Процедур.
-     
-    public String getSettingOrMessage(EnumSettingKey setting, String operation)
-            throws Exception
+
+    /// <summary>
+    /// NR-Извлечь значение Настройки из ФайлНастроекОператора или ТаблицаНастроекОператора, иначе вывести сообщение о ее отсутствии.
+    /// </summary>
+    /// <param name="setting">Ключ Настройки.</param>
+    /// <param name="operation">Название выполняемой операции для использования в текстах сообщений.</param>
+    /// <returns>Функция возвращает значение настройки или null.</returns>
+    /// <remarks>
+    /// Эта функция может использоваться в коде Процедур из Библиотек Процедур.
+    /// </remarks>
+    public String getSettingOrMessage(SettingKey setting, String operation)
     {
         // TODO: хорошо бы и из БД извлекать такую настройку, если она там есть. Но пока - только ФайлНастроекОператора проверяется.
         String newQuery = this.m_Settings.getValue(setting);
-        if (Utility.StringIsNullOrEmpty(newQuery))
+        if (String.IsNullOrEmpty(newQuery))
         {
             String msg = String.format("Невозможно выполнить %s, поскольку настройка %s не найдена в ФайлНастроекОператора.", operation, setting.getTitle());
             this.AddMessageToConsoleAndLog(msg, EnumDialogConsoleColor.Предупреждение, EnumLogMsgClass.SubsystemEvent_Settings, EnumLogMsgState.Fail);
@@ -433,22 +410,23 @@ namespace Engine.OperatorEngine
         return newQuery;
     }
 
-    
-     * NT - Получить значение настройки из ФайлНастроекОператора или ТаблицаНастроекОператора.
-     * 
-     * @param setting
-     *            Ключ - название настройки.
-     * @return Функция возвращает значение настройки из ФайлНастроекОператора или ТаблицаНастроекОператора.
-     *         Функция возвращает null, если поля настройки не найдено.
-     *         Функция возвращает пустую строку, если значение настройки не указано.
-     * 
-     *         Эта функция может использоваться в коде Процедур из Библиотек Процедур.
-     
-    public String getSettingFromFileOrTable(EnumSettingKey setting)
+/// <summary>
+/// NR - Получить значение настройки из ФайлНастроекОператора или ТаблицаНастроекОператора.
+/// </summary>
+/// <param name="setting">Ключ - название настройки.</param>
+/// <returns>
+/// Функция возвращает значение настройки из ФайлНастроекОператора или ТаблицаНастроекОператора.
+/// Функция возвращает null, если поля настройки не найдено.
+/// Функция возвращает пустую строку, если значение настройки не указано.
+/// </returns>
+/// <remarks>
+/// Эта функция может использоваться в коде Процедур из Библиотек Процедур.
+/// </remarks>
+    public String getSettingFromFileOrTable(SettingKey setting)
     {
         // Файл настроек всегда должен проверяться раньше, чем таблица настроек.
         String result = this.m_Settings.getValue(setting);
-        if (Utility.StringIsNullOrEmpty(result) == true)
+        if (String.IsNullOrEmpty(result) == true)
         {
             result = this.m_ECM.getSettingFirstValue(setting.getTitle());
         }
@@ -462,13 +440,11 @@ namespace Engine.OperatorEngine
 
     // #region Основной цикл исполнения механизма
 
-    
-     * NR-Основной цикл исполнения механизма
-     * 
-     * @throws Exception
-     *             Ошибка при работе ЦиклИсполненияЗапросов.
-     
-    public void CommandLoop() throws Exception
+
+/// <summary>
+/// NR-Основной цикл исполнения механизма
+/// </summary>
+    public void CommandLoop() 
     {
 
         // TODO: работать здесь!!! Такая свалка недоделок получилась, бардак в проекте нарастает.
@@ -563,17 +539,13 @@ namespace Engine.OperatorEngine
         return;
     }
 
-    
-     * NR- Запустить исполнение запроса и вернуть результат
-     * 
-     * @param query
-     *            Строка запроса или путь к Процедуре.
-     * @return Функция возвращает код результата исполнения Процедуры.
-     * @throws Exception
-     *             Исключение при ошибке.
-     
+
+/// <summary>
+/// NR- Запустить исполнение запроса и вернуть результат
+/// </summary>
+/// <param name="query">Строка запроса или путь к Процедуре.</param>
+/// <returns>Функция возвращает код результата исполнения Процедуры.</returns>
     private EnumProcedureResult DoCommandExecution(String query)
-            throws Exception
     {
         // TODO: Отложить это все до готовности остальных частей проекта: БД, настроек, остального.
 
@@ -624,13 +596,12 @@ exitCode = DoPostProcessing(exitCode);// готово
         return exitCode;
     }
 
-    
-     * NT-Пре-процессинг введенного пользователем запроса.
-     * 
-     * @param userQuery
-     *            Объект введенного пользователем запроса.
-     * @return Функция возвращает код результата исполнения Процедуры, выбранной как пред-обработка поступившего запроса.
-     
+
+    /// <summary>
+    /// NR-Пре-процессинг введенного пользователем запроса.
+    /// </summary>
+    /// <param name="userQuery">Объект введенного пользователем запроса.</param>
+    /// <returns>Функция возвращает код результата исполнения Процедуры, выбранной как пред-обработка поступившего запроса.</returns>
     private EnumProcedureResult DoPreProcessing(UserQuery userQuery)
 {
     // Тут если текст запроса = тексту одной из встроенных команд, то
@@ -646,17 +617,12 @@ exitCode = DoPostProcessing(exitCode);// готово
     return EnumProcedureResult.Success;
 }
 
-
- * NT-Выполнить пост-обработку результата исполнения Процедуры.
- * 
- * @param code
- *            Код результата исполнения предыдущей Процедуры.
- * @return Функция возвращает код результата исполнения Процедуры, выбранной как пост-обработка результата предыдущей Процедуры.
- * @throws Exception
- *             Ошибка при работе с файлом настроек.
- 
+/// <summary>
+/// NR-Выполнить пост-обработку результата исполнения Процедуры.
+/// </summary>
+/// <param name="code">Код результата исполнения предыдущей Процедуры.</param>
+/// <returns>Функция возвращает код результата исполнения Процедуры, выбранной как пост-обработка результата предыдущей Процедуры.</returns>
 private EnumProcedureResult DoPostProcessing(EnumProcedureResult code)
-            throws Exception
 {
     // Превратить exitCode в путь Процедуры или текст Запроса
     String newQuery = null;
@@ -695,12 +661,11 @@ private EnumProcedureResult DoPostProcessing(EnumProcedureResult code)
 }
 
 
- * NT-Исполнить запрос через ЦиклПеребораПроцедур.
- * 
- * @param userQuery
- *            Текущий текст запроса.
- * @return Функция возвращает код результата исполнения Процедуры.
- 
+/// <summary>
+/// NR-Исполнить запрос через ЦиклПеребораПроцедур.
+/// </summary>
+/// <param name="userQuery">Текущий текст запроса.</param>
+/// <returns>Функция возвращает код результата исполнения Процедуры.</returns>
 private EnumProcedureResult DoProcedureLoopExecution(UserQuery userQuery)
 {
     // запустить цикл выборки Процедур для Запроса и исполнить Процедуру.
@@ -746,26 +711,20 @@ result = EnumProcedureResult.Success;
 return result;
     }
 
-    
-     * NT- Execute Procedure
-     * 
-     * @param userQuery
-     *            User query object
-     * @param regex
-     *            Procedure regex string
-     * @param p
-     *            Procedure object
-     * @param args
-     *            Procedure argument collection
-     * @return Функция возвращает код результата исполнения Процедуры.
-     * @throws Exception
-     *             Исключение при ошибке.
-     
+
+/// <summary>
+/// NR- Execute Procedure
+/// </summary>
+/// <param name="userQuery">User query object</param>
+/// <param name="regex">Procedure regex string</param>
+/// <param name="p">Procedure object</param>
+/// <param name="args">Procedure argument collection</param>
+/// <returns>Функция возвращает код результата исполнения Процедуры.</returns>
     private EnumProcedureResult DoProcedureExecute(
             UserQuery userQuery,
             String regex,
             Procedure p,
-            ArgumentCollection args) throws Exception
+            ArgumentCollection args) 
 {
     // и еще нужно этим аргументам сопоставить типы мест хотя бы
     TryAssignPlaces(args);
@@ -792,16 +751,13 @@ return result;
 }
 
 
- * NT- Запустить Процедуру из локальной БиблиотекаПроцедурОператора.
- * 
- * @param userQuery
- *            Команда пользователя.
- * @param p
- *            Объект процедуры.
- * @param args
- *            Коллекция аргументов.
- * @return Функция возвращает результат выполнения процедуры.
- 
+/// <summary>
+/// NR- Запустить Процедуру из локальной БиблиотекаПроцедурОператора.
+/// </summary>
+/// <param name="userQuery">Команда пользователя..</param>
+/// <param name="p">Объект процедуры.</param>
+/// <param name="args">Коллекция аргументов.</param>
+/// <returns> Функция возвращает результат выполнения процедуры.</returns>
 private EnumProcedureResult DoLocalAssembly(
         UserQuery userQuery,
         Procedure p,
@@ -846,11 +802,18 @@ private EnumProcedureResult DoLocalAssembly(
 }
 
 
- * NT-Открыть пустой Терминал по пути LoneTerminal из ФайлНастроекОператора.
- * 
- * @return Функция возвращает EnumProcedureResult.Success при успехе.
- *         Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка.
- 
+/// <summary>
+/// NR-Открыть пустой Терминал по пути LoneTerminal из ФайлНастроекОператора.
+/// </summary>
+/// <returns>
+/// Функция возвращает EnumProcedureResult.Success при успехе.
+/// Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка.
+/// </returns>
+/// <exception cref="Exception">
+/// Не найдена команда запуска Терминала из настройки " + EnumSettingKey.LoneTerminal.getTitle()
+/// or
+/// Не найден путь к рабочему каталогу Терминала из настройки " + EnumSettingKey.DefaultWorkingDirectory.getTitle()
+/// </exception>
 public EnumProcedureResult StartAloneTerminal()
 {
     // Еще, для программ нужен рабочий каталог. Для wget подойдет каталог Downloads, для других программ - другие варианты желательны.
@@ -887,14 +850,19 @@ public EnumProcedureResult StartAloneTerminal()
     return result;
 }
 
-
- * NT-Открыть Терминал и перенаправить в него текущий текст запроса.
- * 
- * @param userQuery
- *            Текущий текст запроса
- * @return Функция возвращает EnumProcedureResult.Success при успехе.
- *         Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка.
- 
+/// <summary>
+/// NR-Открыть Терминал и перенаправить в него текущий текст запроса.
+/// </summary>
+/// <param name="userQuery">Текущий текст запроса</param>
+/// <returns>
+/// Функция возвращает EnumProcedureResult.Success при успехе.
+/// Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка. 
+/// </returns>
+/// <exception cref="Exception">
+/// Не найдена команда запуска Терминала из настройки " + EnumSettingKey.ForCommandTerminal.getTitle()
+/// or
+/// Не найден путь к рабочему каталогу Терминала из настройки " + EnumSettingKey.DefaultWorkingDirectory.getTitle()
+/// </exception>
 private EnumProcedureResult DoCommandEnglishTerminal(UserQuery userQuery)
 {
     // образец: private EnumProcedureResult ExecuteWithTerminal(String query)
@@ -937,13 +905,19 @@ private EnumProcedureResult DoCommandEnglishTerminal(UserQuery userQuery)
 }
 
 
- * NT-Исполнить ShellExecute по пути ShellExecuteCommand из ФайлНастроекОператора.
- * 
- * @param arg
- *            URI-путь к запускаемому объекту. Пример: file:///home/jsmith/Documents/Путь%20с%20пробелами.txt
- * @return Функция возвращает EnumProcedureResult.Success при успехе.
- *         Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка.
- 
+/// <summary>
+/// NR-Исполнить ShellExecute по пути ShellExecuteCommand из ФайлНастроекОператора.
+/// </summary>
+/// <param name="arg">URI-путь к запускаемому объекту. Пример: file:///home/jsmith/Documents/Путь%20с%20пробелами.txt</param>
+/// <returns>
+/// Функция возвращает EnumProcedureResult.Success при успехе.
+/// Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка. 
+/// </returns>
+/// <exception cref="Exception">
+/// Не найдена команда запуска Терминала из настройки " + EnumSettingKey.ShellExecuteCommand.getTitle()
+/// or
+/// Не найден путь к рабочему каталогу Терминала из настройки " + EnumSettingKey.DefaultWorkingDirectory.getTitle()
+/// </exception>
 public EnumProcedureResult StartShellExecute(String arg)
 {
     EnumProcedureResult result = EnumProcedureResult.Success;
@@ -971,13 +945,19 @@ public EnumProcedureResult StartShellExecute(String arg)
 }
 
 
- * NT-Исполнить команду по пути ForCommandTerminal из ФайлНастроекОператора.
- * 
- * @param arg
- *            URI-путь к запускаемому объекту. Пример: file:///home/jsmith/Documents/Путь%20с%20пробелами.txt
- * @return Функция возвращает EnumProcedureResult.Success при успехе.
- *         Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка.
- 
+/// <summary>
+/// NR-Исполнить команду по пути ForCommandTerminal из ФайлНастроекОператора.
+/// </summary>
+/// <param name="arg">URI-путь к запускаемому объекту. Пример: file:///home/jsmith/Documents/Путь%20с%20пробелами.txt</param>
+/// <returns>
+/// Функция возвращает EnumProcedureResult.Success при успехе.
+/// Функция возвращает EnumProcedureResult.Error, если при запуске Терминала произошла ошибка.
+/// </returns>
+/// <exception cref="Exception">
+/// Не найдена команда запуска Терминала из настройки " + EnumSettingKey.ForCommandTerminal.getTitle()
+/// or
+/// Не найден путь к рабочему каталогу Терминала из настройки " + EnumSettingKey.DefaultWorkingDirectory.getTitle()
+/// </exception>
 public EnumProcedureResult StartCommandTerminalExecute(String arg)
 {
     EnumProcedureResult result = EnumProcedureResult.Success;

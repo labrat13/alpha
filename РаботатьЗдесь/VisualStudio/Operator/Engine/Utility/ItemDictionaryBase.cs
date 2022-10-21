@@ -7,7 +7,7 @@ namespace Engine.Utility
     /// <summary>
     /// NT-Общий класс словаря списков объектов Item
     /// </summary>
-    internal class ItemDictionaryBase
+    public class ItemDictionaryBase
     {
         // TODO: попробовать позже реализовать этот класс как шаблон<T>
 

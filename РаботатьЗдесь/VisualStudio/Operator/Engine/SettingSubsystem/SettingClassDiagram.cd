@@ -1,24 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Engine.OperatorEngine.EngineSubsystem" Collapsed="true">
+  <Class Name="Engine.OperatorEngine.EngineSubsystem">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAACAAAAAABIAAAAAAAAAAAAAAIAAAAAAAAAACCAAA=</HashCode>
       <FileName>OperatorEngine\EngineSubsystem.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Engine.SettingSubsystem.ApplicationSettingsBase" Collapsed="true">
-    <Position X="0.5" Y="1.75" Width="1.5" />
+  <Class Name="Engine.SettingSubsystem.ApplicationSettingsBase">
+    <Position X="0.5" Y="4" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>AAAAgAABQgEBBAAEAACgAAAAAAAAkAAAAAIAAQICgAA=</HashCode>
       <FileName>SettingSubsystem\ApplicationSettingsBase.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Engine.SettingSubsystem.SettingItem" Collapsed="true">
-    <Position X="4" Y="0.5" Width="1.5" />
+  <Class Name="Engine.SettingSubsystem.SettingItem">
+    <Position X="10.25" Y="4.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAQAAAAAAAEAAIAAAAAAAgIAAEAAAAAAAAAAAA=</HashCode>
       <FileName>SettingSubsystem\SettingItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.SettingSubsystem.ApplicationSettingsKeyed">
+    <Position X="4.5" Y="1.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAIAAAAAFDAEAADgDAEBAAgAACEAAAIAEQIAAQA=</HashCode>
+      <FileName>SettingSubsystem\ApplicationSettingsKeyed.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.SettingSubsystem.SettingItemCollection">
+    <Position X="7.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAABQAAAQkEAAEBEAACAAAgACAAAAAAAAAIAAABAAAg=</HashCode>
+      <FileName>SettingSubsystem\SettingItemCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.SettingSubsystem.SettingKey">
+    <Position X="13" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AEcAAAAABCAiAEAgAgaAICACQAAFIAAAAAACAAJQKAE=</HashCode>
+      <FileName>SettingSubsystem\SettingKey.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.Item" Collapsed="true">
+    <Position X="10.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AoAAIAAAAAAgAEIkAIQQAgQAAAAAYAAQgAQIAAAAkgA=</HashCode>
+      <FileName>OperatorEngine\Item.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

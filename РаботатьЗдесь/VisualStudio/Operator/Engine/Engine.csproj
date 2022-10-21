@@ -101,6 +101,7 @@
     <Content Include="Engine-Readme.txt" />
     <Content Include="Engine-Todo.txt" />
     <Content Include="Engine-Version.txt" />
+    <Content Include="SettingSubsystem\ПерепроектироватьПодсистемуНастроек.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

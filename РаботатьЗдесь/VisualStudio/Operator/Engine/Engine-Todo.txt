@@ -410,9 +410,9 @@
   - LibraryManagerBase          - need
   - OperatorProcedureAttribute  - ported, NT
   - ProcedureExecutionManager   - need
-- SettingSubsystem              - need  TODO: перепроектировать подсистему настроек под особенности Шарпа.
-  - ApplicationSettingBase      - need
-  - ApplicationSettingKeyed     - need
+- SettingSubsystem              - ported, NT  TODO: перепроектировать подсистему настроек под особенности Шарпа.
+  - ApplicationSettingBase      - ported, NT
+  - ApplicationSettingKeyed     - ported, NT
   - EnumSettingKey              - заменен на класс SettingKey, используется вместо енума. 
   - SettingItem                 - ported, NT
   - SettingItemCollection       - ported, NT, 

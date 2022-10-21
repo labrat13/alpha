@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Engine.SettingSubsystem;
 
 namespace Engine.SettingSubsystem
 {
@@ -209,6 +205,8 @@ namespace Engine.SettingSubsystem
         public string Description { get => this.m_Description; set => this.m_Description = value; }
 
         #endregion
+        
+        //TODO: проверить потребность в реализации нижеследующих функций
 
 //        // *** Массив ключей настроек ***
 //        /**
