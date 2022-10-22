@@ -1007,7 +1007,7 @@ return;
     String result = null;
     SettingItem si = this.m_settings.getFirstItem(title);
     if (si != null)
-        result = si.get_Path().trim();
+        result = si.get_Path().Trim();
 
     return result;
 }

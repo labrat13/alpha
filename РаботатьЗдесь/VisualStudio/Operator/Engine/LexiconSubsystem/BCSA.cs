@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
+using Engine.SettingSubsystem;
+using Engine.Utility;
 
 namespace Engine.LexiconSubsystem
 {
@@ -15,58 +14,50 @@ namespace Engine.LexiconSubsystem
         // BigCommandSemanticAnalyser - такое длинное название
 
         /// <summary>
-        /// NR - Конструктор
+        /// NT - Конструктор
         /// </summary>
         /// <param name="engine">Ссылка на объект движка.</param>
         public BCSA(OperatorEngine.Engine engine) : base(engine)
         {
-            //TODO: Add code here
         }
 
         #region  *** Override this from EngineSubsystem parent class ***
         /// <summary>
-        /// NR - Initialize Subsystem. This function must be overrided in child classes.
+        /// NT - Initialize Subsystem. This function must be overrided in child classes.
         /// </summary>
-        /// <exception cref="Exception">Exception at Function must be overridden</exception>
+        /// <exception cref="Exception"></exception>
         protected override void onOpen()
         {
+            //перед этим должна быть инициализирована подсистема настроек: EngineSettings
+
             // init array Dialogs.ExitAppCommands from settings file string
+            //TODO: почему не из БД также?
             // это не потребуется очищать при завершении данной подсистемы.
-            String words = this.m_Engine.get_EngineSettings().getValue(EnumSettingKey.ExitAppCommands);
-            if (Utility.StringUtility.StringIsNullOrEmpty(words))
+            String words = this.m_Engine.EngineSettings.getValue(SettingKey.ExitAppCommands);
+            if (StringUtility.StringIsNullOrEmpty(words))
             {
-                String msg = String.Format("Ошибка! В файле настроек отсутствует необходимое поле \"{0}\" или значение для него", EnumSettingKey.ExitAppCommands.getTitle());
+                String msg = String.Format("Ошибка! В файле настроек отсутствует необходимое поле \"{0}\" или значение для него", SettingKey.ExitAppCommands.Title);
                 throw new Exception(msg);
             }
-            String[] sar = Utility.StringUtility.SplitCommaDelimitedString(words);
+            String[] sar = StringUtility.SplitCommaDelimitedString(words);
             Dialogs.ExitAppCommands = sar;
 
-            // set ready flag
-            this.m_Ready = true;
+            // set ready flag  - done on Close() parent class
 
             return;
         }
 
         /// <summary>
-        /// NR - De-initialize Subsystem. This function must be overrided in child classes.
+        /// NT - De-initialize Subsystem. This function must be overrided in child classes.
         /// </summary>
-        /// <exception cref="Exception">Exception at Function must be overridden</exception>
+        /// <exception cref="Exception"></exception>
         protected override void onClose()
         {
             // Cleanup log subsystem here
-            if (this.m_Ready == true)
-            {
-                // TODO: add cleanup code here
-            }
-            // clear ready flag
-            this.m_Ready = false;
 
             return;
         }
         #endregion
-
-
-
 
         //    /**
         //     * NT-Разобрать входной запрос команды, построить граф исполнения и
@@ -104,7 +95,7 @@ namespace Engine.LexiconSubsystem
         //
         //    }
 
-        #region Функции для Русского языка
+        #region *** Функции для Русского языка ***
 
         /// <summary>
         /// Русский язык для конверсий и зависимых от языка операций
@@ -115,7 +106,6 @@ namespace Engine.LexiconSubsystem
         /// </remarks>
         public static CultureInfo RuCulture = new CultureInfo("ru-RU", true);
 
-
         /// <summary>
         /// Буквы русского алфавита маленькие (Строчные)
         /// </summary>
@@ -125,8 +115,6 @@ namespace Engine.LexiconSubsystem
         /// Буквы русского алфавита большие (Прописные)
         /// </summary>
         private const String RussianAlphabetShift = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
-
-
 
         /// <summary>
         /// NT-Вернуть True, если первые три символа - не русскоязычные.
@@ -163,8 +151,5 @@ namespace Engine.LexiconSubsystem
             return ((RussianAlphabet.IndexOf(p) != -1) || (RussianAlphabetShift.IndexOf(p) != -1));
         }
         #endregion
-
-
-
     }
 }

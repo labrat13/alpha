@@ -161,7 +161,7 @@ public class UnsortedProcedures
             {
                 //1. извлечь название заметки 
                 //извлечь название файла: берем из аргумента сырую строку запроса, так как Места тут не нужны, даже если движок подставил одно из них.
-                String title = args.getByIndex(0).get_ArgumentQueryValue().trim();
+                String title = args.getByIndex(0).get_ArgumentQueryValue().Trim();
 
                 //копируем название заметки для последующей записи в файл.
                 String titleAsContent = new String(title);
@@ -171,10 +171,10 @@ public class UnsortedProcedures
                 engine.get_OperatorConsole().PrintEmptyLine();
 
                 //Если в конце названия заметки стоит точка, то из имени файла ее надо убрать, а то она туда попадает и получается неправильно: заметка..txt
-                title = Utility.RemoveEndingDots(title).trim();
+                title = Utility.RemoveEndingDots(title).Trim();
                 //TODO: если этот цикл переписать с использованием File как основы для хранения пути файла, 
                 // то он будет немного проще и быстрее, и потом URI из него получать будет быстрее.
-                boolean ФайлУжеСуществует = false;
+                Boolean ФайлУжеСуществует = false;
                 String fpath = null;
                 //label_1:
                 while (true)

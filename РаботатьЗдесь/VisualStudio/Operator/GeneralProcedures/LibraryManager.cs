@@ -25,7 +25,7 @@ public class LibraryManager extends LibraryManagerBase
     // * Backreference to Operator Engine object
     // protected Engine m_Engine;
     // * Флаг что менеджер был инициализирован
-    // protected boolean m_Initialized;
+    // protected Boolean m_Initialized;
     // * Путь к файлу библиотеки Процедур.
     // protected String m_LibraryPath;
     // * Название библиотеки Процедур как идентификатор Библиотеки.

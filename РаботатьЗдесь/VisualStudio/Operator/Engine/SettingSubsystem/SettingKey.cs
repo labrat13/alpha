@@ -245,7 +245,7 @@ namespace Engine.SettingSubsystem
 // *            Keyname string.
 // * @return Returns true if specified string already used as some keyname here.
 // */
-//public static boolean IsKeynameExists(String keyname)
+//public static Boolean IsKeynameExists(String keyname)
 //{
 //    String[] keys = EnumSettingKey.getKeyArray();
 //    return OperatorEngine.Utility.arrayContainsStringOrdinal(keys, keyname, true);

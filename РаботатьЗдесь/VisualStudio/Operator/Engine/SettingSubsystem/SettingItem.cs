@@ -151,7 +151,7 @@ namespace Engine.SettingSubsystem
         }
 
         /// <summary>
-        /// Gets the value as boolean.
+        /// Gets the value as Boolean.
         /// </summary>
         /// <returns>Returns Value as Boolean; returns null if Value has invalid format.</returns>
         public Boolean? getValueAsBoolean()

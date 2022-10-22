@@ -97,7 +97,7 @@ public class ProcedureProcedures
                 // 1. Извлечь из аргумента название команды
                 String procedureTitle;
                 FuncArgument arg = args.getByIndex(0);
-                procedureTitle = arg.get_ArgumentQueryValue().trim();// берем сырой текст аргумента из запроса
+                procedureTitle = arg.get_ArgumentQueryValue().Trim();// берем сырой текст аргумента из запроса
 
 
                 String str = String.format("Начата процедура %s(\"%s\")", currentProcedureTitle, procedureTitle);
@@ -207,7 +207,7 @@ public class ProcedureProcedures
                 {
                     // set namespace value
                     str = outResult.getValueString();
-                    proc.set_Namespace(str.trim());
+                    proc.set_Namespace(str.Trim());
                 }
 
                 // 7. Вывести свойства Процедуры и запросить подтверждение создания процедуры.
@@ -345,7 +345,7 @@ public class ProcedureProcedures
         // 1. Извлечь из аргумента название команды
         String procedureTitle;
         FuncArgument arg = args.getByIndex(0);
-        procedureTitle = arg.get_ArgumentQueryValue().trim();// берем сырой текст аргумента из запроса
+        procedureTitle = arg.get_ArgumentQueryValue().Trim();// берем сырой текст аргумента из запроса
 
         // DONE: вывести это тестовое сообщение о начале процедуры - в лог!
         String str = String.format("Начата процедура %s(\"%s\")", currentProcedureTitle, procedureTitle);
@@ -475,7 +475,7 @@ public class ProcedureProcedures
         // 1. Извлечь из аргумента название процедуры
         String procedureTitle;
         FuncArgument arg = args.getByIndex(0);
-        procedureTitle = arg.get_ArgumentQueryValue().trim();// берем сырой текст аргумента из запроса
+        procedureTitle = arg.get_ArgumentQueryValue().Trim();// берем сырой текст аргумента из запроса
         engine.get_OperatorConsole().PrintTextLine(String.format("Название изменяемой Команды: \"%s\"", procedureTitle), EnumDialogConsoleColor.Сообщение);
 
         // TODO: проверить признак того, что вместо названия процедуры движком было подставлено название зарегистрированного места
@@ -697,7 +697,7 @@ public class ProcedureProcedures
             {
                 // set namespace value
                 stmp = outResult.getValueString();
-                procNew.set_Namespace(stmp.trim());
+                procNew.set_Namespace(stmp.Trim());
             }
         }
         // else Нет - перейти к следующему свойству Команды.
@@ -887,7 +887,7 @@ private static EnumProcedureResult readProcedureTitleForNew(
     // temp string with old title
     String str = new String(oldTitle);
 // 2 проверить что в БД нет Процедуры с таким названием, без учета регистра символов
-boolean notUnicalProcedure = false;
+Boolean notUnicalProcedure = false;
 while (true)
 {
     // если название команды - пустая строка, вывести сообщение и перейти к приему нового названия команды
@@ -949,7 +949,7 @@ return EnumProcedureResult.Success;
     // temp string with old title
     String str = new String(proc.get_Title());
 // 2 проверить что в БД нет Процедуры с таким названием, без учета регистра символов, кроме текущей.
-boolean notUnicalProcedure = false;
+Boolean notUnicalProcedure = false;
 while (true)
 {
     // 1 введите новое название, пустые строки не принимаюся.
@@ -1099,7 +1099,7 @@ private static EnumProcedureResult readProcedureVes(
     // - вывести справку
     printHelpProcedureVesProp(engine);
     // - запросить новое значение
-    boolean isValidValue = false;
+    Boolean isValidValue = false;
     String stmp = engine.get_OperatorConsole().PrintQuestionAnswer(EnumSpeakDialogResult.Отмена, "Введите Вес Команды:", true, true);
         if (Dialogs.этоОтмена(stmp))
             return EnumProcedureResult.CancelledByUser;

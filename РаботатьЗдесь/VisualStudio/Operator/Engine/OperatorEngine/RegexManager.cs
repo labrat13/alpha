@@ -80,8 +80,8 @@ namespace Engine.OperatorEngine
             if (Utility.StringIsNullOrEmpty(pattern))
                 return EnumRegexType.Empty;
             // проверка наличия ^ и $
-            boolean b1 = (pattern.charAt(0) == '^');
-            boolean b2 = (pattern.charAt(pattern.length() - 1) == '$');
+            Boolean b1 = (pattern.charAt(0) == '^');
+            Boolean b2 = (pattern.charAt(pattern.length() - 1) == '$');
             if ((b1 & b2) == true)
                 return EnumRegexType.NormalRegex; // это сложный регекс
             else if ((b1 | b2) == false)
@@ -108,7 +108,7 @@ namespace Engine.OperatorEngine
 
             // Пример простого регекса:
             // Копировать %файл в %папка
-            String query = simpleRx.trim();
+            String query = simpleRx.Trim();
 
             Matcher m = RegexManager.MNRPattern.matcher(query);
             StringBuilder sb = new StringBuilder();
@@ -172,11 +172,11 @@ namespace Engine.OperatorEngine
         private static String makeNewArgName(String argname, int argCounter)
         {
             // удалить первый символ аргумента простого регекса = %
-            String newName = argname.trim().substring(1);
+            String newName = argname.Trim().substring(1);
             // использовать регекс
             Matcher m = RegexManager.MNANPattern.matcher(newName);
             // все ли название состоит из допустимых символов?
-            boolean valid = m.find();
+            Boolean valid = m.find();
             if (valid)
                 return newName;
             else return "arg_" + Integer.toString(argCounter);
@@ -221,7 +221,7 @@ namespace Engine.OperatorEngine
          * @return Функция возвращает True, если путь соответствует формату. False в
          *         противном случае.
          */
-        public static boolean IsAssemblyCodePath(String path)
+        public static Boolean IsAssemblyCodePath(String path)
         {
             // проверить что путь это путь к функции сборки
             // имясборки.имякласса.имяфункции()
@@ -234,7 +234,7 @@ namespace Engine.OperatorEngine
             // return Regex.IsMatch(path, pattern);
             Matcher m = ACPPattern.matcher(path);
             // Проверить полное совпадение с паттерном
-            boolean found = m.matches();
+            Boolean found = m.matches();
 
             return found;
         }
@@ -257,7 +257,7 @@ namespace Engine.OperatorEngine
             // тут не проверяем формат входной строки, так как регекс
             // уже все проверил ранее в IsAssemblyCodePath()
             LinkedList<String> lis = new LinkedList<String>();
-        String p = path.trim();
+        String p = path.Trim();
         // p.Split(new char[] { '(' }, StringSplitOptions.RemoveEmptyEntries);
         String[] sar1 = Utility.StringSplit(p, "\\(", true);
         // TODO: Оптимизация: можно ли обойтись без регекса? Он наверно медленнее поиска в строке?
@@ -270,9 +270,9 @@ namespace Engine.OperatorEngine
         String[] sar2 = Utility.StringSplit(names, "\\.", true);
         // TODO: Оптимизация: можно ли обойтись без регекса?
 
-        lis.add(sar2[0].trim());// assembly name
-        lis.add(sar2[1].trim());// class name
-        lis.add(sar2[2].trim());// func name
+        lis.add(sar2[0].Trim());// assembly name
+        lis.add(sar2[1].Trim());// class name
+        lis.add(sar2[2].Trim());// func name
         // TODO: можно ли уместить путь к методу в Java в 3 элемента?
 
         // отсечь все что после закрывающей скобки
@@ -281,7 +281,7 @@ namespace Engine.OperatorEngine
             throw new Exception(String.format("Неправильный путь: %s", path));
         // но этого не может быть - ведь мы уже проверили формат пути ранее
 
-        args = args.substring(0, pos).trim(); // как .Remove(pos);? - проверить!
+        args = args.substring(0, pos).Trim(); // как .Remove(pos);? - проверить!
         // если там еще что-то есть, это должны быть аргументы
         if (args.length() > 0)
         {
@@ -293,7 +293,7 @@ namespace Engine.OperatorEngine
 
             for (String s : sar4)
             {
-                lis.add(s.trim());
+                lis.add(s.Trim());
             }
 }
 return lis.toArray(new String[lis.size()]);
@@ -408,7 +408,7 @@ public static String ConvertApplicationCommandString(
     // 2. заменить аргументы на значения
     // 3. вернуть получившуюся строку
 
-    String query = cmdline.trim();
+    String query = cmdline.Trim();
 
     Matcher m = MNRPattern.matcher(query);
     StringBuilder sb = new StringBuilder();

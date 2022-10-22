@@ -51,6 +51,7 @@
     <Compile Include="DbSubsystem\PlacesCollection.cs" />
     <Compile Include="DbSubsystem\ProcedureCollection.cs" />
     <Compile Include="DbSubsystem\SqliteDbAdapter.cs" />
+    <Compile Include="LexiconSubsystem\SpeakDialogResult.cs" />
     <Compile Include="OperatorEngine\ElementCacheManager.cs" />
     <Compile Include="OperatorEngine\EntityType.cs" />
     <Compile Include="OperatorEngine\EntityTypesCollection.cs" />
@@ -58,8 +59,7 @@
     <Compile Include="OperatorEngine\EnumRegexType.cs" />
     <Compile Include="LexiconSubsystem\DialogConsole.cs" />
     <Compile Include="LexiconSubsystem\Dialogs.cs" />
-    <Compile Include="LexiconSubsystem\EnumDialogConsoleColor.cs" />
-    <Compile Include="LexiconSubsystem\EnumSpeakDialogResult.cs" />
+    <Compile Include="LexiconSubsystem\DialogConsoleColor.cs" />
     <Compile Include="LogSubsystem\EnumLogMsgClass.cs" />
     <Compile Include="LogSubsystem\EnumLogMsgState.cs" />
     <Compile Include="LogSubsystem\LogManager.cs" />

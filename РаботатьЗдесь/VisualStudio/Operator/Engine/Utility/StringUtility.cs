@@ -281,15 +281,15 @@ namespace Engine.Utility
         /// </summary>
         /// <param name="array">Массив строк.</param>
         /// <param name="sample">Строка-образец для поиска.</param>
-        /// <param name="ignoreCase">Игнорировать регистр символов строки.</param>
+        /// <param name="compmode">Режим сравнения строк.</param>
         /// <returns>Возвращает True, если массив содержит указанную строку; False в противном случае.</returns>
-        public static bool arrayContainsStringOrdinal(
+        public static bool arrayContainsString(
                 String[] array,
                 String sample,
-                bool ignoreCase)
+                StringComparison compmode)
         {
             foreach (String s in array)
-                if (String.Compare(s, sample, ignoreCase) == 0)
+                if (String.Compare(s, sample, compmode) == 0)
                     return true;
 
             return false;

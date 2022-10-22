@@ -155,7 +155,7 @@ public class SettingProcedures
                 // 1. Извлечь из аргумента название Настройки
                 String settingTitle;
                 FuncArgument arg = args.getByIndex(0);
-                settingTitle = arg.get_ArgumentQueryValue().trim();// берем сырой текст аргумента из запроса
+                settingTitle = arg.get_ArgumentQueryValue().Trim();// берем сырой текст аргумента из запроса
 
                 String str = String.format("Начата процедура %s(\"%s\")", currentProcedureTitle, settingTitle);
                 // DONE: вывести это тестовое сообщение о начале процедуры - в лог!
@@ -234,7 +234,7 @@ public class SettingProcedures
                 {
                     // set namespace value
                     str = outResult.getValueString();
-                    proc.set_Namespace(str.trim());
+                    proc.set_Namespace(str.Trim());
                 }
 
                 // 7. Вывести свойства Настройки и запросить подтверждение создания Настройки.
@@ -373,7 +373,7 @@ public class SettingProcedures
                 // 1. Извлечь из аргумента название Настройки
                 String settingTitle;
                 FuncArgument arg = args.getByIndex(0);
-                settingTitle = arg.get_ArgumentQueryValue().trim();// берем сырой текст аргумента из запроса
+                settingTitle = arg.get_ArgumentQueryValue().Trim();// берем сырой текст аргумента из запроса
 
                 // DONE: вывести это тестовое сообщение о начале процедуры - в лог!
                 String str = String.format("Начата процедура %s(\"%s\")", currentProcedureTitle, settingTitle);
@@ -502,7 +502,7 @@ public class SettingProcedures
                 // 1. Извлечь из аргумента название Настройки
                 String settingTitle;
                 FuncArgument arg = args.getByIndex(0);
-                settingTitle = arg.get_ArgumentQueryValue().trim();// берем сырой текст аргумента из запроса
+                settingTitle = arg.get_ArgumentQueryValue().Trim();// берем сырой текст аргумента из запроса
                                                                    // вывести в лог тестовое сообщение о начале процедуры
                 String str = String.format("Начата процедура %s(\"%s\")", currentProcedureTitle, settingTitle);
                 engine.AddMessageToConsoleAndLog(str, EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.SubsystemEvent_Procedure, EnumLogMsgState.OK);
@@ -669,7 +669,7 @@ public class SettingProcedures
                     {
                         // set namespace value
                         stmp = outResult.getValueString();
-                        settNew.set_Namespace(stmp.trim());
+                        settNew.set_Namespace(stmp.Trim());
                     }
                 }
                 // else Нет - перейти к следующему свойству Настройки.
@@ -857,7 +857,7 @@ return EnumProcedureResult.Success;
 // Если пользователь выберет Отмена, то выйти с отменой.
 // Если пользователь выберет Нет, то запросить новое название Настройки в диалоге.
 // и перейти снова в начало цикла, чтобы вывести имеющиеся Настройки с этим именем и продолжить цикл.
-boolean notUnicalSetting = false;
+Boolean notUnicalSetting = false;
 while (true)
 {
     // если название Настройки - пустая строка, вывести сообщение и перейти к приему нового названия Настройки
@@ -935,7 +935,7 @@ return EnumProcedureResult.Success;
 // Если пользователь выберет Отмена, то выйти с отменой.
 // Если пользователь выберет Нет, то запросить новое название Настройки в диалоге.
 // и перейти снова в начало цикла, чтобы вывести имеющиеся Настройки с этим именем и продолжить цикл.
-boolean notUnicalSetting = false;
+Boolean notUnicalSetting = false;
 while (true)
 {
     // если название Настройки - пустая строка, вывести сообщение и перейти к приему нового названия Настройки

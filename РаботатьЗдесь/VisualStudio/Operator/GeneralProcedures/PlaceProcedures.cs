@@ -165,7 +165,7 @@ public class PlaceProcedures
                 // 1. Извлечь из аргумента название команды
                 String placeTitle;
                 FuncArgument arg = args.getByIndex(0);
-                placeTitle = arg.get_ArgumentQueryValue().trim();// берем сырой текст аргумента из запроса
+                placeTitle = arg.get_ArgumentQueryValue().Trim();// берем сырой текст аргумента из запроса
 
                 // вывести это тестовое сообщение о начале процедуры в лог
                 String str = String.format("Начата процедура %s(\"%s\")", currentProcedureTitle, placeTitle);
@@ -291,7 +291,7 @@ public class PlaceProcedures
                 {
                     // set namespace value
                     str = outResult.getValueString();
-                    place.set_Namespace(str.trim());
+                    place.set_Namespace(str.Trim());
                 }
 
                 // 7. Вывести свойства Места и запросить подтверждение создания Места.
@@ -432,7 +432,7 @@ public class PlaceProcedures
                 // 1. Извлечь из аргумента название Места
                 String placeTitle;
                 FuncArgument arg = args.getByIndex(0);
-                placeTitle = arg.get_ArgumentQueryValue().trim();// берем сырой текст аргумента из запроса
+                placeTitle = arg.get_ArgumentQueryValue().Trim();// берем сырой текст аргумента из запроса
 
                 // вывести это тестовое сообщение о начале процедуры в лог
                 String str = String.format("Начата процедура %s(\"%s\")", currentProcedureTitle, placeTitle);
@@ -555,7 +555,7 @@ public class PlaceProcedures
                 // 1. Извлечь из аргумента название Места
                 String placeTitle;
                 FuncArgument arg = args.getByIndex(0);
-                placeTitle = arg.get_ArgumentQueryValue().trim();// берем сырой текст аргумента из запроса
+                placeTitle = arg.get_ArgumentQueryValue().Trim();// берем сырой текст аргумента из запроса
                 engine.get_OperatorConsole().PrintTextLine(String.format("Название изменяемого Места: \"%s\"", placeTitle), EnumDialogConsoleColor.Сообщение);
                 // 2. извлечь из БД список Мест с таким названием и показать пользователю.
                 // без учета регистра символов
@@ -741,7 +741,7 @@ public class PlaceProcedures
                     {
                         // set namespace value
                         stmp = outResult.getValueString();
-                        placeNew.set_PlaceTypeExpression(stmp.trim());
+                        placeNew.set_PlaceTypeExpression(stmp.Trim());
                     }
                 }
                 // else Нет - перейти к следующему свойству Места.
@@ -770,7 +770,7 @@ public class PlaceProcedures
                     {
                         // set namespace value
                         stmp = outResult.getValueString();
-                        placeNew.set_Namespace(stmp.trim());
+                        placeNew.set_Namespace(stmp.Trim());
                     }
                 }
                 // else Нет - перейти к следующему свойству Места.
@@ -951,7 +951,7 @@ return EnumProcedureResult.Success;
     // temp string with old title
     String str = new String(oldTitle);
 // 2 проверить что в БД нет Процедуры с таким названием, без учета регистра символов
-boolean notUnicalPlace = false;
+Boolean notUnicalPlace = false;
 while (true)
 {
     // если название места - пустая строка, вывести сообщение и перейти к приему нового названия места
@@ -1013,7 +1013,7 @@ return EnumProcedureResult.Success;
     // temp string with old title
     String str = new String(place.get_Title());
 // 2 проверить что в БД нет Места с таким названием, без учета регистра символов, кроме текущей.
-boolean notUnicalPlace = false;
+Boolean notUnicalPlace = false;
 while (true)
 {
     // 1 введите новое название, пустые строки не принимаются.
@@ -1331,12 +1331,12 @@ return result;
  *            Объект Места для исключения из сравнения.
  * @return Функция возвращает True, если все синонимы уникальные, False в противном случае.
  */
-private static boolean checkPlaceSynonimUnicality(
+private static Boolean checkPlaceSynonimUnicality(
         Engine engine,
         String syno,
         Place place)
 {
-    boolean result = true;
+    Boolean result = true;
     // 1. получить список синонимов
     LinkedList<String> sy = OperatorEngine.Utility.SplitCommaDelimitedString2(syno);
     // 2. для каждого синонима получить список или 1 объект места.

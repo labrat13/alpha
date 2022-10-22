@@ -180,7 +180,7 @@ namespace Engine.OperatorEngine
         // *            Directory to remove
         // * @return Returns True if success, false if errors
         // */
-        //public static boolean RemoveDirectory(File dir)
+        //public static Boolean RemoveDirectory(File dir)
         //{
         //    if (dir.isDirectory())
         //    {
@@ -282,7 +282,7 @@ namespace Engine.OperatorEngine
         //    FilenameFilter filter = new FilenameFilter()
         //    {
 
-        //            public boolean accept(File file, String name)
+        //            public Boolean accept(File file, String name)
         //    {
         //        // check filename ends
         //        for (String ext : exts)
@@ -310,7 +310,7 @@ namespace Engine.OperatorEngine
         //    public static File[] getDirectoryFiles(
         //            File dir,
         //            String[] exts,
-        //            boolean recursive)
+        //            Boolean recursive)
         //{
         //    LinkedList<File> result = new LinkedList<File>();
         //    getDirectoryFilesRecurse(result, dir, exts, recursive);
@@ -334,7 +334,7 @@ namespace Engine.OperatorEngine
         //        LinkedList<File> result,
         //        File dir,
         //        String[] exts,
-        //        boolean recursive)
+        //        Boolean recursive)
         //{
         //    File[] files = dir.listFiles();
         //    if (files != null && files.length > 0)
@@ -361,7 +361,7 @@ namespace Engine.OperatorEngine
         //     * @return Function returns True if file title matched with any of specified title ending's.
         //     *         Function returns False otherwise.
         //     */
-        //    private static boolean checkFileExt(File f, String[] exts)
+        //    private static Boolean checkFileExt(File f, String[] exts)
         //{
         //    // check filename ends
         //    String name = f.getAbsolutePath();

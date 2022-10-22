@@ -141,9 +141,9 @@ namespace Engine.Utility
          * @param addr Проверяемая строка
          * @return Возвращает True, если строка это веб-ссылка, False в противном случае.
          */
-        public static boolean isLocalFile(String addr)
+        public static Boolean isLocalFile(String addr)
         {
-            boolean result = true;
+            Boolean result = true;
             if (addr.isEmpty()) return false;
             //если это локальный путь ФС, то он должен начинаться с / или ~
             if (addr.startsWith("/") || addr.startsWith("~"))

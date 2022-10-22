@@ -24,33 +24,31 @@ namespace Engine.OperatorEngine
     {
         //TODO: Port this class from Java code
 
-
-
         #region *** Constants and Fields ***
 
-    /// <summary>
-    /// Строка названия Оператора для платформы Windows
-    /// </summary>
+        /// <summary>
+        /// Строка названия Оператора для платформы Windows
+        /// </summary>
         public const String ApplicationTitle = "Operator";
 
-         /// <summary>
-         /// Строка версии Оператора для платформы Windows
-         /// </summary>
+        /// <summary>
+        /// Строка версии Оператора для платформы Windows
+        /// </summary>
         public const String EngineVersionString = "1.1.0.0";
 
-         /// <summary>
-         /// Статический объект версии движка для платформы Windows 
-         /// </summary>
+        /// <summary>
+        /// Статический объект версии движка для платформы Windows 
+        /// </summary>
         public static OperatorVersion EngineVersion = OperatorVersion.tryParse(EngineVersionString);
 
-         /// <summary>
-         /// Менеджер подсистемы лога
-         /// </summary>
+        /// <summary>
+        /// Менеджер подсистемы лога
+        /// </summary>
         private LogManager m_logman;
 
-         /// <summary>
-         /// Объект адаптера БД Оператора.
-         /// </summary>
+        /// <summary>
+        /// Объект адаптера БД Оператора.
+        /// </summary>
         private OperatorDbAdapter m_db;
         // TODO: Объект реализован частично. Исправить весь код для него.
 
@@ -104,8 +102,6 @@ namespace Engine.OperatorEngine
 
         return;
     }
-
-
 
         #region *** Properties ***
 
@@ -178,12 +174,16 @@ namespace Engine.OperatorEngine
             // this.m_OperatorConsole.PrintTextLine("Operator loading...", EnumDialogConsoleColor.Сообщение);
 
             // 1. check operator folder exist
+            //TODO: если каталог не найден, предложить создать новый с ответами Да и Нет.
+            //и вывести путь для каталога Оператора. (Путь прописан в коде, его нельзя изменить. Но можно создать все прямо в текущем каталоге приложения)
+            //Если Нет, то  завершить работу приложения.
+            //Если Да, то создать новый каталог Оператор
             if (FileSystemManager.isAppFolderExists() == false)
             {
                 String msg1 = "Ошибка: Каталог Оператор не найден: " + FileSystemManager.getAppFolderPath();
                 String msg2 = "Будет создан новый каталог Оператор с настройками по умолчанию.";
-                this.m_OperatorConsole.PrintTextLine(msg1, EnumDialogConsoleColor.Предупреждение);
-                this.m_OperatorConsole.PrintTextLine(msg2, EnumDialogConsoleColor.Предупреждение);
+                this.m_OperatorConsole.PrintTextLine(msg1, DialogConsoleColor.Предупреждение);
+                this.m_OperatorConsole.PrintTextLine(msg2, DialogConsoleColor.Предупреждение);
                 FileSystemManager.CreateOperatorFolder();
             }
 
@@ -205,7 +205,7 @@ namespace Engine.OperatorEngine
             {
                 String msg3 = "Файл настроек " + settingsFilePath + " не найден! Будет создан файл с настройками по умолчанию.";
                 this.m_logman.AddMessage(EnumLogMsgClass.Default, EnumLogMsgState.Fail, msg3);
-                this.m_OperatorConsole.PrintTextLine(msg3, EnumDialogConsoleColor.Предупреждение);
+                this.m_OperatorConsole.PrintTextLine(msg3, DialogConsoleColor.Предупреждение);
                 this.m_Settings.Reset();
                 this.m_Settings.Store(settingsFilePath);
             }
@@ -217,13 +217,13 @@ namespace Engine.OperatorEngine
 
             // если новой бд нет в каталоге приложения, создаем ее.
             String dbFile = FileSystemManager.getAppDbFilePath();
-            String connectionString = OperatorDbAdapter.CreateConnectionString(dbFile);
+            String connectionString = OperatorDbAdapter.CreateConnectionString(dbFile, false);
             if (FileSystemManager.isAppDbFileExists() == false)
             {
                 // print warning about database
                 String msg4 = "Файл базы данных " + dbFile + " не найден! Будет создан новый пустой файл базы данных.";
                 this.m_logman.AddMessage(EnumLogMsgClass.Default, EnumLogMsgState.Fail, msg4);
-                this.m_OperatorConsole.PrintTextLine(msg4, EnumDialogConsoleColor.Предупреждение);
+                this.m_OperatorConsole.PrintTextLine(msg4, DialogConsoleColor.Предупреждение);
                 // TODO: тут лучше попытаться загрузить бекап-копию БД, после
                 // предупреждения о отсутствии основного файла.
                 // Но эту копию надо сначала создать.
@@ -238,13 +238,13 @@ namespace Engine.OperatorEngine
             this.m_db.Close();
             // Использовать адаптер так, чтобы он открывал БД только на
             // время чтения или записи, а не держал ее постоянно открытой.
-            // Так меньше вероятность повредить бд при глюках линукса.
+            // Так меньше вероятность повредить бд при глюках OS.
 
             // 5. Open PEM
             // TODO: дополнить код здесь полезными проверками
-            this.AddMessageToConsoleAndLog("Загрузка Библиотек Процедур..", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.SubsystemEvent_Procedure, EnumLogMsgState.Default);
+            this.AddMessageToConsoleAndLog("Загрузка Библиотек Процедур..", DialogConsoleColor.Сообщение, EnumLogMsgClass.SubsystemEvent_Procedure, EnumLogMsgState.Default);
             this.m_PEM.Open();// TODO: this function not completed now.
-            this.AddMessageToConsoleAndLog("Загрузка Библиотек Процедур завершена.", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.SubsystemEvent_Procedure, EnumLogMsgState.Default);
+            this.AddMessageToConsoleAndLog("Загрузка Библиотек Процедур завершена.", DialogConsoleColor.Сообщение, EnumLogMsgClass.SubsystemEvent_Procedure, EnumLogMsgState.Default);
             this.m_OperatorConsole.PrintEmptyLine();
             // 6. Open ECM
             // TODO: дополнить код здесь полезными проверками
@@ -284,11 +284,13 @@ namespace Engine.OperatorEngine
         }
         #endregion
 
-    // *************************************************************
+
     #region *** Safe access to Log ***
+    
         //TODO: эту подсистему лога надо перепроектировать - и свойства событий неправильные, и доступ к ней тоже кривой.
+
 /// <summary>
-/// NR-append new message object to log
+/// NT-append new message object to log
 /// </summary>
 /// <param name="c">Event class code</param>
 /// <param name="s">Event state code</param>
@@ -307,7 +309,7 @@ namespace Engine.OperatorEngine
 
           
     /// <summary>
-    /// NR-Write exception to engine log if available
+    /// NT-Write exception to engine log if available
     /// </summary>
     /// <param name="en">Engine object</param>
     /// <param name="e">Exception object</param>
@@ -331,7 +333,7 @@ namespace Engine.OperatorEngine
 
 
     /// <summary>
-    /// NR-Check log is available
+    /// NT-Check log is available
     /// </summary>
     /// <param name="en">Engine object</param>
     /// <returns>
@@ -364,7 +366,7 @@ namespace Engine.OperatorEngine
     }
 
 /// <summary>
-/// NR-Вывести сообщение на консоль и в лог.
+/// NT-Вывести сообщение на консоль и в лог.
 /// </summary>
 /// <param name="text">Текст сообщения.</param>
 /// <param name="color">Класс сообщения Консоли.</param>
@@ -372,46 +374,50 @@ namespace Engine.OperatorEngine
 /// <param name="state">Состояние сообщения Лога.</param>
     public void AddMessageToConsoleAndLog(
             String text,
-            EnumDialogConsoleColor color,
+            DialogConsoleColor color,
             EnumLogMsgClass cls,
             EnumLogMsgState state)
     {
         this.m_OperatorConsole.PrintTextLine(text, color);
         this.m_logman.AddMessage(cls, state, text);
     }
-    #endregion
+        #endregion
 
+        #region *** Извлечение Настроек ***
 
-    /// <summary>
-    /// NR-Извлечь значение Настройки из ФайлНастроекОператора или ТаблицаНастроекОператора, иначе вывести сообщение о ее отсутствии.
-    /// </summary>
-    /// <param name="setting">Ключ Настройки.</param>
-    /// <param name="operation">Название выполняемой операции для использования в текстах сообщений.</param>
-    /// <returns>Функция возвращает значение настройки или null.</returns>
-    /// <remarks>
-    /// Эта функция может использоваться в коде Процедур из Библиотек Процедур.
-    /// </remarks>
-    public String getSettingOrMessage(SettingKey setting, String operation)
+        /// <summary>
+        /// NT-Извлечь значение Настройки из ФайлНастроекОператора или ТаблицаНастроекОператора, иначе вывести сообщение о ее отсутствии.
+        /// </summary>
+        /// <param name="setting">Ключ Настройки.</param>
+        /// <param name="operation">Название выполняемой операции для использования в текстах сообщений.</param>
+        /// <returns>Функция возвращает значение настройки или null.</returns>
+        /// <remarks>
+        /// Эта функция может использоваться в коде Процедур из Библиотек Процедур.
+        /// </remarks>
+        public String getSettingOrMessage(SettingKey setting, String operation)
     {
-        // TODO: хорошо бы и из БД извлекать такую настройку, если она там есть. Но пока - только ФайлНастроекОператора проверяется.
-        String newQuery = this.m_Settings.getValue(setting);
-        if (String.IsNullOrEmpty(newQuery))
+        // TODO: эта функция извлекает только первую настройку, а нужно извлекать все элементы с таким ключом.
+        // Но это требует перепроектировать весь код, использующий настройки.
+        String val = this.m_Settings.getValue(setting);
+        string title = setting.Title;//key cached
+
+        if (String.IsNullOrEmpty(val))
         {
-            String msg = String.format("Невозможно выполнить %s, поскольку настройка %s не найдена в ФайлНастроекОператора.", operation, setting.getTitle());
-            this.AddMessageToConsoleAndLog(msg, EnumDialogConsoleColor.Предупреждение, EnumLogMsgClass.SubsystemEvent_Settings, EnumLogMsgState.Fail);
-            // from database
-            newQuery = this.m_ECM.getSettingFirstValue(setting.getTitle());
-            if (Utility.StringIsNullOrEmpty(newQuery))
+            String msg = String.Format("Невозможно выполнить {0}, поскольку настройка {1} не найдена в ФайлНастроекОператора.", operation, title);
+            this.AddMessageToConsoleAndLog(msg, DialogConsoleColor.Предупреждение, EnumLogMsgClass.SubsystemEvent_Settings, EnumLogMsgState.Fail);
+            //then get from database
+            val = this.m_ECM.getSettingFirstValue(title);
+            if (String.IsNullOrEmpty(val))
             {
-                String msg2 = String.format("Невозможно выполнить %s, поскольку настройка %s не найдена в ТаблицаНастроекОператора.", operation, setting.getTitle());
-                this.AddMessageToConsoleAndLog(msg2, EnumDialogConsoleColor.Предупреждение, EnumLogMsgClass.SubsystemEvent_Settings, EnumLogMsgState.Fail);
+                String msg2 = String.Format("Невозможно выполнить {0}, поскольку настройка {1} не найдена в ТаблицаНастроекОператора.", operation, title);
+                this.AddMessageToConsoleAndLog(msg2, DialogConsoleColor.Предупреждение, EnumLogMsgClass.SubsystemEvent_Settings, EnumLogMsgState.Fail);
             }
         }
-        return newQuery;
+        return val;
     }
 
 /// <summary>
-/// NR - Получить значение настройки из ФайлНастроекОператора или ТаблицаНастроекОператора.
+/// NT - Получить значение настройки из ФайлНастроекОператора или ТаблицаНастроекОператора.
 /// </summary>
 /// <param name="setting">Ключ - название настройки.</param>
 /// <returns>
@@ -428,17 +434,16 @@ namespace Engine.OperatorEngine
         String result = this.m_Settings.getValue(setting);
         if (String.IsNullOrEmpty(result) == true)
         {
-            result = this.m_ECM.getSettingFirstValue(setting.getTitle());
+                //then get from database
+                result = this.m_ECM.getSettingFirstValue(setting.Title);
         }
 
         return result;
     }
 
-    // **********************************************************
+     #endregion
 
-    // #endregion
-
-    // #region Основной цикл исполнения механизма
+     #region *** Основной цикл исполнения механизма ***
 
 
 /// <summary>
@@ -452,21 +457,21 @@ namespace Engine.OperatorEngine
 
         // выводим приветствие и описание программы
         this.m_OperatorConsole.PrintEmptyLine();
-        this.m_OperatorConsole.PrintTextLine("Консоль речевого интерфейса. Версия " + Utility.getOperatorVersionString(), EnumDialogConsoleColor.Сообщение);
-        this.m_OperatorConsole.PrintTextLine("Для завершения работы приложения введите слово выход или quit", EnumDialogConsoleColor.Сообщение);
-        this.m_OperatorConsole.PrintTextLine("Сегодня " + BCSA.CreateLongDatetimeString(LocalDateTime.now()), EnumDialogConsoleColor.Сообщение);
+        this.m_OperatorConsole.PrintTextLine("Консоль речевого интерфейса. Версия " + Engine.EngineVersionString, DialogConsoleColor.Сообщение);
+        this.m_OperatorConsole.PrintTextLine("Для завершения работы приложения введите слово выход или quit", DialogConsoleColor.Сообщение);
+        this.m_OperatorConsole.PrintTextLine("Сегодня " + StringUtility.CreateLongDatetimeString(DateTime.Now), DialogConsoleColor.Сообщение);
         this.m_OperatorConsole.PrintEmptyLine();
 
-        // -3.1 выполнить СтартоваяПроцедура.
+        // 3.1 выполнить СтартоваяПроцедура.
         int StartResult = CommandStartupProcedure();
-        // -3.2 вывести приглашение пользователю.
+        // 3.2 вывести приглашение пользователю.
         EnumProcedureResult result = EnumProcedureResult.Unknown;
         // запускаем цикл приема запросов
         while (true)
         {
-            this.m_OperatorConsole.PrintTextLine("", EnumDialogConsoleColor.Сообщение);
-            this.m_OperatorConsole.PrintTextLine("Введите ваш запрос:", EnumDialogConsoleColor.Сообщение);
-            // -3.3 ожидать ввод запроса от пользователя.
+            this.m_OperatorConsole.PrintTextLine("", DialogConsoleColor.Сообщение);
+            this.m_OperatorConsole.PrintTextLine("Введите ваш запрос:", DialogConsoleColor.Сообщение);
+            // 3.3 ожидать ввод запроса от пользователя.
             String query = this.m_OperatorConsole.ReadLine();
             // если был нажат CTRL+C, query может быть null
             // пока я не знаю, что делать в этом случае, просто перезапущу цикл
@@ -480,11 +485,11 @@ namespace Engine.OperatorEngine
                 continue;
             // триммим из запроса пробелы всякие лишние сразу же
             // если строка пустая, начинаем новый цикл приема команды
-            query = query.trim();
+            query = query.Trim();
             // query теперь может оказаться пустой строкой
-            if (query.isEmpty())
+            if (String.IsNullOrEmpty(query))
                 continue;
-            // -3.4 TODO: событие С10 Поступил новый запрос от пользователя.
+            // 3.4 TODO: событие С10 Поступил новый запрос от пользователя.
             // TODO: добавить событие С10 в лог вместе с текстом запроса.
 
             // TODO: Отложить это все до готовности остальных частей проекта: БД, настроек, остального.
@@ -540,75 +545,75 @@ namespace Engine.OperatorEngine
     }
 
 
-/// <summary>
-/// NR- Запустить исполнение запроса и вернуть результат
-/// </summary>
-/// <param name="query">Строка запроса или путь к Процедуре.</param>
-/// <returns>Функция возвращает код результата исполнения Процедуры.</returns>
-    private EnumProcedureResult DoCommandExecution(String query)
-    {
-        // TODO: Отложить это все до готовности остальных частей проекта: БД, настроек, остального.
-
-        // TODO: этот код должен перехватывать все исключения и возвращать только EnumProcedureResult.Error при любой ошибке.
-
-        // Создать объект запроса пользователя для использования в алгоритме и Процедурах.
-        UserQuery userQuery = new UserQuery(query);
-    // если это строка запроса, то запустить цикл выбора и исполнения Процедур.
-    // если это путь к Процедуре, то запустить эту выбранную Процедуру только.
-
-    // вернуть - яхз пока что возвращать. Наверно, Код результата процедуры?
-    EnumProcedureResult exitCode = EnumProcedureResult.Success;
-    // -3.5 исполнение запроса
-    // - 3.5.1 Выполнить ПредОбработкаЗапроса.
-    exitCode = DoPreProcessing(userQuery);// готово
-        if (exitCode != EnumProcedureResult.Exit)
+        /// <summary>
+        /// NT- Запустить исполнение запроса и вернуть результат
+        /// </summary>
+        /// <param name="query">Строка запроса или путь к Процедуре.</param>
+        /// <returns>Функция возвращает код результата исполнения Процедуры.</returns>
+        private EnumProcedureResult DoCommandExecution(String query)
         {
-            // - 3.5.2 Выполнить ИсполнениеЗапроса.
-            // если запрос это путь к Процедуре, то:
-            if (RegexManager.IsAssemblyCodePath(userQuery.getQuery()) == true)
+            // TODO: Отложить это все до готовности остальных частей проекта: БД, настроек, остального.
+
+            // TODO: этот код должен перехватывать все исключения и возвращать только EnumProcedureResult.Error при любой ошибке.
+
+            // Создать объект запроса пользователя для использования в алгоритме и Процедурах.
+            UserQuery userQuery = new UserQuery(query);
+            // если это строка запроса, то запустить цикл выбора и исполнения Процедур.
+            // если это путь к Процедуре, то запустить эту выбранную Процедуру только.
+
+            // вернуть - яхз пока что возвращать. Наверно, Код результата процедуры?
+            EnumProcedureResult exitCode = EnumProcedureResult.Success;
+            // 3.5 исполнение запроса
+            // 3.5.1 Выполнить ПредОбработкаЗапроса.
+            exitCode = DoPreProcessing(userQuery);// готово
+            if (exitCode != EnumProcedureResult.Exit)
             {
-                // выполнить Процедуру без аргументов, по ее пути.
-                // потом выполнить пост-обработку, если она нужна.
-                exitCode = DoSimpleProcedureExecution(userQuery);// готово
-}
-            else
-{
-    // если запрос - англоязычный, то перенаправить его в Терминал
-    if (BCSA.IsNotRussianFirst(userQuery.getQuery()) == true)
-    {
-        exitCode = DoCommandEnglishTerminal(userQuery);// готово
-                                                       // TODO: всегда возвращает EnumProcedureResult.Success ?
-    }
-    else
-    {
-        // иначе - запустить цикл выборки Процедур для Запроса и исполнить Процедуру.
-        exitCode = DoProcedureLoopExecution(userQuery);// TODO: работать здесь!!!
-    }
-}
-// - 3.5.3 Выполнить ПостОбработкаЗапроса.
-exitCode = DoPostProcessing(exitCode);// готово
-            // -3.6 если С11 Исполнение запроса успешно завершено.
-            // -3.7 если С12, то переход на следующую итерацию цикла.
-            // -3.8 если С13, то завершение работы Оператор.
-            // -3.9 если С14, то переход на следующую итерацию цикла.
+                // 3.5.2 Выполнить ИсполнениеЗапроса.
+                // если запрос это путь к Процедуре, то:
+                if (RegexManager.IsAssemblyCodePath(userQuery.Query) == true)
+                {
+                    // выполнить Процедуру без аргументов, по ее пути.
+                    // потом выполнить пост-обработку, если она нужна.
+                    exitCode = DoSimpleProcedureExecution(userQuery);// готово
+                }
+                else
+                {
+                    // если запрос - англоязычный, то перенаправить его в Терминал
+                    if (BCSA.IsNotRussianFirst(userQuery.Query) == true)
+                    {
+                        exitCode = DoCommandEnglishTerminal(userQuery);// готово
+                                                                       // TODO: всегда возвращает EnumProcedureResult.Success ?
+                    }
+                    else
+                    {
+                        // иначе - запустить цикл выборки Процедур для Запроса и исполнить Процедуру.
+                        exitCode = DoProcedureLoopExecution(userQuery);// TODO: работать здесь!!!
+                    }
+                }
+                // 3.5.3 Выполнить ПостОбработкаЗапроса.
+                exitCode = DoPostProcessing(exitCode);// готово
+                // 3.6 если С11 Исполнение запроса успешно завершено.
+                // 3.7 если С12, то переход на следующую итерацию цикла.
+                // 3.8 если С13, то завершение работы Оператор.
+                // 3.9 если С14, то переход на следующую итерацию цикла.
+            }
+            // else - DoPreProcessing() returns Exit - нужно завершить работу приложения в вызывающем коде.
+            return exitCode;
         }
-        // else - DoPreProcessing() returns Exit - нужно завершить работу приложения в вызывающем коде.
-        return exitCode;
-    }
 
 
-    /// <summary>
-    /// NR-Пре-процессинг введенного пользователем запроса.
-    /// </summary>
-    /// <param name="userQuery">Объект введенного пользователем запроса.</param>
-    /// <returns>Функция возвращает код результата исполнения Процедуры, выбранной как пред-обработка поступившего запроса.</returns>
-    private EnumProcedureResult DoPreProcessing(UserQuery userQuery)
+        /// <summary>
+        /// NT-Пре-процессинг введенного пользователем запроса.
+        /// </summary>
+        /// <param name="userQuery">Объект введенного пользователем запроса.</param>
+        /// <returns>Функция возвращает код результата исполнения Процедуры, выбранной как пред-обработка поступившего запроса.</returns>
+        private EnumProcedureResult DoPreProcessing(UserQuery userQuery)
 {
     // Тут если текст запроса = тексту одной из встроенных команд, то
     // заменить текст запроса на текст соответствующей Процедуры или команды из ФайлНастроекОператора.
 
     // 1. Проверяем команду Выход
-    if (Lexicon.Dialogs.isExitAppCommand(userQuery.getQuery()) == true)
+    if (LexiconSubsystem.Dialogs.isExitAppCommand(userQuery.Query) == true)
         return EnumProcedureResult.Exit;
     // если будут еще встроенные команды, то для них надо извлечь из настроек текст запроса и заменить его в userQuery объекте.
     // - и эта замена должна быть записана в Лог (выяснить, делается ли это уже автоматически?).
@@ -733,7 +738,7 @@ return result;
     // приложению.
     // TODO:оптимизация: сделать это при загрузке Процедуры из БД и
     // сохранить в служебном поле Процедуры
-    boolean isAssemblyCodePath = RegexManager.IsAssemblyCodePath(p.get_Path());
+    Boolean isAssemblyCodePath = RegexManager.IsAssemblyCodePath(p.get_Path());
         if (isAssemblyCodePath == false)
         {
         // если к приложению, его надо запустить и вернуть стандартное
@@ -893,7 +898,7 @@ private EnumProcedureResult DoCommandEnglishTerminal(UserQuery userQuery)
         // 3. TODO: разделить командную строку терминала на приложение и аргументы в классе RegexManager.
 
         // 4. пока разделить нечем - вызвать PEM.ExecuteApplicationSimple()
-        String cmdline = cmdterm.trim() + " " + userQuery.getQuery();
+        String cmdline = cmdterm.Trim() + " " + userQuery.getQuery();
         this.m_PEM.ExecuteApplicationSimple(cmdline, workDirectory);
     }
     catch (Exception e)
@@ -1017,7 +1022,7 @@ private EnumProcedureResult DoShellExecute(
         String cmdline = RegexManager.ConvertApplicationCommandString(p.get_Path(), args);
 
         // 4. пока разделить нечем - вызвать PEM.ExecuteApplicationSimple()
-        // String cmdline = cmdterm.trim() + " " + cmdQuery; - ничего не будем добавлять в командную строку от Команды.
+        // String cmdline = cmdterm.Trim() + " " + cmdQuery; - ничего не будем добавлять в командную строку от Команды.
         this.m_PEM.ExecuteApplicationSimple(cmdline, workDirectory);
     }
     catch (Exception e)
@@ -1127,7 +1132,7 @@ private int CommandStartupProcedure() throws Exception
     SettingItem []
     settings = null;
         // если флага нет, или он сброшен, то стартап запускать
-        if ((ignoreStartup == null) || (ignoreStartup.booleanValue() == false))
+        if ((ignoreStartup == null) || (ignoreStartup.BooleanValue() == false))
         {
         // читаем настройку из ФайлНастроекОператора
         // - если в ФайлНастроекОператор поле cmd_startup существует и не пустое, то:
@@ -1154,12 +1159,12 @@ private int CommandStartupProcedure() throws Exception
         if ((settings == null) || (settings.length == 0))
         {
             // Вывести на консоль и в лог сообщение об отсутствии команд для стартапа.
-            this.AddMessageToConsoleAndLog("Нет заданий для процедуры старта Оператор.", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.StartupExecution, EnumLogMsgState.OK);
+            this.AddMessageToConsoleAndLog("Нет заданий для процедуры старта Оператор.", DialogConsoleColor.Сообщение, EnumLogMsgClass.StartupExecution, EnumLogMsgState.OK);
         }
         else
         {
             // Вывести на консоль и в лог сообщение о начале исполнения команд для стартапа.
-            this.AddMessageToConsoleAndLog("Исполнение процедуры старта Оператор начато:", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.StartupExecution, EnumLogMsgState.OK);
+            this.AddMessageToConsoleAndLog("Исполнение процедуры старта Оператор начато:", DialogConsoleColor.Сообщение, EnumLogMsgClass.StartupExecution, EnumLogMsgState.OK);
 
             for (SettingItem ca : settings)
             {
@@ -1167,12 +1172,12 @@ private int CommandStartupProcedure() throws Exception
                 if (ca == null)
                     continue;
                 // get query text
-                String caQuery = ca.get_Path().trim();
+                String caQuery = ca.get_Path().Trim();
                 if (caQuery.isEmpty())
                     continue;
                 // Вывести на консоль и в лог название и описание команды финиша. Предварительно вывести в консоль пустую строку как разделитель.
                 String msgcmd = ca.toSingleDescriptionString();
-                this.AddMessageToConsoleAndLog(msgcmd, EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.StartupExecution, EnumLogMsgState.OK);
+                this.AddMessageToConsoleAndLog(msgcmd, DialogConsoleColor.Сообщение, EnumLogMsgClass.StartupExecution, EnumLogMsgState.OK);
 
                 // TODO: тут запустить Процедуру или Запрос на исполнение в обычном порядке.
                 // TODO: результат Процедуры нужно обработать, вдруг он вызовет перезагрузку компьютера посреди исполнения следующего запроса в списке?
@@ -1190,7 +1195,7 @@ private int CommandStartupProcedure() throws Exception
         {
         // вывести на консоль сообщение о игнорировании стартапа.
         // и вывести в лог сообщение об игнорировании стартапа.
-        this.AddMessageToConsoleAndLog("Исполнение процедуры старта Оператор запрещено конфигурацией.", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.StartupExecution, EnumLogMsgState.OK);
+        this.AddMessageToConsoleAndLog("Исполнение процедуры старта Оператор запрещено конфигурацией.", DialogConsoleColor.Сообщение, EnumLogMsgClass.StartupExecution, EnumLogMsgState.OK);
     }
         return 0;
 }
@@ -1247,12 +1252,12 @@ private int CommandFinishProcedure(EnumProcedureResult pr) throws Exception
         if (settings == null)
         {
             // Вывести на консоль и в лог сообщение об отсутствии команд для финиша.
-            this.AddMessageToConsoleAndLog("Исполнение процедуры завершения Оператор невозможно: задания не определены.", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.FinishExecution, EnumLogMsgState.OK);
+            this.AddMessageToConsoleAndLog("Исполнение процедуры завершения Оператор невозможно: задания не определены.", DialogConsoleColor.Сообщение, EnumLogMsgClass.FinishExecution, EnumLogMsgState.OK);
         }
         else
         {
             // Вывести на консоль и в лог сообщение о начале исполнения команд для финиша.
-            this.AddMessageToConsoleAndLog("Исполнение процедуры завершения Оператор начато:", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.FinishExecution, EnumLogMsgState.OK);
+            this.AddMessageToConsoleAndLog("Исполнение процедуры завершения Оператор начато:", DialogConsoleColor.Сообщение, EnumLogMsgClass.FinishExecution, EnumLogMsgState.OK);
 
             for (SettingItem ca : settings)
             {
@@ -1260,12 +1265,12 @@ private int CommandFinishProcedure(EnumProcedureResult pr) throws Exception
                 if (ca == null)
                     continue;
                 // get query text
-                String caQuery = ca.get_Path().trim();
+                String caQuery = ca.get_Path().Trim();
                 if (caQuery.isEmpty())
                     continue;
                 // Вывести на консоль и в лог название и описание команды финиша. Предварительно вывести в консоль пустую строку как разделитель.
                 String msgcmd = ca.toSingleDescriptionString();
-                this.AddMessageToConsoleAndLog(msgcmd, EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.FinishExecution, EnumLogMsgState.OK);
+                this.AddMessageToConsoleAndLog(msgcmd, DialogConsoleColor.Сообщение, EnumLogMsgClass.FinishExecution, EnumLogMsgState.OK);
 
                 // TODO: тут запустить Процедуру или Запрос на исполнение в обычном порядке.
                 // TODO: результат Процедуры нужно обработать, вдруг он вызовет перезагрузку компьютера посреди исполнения следующего запроса в списке?
@@ -1275,13 +1280,13 @@ private int CommandFinishProcedure(EnumProcedureResult pr) throws Exception
         // - todo: пост-обработка для КодЗавершенияПроцедуры здесь не выполняется?
         // - TODO: С36 Событие завершения финиша.
         // - вывести сообщение о завершении процедуры finish.
-        this.AddMessageToConsoleAndLog("Исполнение процедуры завершения Оператор завершено.", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.FinishExecution, EnumLogMsgState.OK);
+        this.AddMessageToConsoleAndLog("Исполнение процедуры завершения Оператор завершено.", DialogConsoleColor.Сообщение, EnumLogMsgClass.FinishExecution, EnumLogMsgState.OK);
 
     }
         else
         {
         // вывести на консоль и в лог сообщение о игнорировании финиша.
-        this.AddMessageToConsoleAndLog("Исполнение процедуры старта Оператор запрещено конфигурацией.", EnumDialogConsoleColor.Сообщение, EnumLogMsgClass.FinishExecution, EnumLogMsgState.OK);
+        this.AddMessageToConsoleAndLog("Исполнение процедуры старта Оператор запрещено конфигурацией.", DialogConsoleColor.Сообщение, EnumLogMsgClass.FinishExecution, EnumLogMsgState.OK);
     }
         // return result code
         return 0;
@@ -1311,7 +1316,7 @@ private int CommandFinishProcedure(EnumProcedureResult pr) throws Exception
 private void describeProcedureResult(EnumProcedureResult result)
 {
     String msg = null;
-    boolean ErrorAndBeep = false;
+    Boolean ErrorAndBeep = false;
     switch (result)
     {
         case CancelledByUser:
@@ -1349,13 +1354,13 @@ private void describeProcedureResult(EnumProcedureResult result)
     }
     // выбрать цвет сообщения о результате процедуры
     // подать звуковой сигнал при ошибке
-    EnumDialogConsoleColor color;
+    DialogConsoleColor color;
     if (ErrorAndBeep == true)
     {
         this.m_OperatorConsole.Beep();
-        color = EnumDialogConsoleColor.Предупреждение;
+        color = DialogConsoleColor.Предупреждение;
     }
-    else color = EnumDialogConsoleColor.Сообщение;
+    else color = DialogConsoleColor.Сообщение;
     // выдать сообщение о результате процедуры
     // если курсор не в начале строки, начать сообщение с новой строки.
     this.m_OperatorConsole.SureConsoleCursorStart();
@@ -1371,7 +1376,7 @@ private void EventCommandNotExecuted()
 {
     // TODO: добавить эту функцию -ивент в документацию по работе движка.
     // выводим сообщение что для запроса не удалось подобрать процедуру
-    this.m_OperatorConsole.PrintTextLine("Я такое не умею", EnumDialogConsoleColor.Сообщение);
+    this.m_OperatorConsole.PrintTextLine("Я такое не умею", DialogConsoleColor.Сообщение);
 
     // вообще же тут можно выполнять другую обработку, наверно...
 

@@ -371,17 +371,17 @@
 
 05 октября 2022
 Список классов по неймспейсам для портирования: TODO: отметить тут уже портированные классы и енумы. И замечания, по классам если они короткие. Если длинные - писать после этого списка.  - 
-- DbSubsystem
+- DbSubsystem                   - ported, NT
   - OperatordbAdapter           - ported, NT
   - PlacesCollection            - ported, NT
   - ProcedureCollection         - ported, NT
   - SqliteDbAdapter             - ported, NT
-- LexiconSubsystem              - need             
-  - BCSA                        - need refactoring для диалога консольной винды
-  - DialogConsole               - need refactoring для диалога консольной винды
-  - Dialogs                     - need refactoring для диалога консольной винды
-  - EnumDialogConsoleColor      - need refactoring для диалога консольной винды
-  - EnumSpeakDialogResult       - need refactoring для диалога консольной винды
+- LexiconSubsystem              - ported, NT             
+  - BCSA                        - ported, NT
+  - DialogConsole               - ported, NT
+  - Dialogs                     - ported, NT
+  - DialogConsoleColor          - ported, NT
+  - SpeakDialogResult           - ported, NT
 - LogSubsystem                  - need
   - EnumLogMsgClass             - ported, RT
   - EnumLogMsgState             - ported, RT, need refactoring - не определена роль этого в системе сообщений лога.         
@@ -391,7 +391,7 @@
 - OperatorEngine                - need
   - ArgumentCollection          - ported, NT
   - ElementCacheManager         - need
-  - Engine                      - need
+  - Engine                      -  портировать в последнюю очередь после всех подсистем.
   - EngineSubsystem             - ported, NT
   - EntityType                  - ported, NT
   - EntityTypesCollection       - ported, NT

@@ -379,7 +379,7 @@ namespace Engine.ProcedureSubsystem
         //            String app,
         //            String args,
         //            String workDirectory,
-        //            boolean logging
+        //            Boolean logging
         //            ) throws Exception
         //{
         //    //ProcessBuilder принимает именно так: список из пути приложения и аргументов.
