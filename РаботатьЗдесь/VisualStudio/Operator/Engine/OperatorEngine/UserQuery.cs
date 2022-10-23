@@ -6,7 +6,7 @@ using System.Text;
 namespace Engine.OperatorEngine
 {
     /// <summary>
-    /// NR - User query text as object.
+    /// NT - User query text as object.
     /// </summary>
     public class UserQuery
     {
@@ -111,7 +111,7 @@ namespace Engine.OperatorEngine
             sb.Append(q);
             sb.Append("\".");
             // записать в лог сообщение
-            en.getLogManager().AddMessage(LogSubsystem.EnumLogMsgClass.QueryReplaced, LogSubsystem.EnumLogMsgState.OK, sb.ToString());
+            en.LogManager.AddMessage(LogSubsystem.EnumLogMsgClass.QueryReplaced, LogSubsystem.EnumLogMsgState.OK, sb.ToString());
             // изменить значение запроса
             this.m_Query = q;
 

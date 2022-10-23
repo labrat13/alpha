@@ -210,7 +210,7 @@ namespace Engine.DbSubsystem
         /// </summary>
         /// <param name="list">Список Мест</param>
         /// <exception cref="Exception">Ошибка: Синоним Места уже существует в словаре мест.</exception>
-        public void Fill(LinkedList<Place> list)
+        public void Fill(List<Place> list)
         {
             foreach (Place p in list)
             {

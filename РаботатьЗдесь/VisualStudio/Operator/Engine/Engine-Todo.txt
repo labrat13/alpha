@@ -390,7 +390,7 @@
   - LogMessage                  - ported, NT
 - OperatorEngine                - need
   - ArgumentCollection          - ported, NT
-  - ElementCacheManager         - need
+  - ElementCacheManager         - ported, NT
   - Engine                      -  портировать в последнюю очередь после всех подсистем.
   - EngineSubsystem             - ported, NT
   - EntityType                  - ported, NT
@@ -404,7 +404,7 @@
   - Place                       - ported, NT, refactoring
   - Procedure                   - ported, NT
   - RegexManager                - need
-  - UserQuery                   - wait for dependency
+  - UserQuery                   - ported, NT
 - ProcedureSubsystem            - need
   - ImplementationState         - ported, RT.
   - LibraryManagerBase          - need

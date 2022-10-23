@@ -53,7 +53,7 @@ namespace Engine.ProcedureSubsystem
         public LibraryManagerBase(Engine.OperatorEngine.Engine engine, string title, string libPath) : base(engine)
         {
             //this.m_Engine = engine; - done by parent constructor
-            this.m_Ready = false;
+            //this.m_Ready = false; - done by parent constructor
             this.m_LibraryPath = libPath;
             this.m_LibraryTitle = title;
 
@@ -69,8 +69,8 @@ namespace Engine.ProcedureSubsystem
         /// </summary>
         public string LibraryPath
         {
-            get => this.m_LibraryPath;
-            set => this.m_LibraryPath = value;
+            get { return this.m_LibraryPath; }
+            set { this.m_LibraryPath = value; }
         }
 
         /// <summary>
@@ -78,30 +78,30 @@ namespace Engine.ProcedureSubsystem
         /// </summary>
         public string LibraryTitle
         {
-            get => this.LibraryTitle;
-            set => this.LibraryTitle = value;
+            get { return this.LibraryTitle; }
+            set { this.LibraryTitle = value; }
         }
 
         #endregion
 
         #region  *** Skip Overriding this from EngineSubsystem parent class ***
-        ///// <summary>
-        ///// NR - Initialize Subsystem. This function must be overrided in child classes.
-        ///// </summary>
-        ///// <exception cref="Exception">Exception at Function must be overridden</exception>
-        //protected override void onOpen()
-        //{
-        //    throw new Exception("Function must be overridden");//TODO: Add code here
-        //}
+        /// <summary>
+        /// NR - Initialize Subsystem. This function must be overrided in child classes.
+        /// </summary>
+        /// <exception cref="Exception">Exception at Function must be overridden</exception>
+        protected override void onOpen()
+        {
+            throw new Exception("Function must be overridden");
+        }
 
-        ///// <summary>
-        ///// NR - De-initialize Subsystem. This function must be overrided in child classes.
-        ///// </summary>
-        ///// <exception cref="Exception">Exception at Function must be overridden</exception>
-        //protected override void onClose()
-        //{
-        //    throw new Exception("Function must be overridden");//TODO: Add code here
-        //}
+        /// <summary>
+        /// NR - De-initialize Subsystem. This function must be overrided in child classes.
+        /// </summary>
+        /// <exception cref="Exception">Exception at Function must be overridden</exception>
+        protected override void onClose()
+        {
+            throw new Exception("Function must be overridden");
+        }
         #endregion
 
         #region *** Public API ***
@@ -124,7 +124,7 @@ namespace Engine.ProcedureSubsystem
         /// <exception cref="Exception">Error in processing.</exception>
         public virtual Place[] getLibraryPlaces()
         {
-            // if (this.m_Initialized == false)
+            // if (this.m_Ready == false)
             // {
             //
             // }
@@ -142,7 +142,7 @@ namespace Engine.ProcedureSubsystem
         /// <exception cref="Exception">Error in processing.</exception>
         public virtual Procedure[] getLibraryProcedures()
         {
-            // if (this.m_Initialized == false)
+            // if (this.m_Ready == false)
             // {
             //
             // }
@@ -160,7 +160,7 @@ namespace Engine.ProcedureSubsystem
         /// <exception cref="Exception">Error in processing.</exception>
         public virtual SettingSubsystem.SettingItem[] getLibrarySettings()
         {
-            // if (this.m_Initialized == false)
+            // if (this.m_Ready == false)
             // {
             //
             // }
@@ -172,25 +172,6 @@ namespace Engine.ProcedureSubsystem
         }
         #endregion
 
-        //#region  *** Override this in child classes *** - come from base class
-        ///// <summary>
-        ///// NT-Initialize Subsystem. This function must be overrided in child classes.
-        ///// </summary>
-        ///// <exception cref="Exception">Exception at Function must be overridden</exception>
-        //protected virtual void onInit()
-        //{
-        //    throw new Exception("Function must be overridden");
-        //}
-
-        ///// <summary>
-        ///// NT-De-initialize Subsystem. This function must be overrided in child classes.
-        ///// </summary>
-        ///// <exception cref="Exception">Exception at Function must be overridden</exception>
-        //protected virtual void onExit()
-        //{
-        //    throw new Exception("Function must be overridden");
-        //}
-        //#endregion
 
         #region *** Статические функции загрузки классов ***
 
