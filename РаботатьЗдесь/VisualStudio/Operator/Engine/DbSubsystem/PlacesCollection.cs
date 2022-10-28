@@ -29,7 +29,7 @@ namespace Engine.DbSubsystem
         /// <summary>
         /// Словарь синонимов сущностей мест.
         /// </summary>
-        public Dictionary<String, Place> Places
+        public Dictionary<String, Place> Items
         {
             get { return m_places; }
             set { this.m_places = value; }

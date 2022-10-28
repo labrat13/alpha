@@ -960,7 +960,7 @@ namespace Engine.OperatorEngine
         /// <returns>Функция возвращает список всех Процедур для перечисления.</returns>
         public List<Procedure> getProceduresAsList()
         {
-            return this.m_procedures.Procedures;
+            return this.m_procedures.Items;
         }
 
         /// <summary>

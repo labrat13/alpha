@@ -155,14 +155,14 @@ namespace Operator
             String res = "(?<" + argName.Substring(1) + ">.+)";
             return res;
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// NT-Разделить строку запуска приложения на путь приложения и аргументы.
         /// Поддерживаются только exe и com расширения файлов.
         /// </summary>
-        /// <param name="cmdline"></param>
-        /// <returns></returns>
+        /// <param name="cmdline">Строка запуска приложения</param>
+        /// <returns>Функция возвращает массив строк: [0]= Путь к файлу приложения [1]= Строка аргументов приложения</returns>
         internal static string[] ParseCommandLine(string cmdline)
         {
             //Можно было лучше сделать - последовательно брать куски с пробелами и проверять, существует ли такой путь и файл.

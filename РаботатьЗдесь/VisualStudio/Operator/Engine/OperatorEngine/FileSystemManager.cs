@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Engine.DbSubsystem;
 using Engine.SettingSubsystem;
@@ -171,6 +172,35 @@ namespace Engine.OperatorEngine
             DirectoryInfo di = Directory.CreateDirectory(path);
 
             return di.Exists;
+        }
+        /// <summary>
+        /// NT-Собрать в список все файлы DLL из каталога Сборок Библиотек Процедур для Оператор
+        /// </summary>
+        /// <returns>Функция возвращает список, содержащий объекты FileInfo для всех файлов dll, найденных в подкаталогах каталога сборок процедур Оператор.</returns>
+        internal static List<FileInfo> getDllFilesFromProcedureLibraryFolder()
+        {
+            // файлы сборок библиотек процедур должны лежать в подпапках внутри папки хранилища библиотек.
+            // собираем файлы *.dll только в подкаталогах указанного каталога
+            List<FileInfo> result = new List<FileInfo>();
+            //1. получить каталог хранилища библиотек процедур Оператор.
+            String libraryFolder = FileSystemManager.getAssembliesFolderPath();
+            //2. в этом каталоге все сборки должны лежать каждая в собственной одноименной папке.
+            // но там также могут находиться и другие вспомогательные dll файлы.
+            //вот сейчас мы их все выберем сколько есть, а потом получатель сам пусть разбирается, где там сборки процедур.
+            DirectoryInfo dip = new DirectoryInfo(libraryFolder);
+            DirectoryInfo[] dirs = dip.GetDirectories();
+            
+            foreach (DirectoryInfo di in dirs)
+            {
+                FileInfo[] fir = di.GetFiles("*.dll", SearchOption.TopDirectoryOnly);
+                foreach(FileInfo fi in fir)
+                {
+                    //добавить проверки тут если нужно
+                    result.Add(fi);
+                }
+            }
+
+            return result;
         }
 
         ///**

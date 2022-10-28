@@ -8,84 +8,84 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.DbSubsystem.OperatorDbAdapter" Collapsed="true">
-    <Position X="0.75" Y="1.5" Width="1.5" />
+    <Position X="0.75" Y="1.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>CQAAAQBCIAIAIAAmRgAABAAAEAAgAAREAgAIEwBAwgA=</HashCode>
       <FileName>DbSubsystem\OperatorDbAdapter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.LexiconSubsystem.BCSA" Collapsed="true">
     <Position X="2.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>AAAAAAIAAAABAAAAAAAAAAAAAAAIAAAQAAAAAEACIAA=</HashCode>
       <FileName>LexiconSubsystem\BCSA.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.LogSubsystem.LogManager" Collapsed="true">
     <Position X="4.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>AQEAAAAAABABAAAAAAAAAAAAAAAAAAAAAAAgAIACAAA=</HashCode>
       <FileName>LogSubsystem\LogManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.OperatorEngine.Engine" Collapsed="true">
     <Position X="7" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>EAwBQAAAIEABAiAABRpAUAUJBIAQIJAQAYgCQCAqBgE=</HashCode>
       <FileName>OperatorEngine\Engine.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.SettingSubsystem.ApplicationSettingsBase" Collapsed="true">
     <Position X="9" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>AAAAgAABQgEBBAAEAACgAAAAAAAAkAAAAAIAAQICgAA=</HashCode>
       <FileName>SettingSubsystem\ApplicationSettingsBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.ProcedureSubsystem.LibraryManagerBase" Collapsed="true">
     <Position X="11" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgAQAAAAAAAAAggAAAIAEAEAAAAIAAAAAEgCAAAA=</HashCode>
+      <HashCode>AAAAgAQAAAABAAAAggAAAIAEAEAAAAIAAAAAEgCCAAA=</HashCode>
       <FileName>ProcedureSubsystem\LibraryManagerBase.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.ProcedureSubsystem.ProcedureExecutionManager" Collapsed="true">
     <Position X="13.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <HashCode>AAAACgACAAIBAABgBAAACAIAAEAAIAAAAAAAAAACAAQ=</HashCode>
       <FileName>ProcedureSubsystem\ProcedureExecutionManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.OperatorEngine.Item" Collapsed="true">
-    <Position X="2.75" Y="3.25" Width="1.5" />
+    <Position X="2.75" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AoAAIAAAAAAgAEIkAIQQAgQAAAAAYAAQgAQIAAAAkgA=</HashCode>
       <FileName>OperatorEngine\Item.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.OperatorEngine.Place" Collapsed="true">
-    <Position X="1" Y="4.5" Width="1.5" />
+    <Position X="1" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAACBAAAEMAAAAAAQACAAAAAQAiAACgAAAAAA=</HashCode>
       <FileName>OperatorEngine\Place.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.OperatorEngine.Procedure" Collapsed="true">
-    <Position X="2.75" Y="4.5" Width="1.5" />
+    <Position X="2.75" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAABAAAAAAAJAAEAAAAAEQAAAAAAAAAAAAAAAIIAAA=</HashCode>
       <FileName>OperatorEngine\Procedure.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.SettingSubsystem.SettingItem" Collapsed="true">
-    <Position X="4.75" Y="4.5" Width="1.5" />
+    <Position X="4.75" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAQAAAAAAAEAAIAAAAAAAgIAAEAAAAAAAAAAAA=</HashCode>
       <FileName>SettingSubsystem\SettingItem.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Engine.OperatorEngine.ArgumentCollection" Collapsed="true">
-    <Position X="7" Y="3.25" Width="1.5" />
+    <Position X="7.25" Y="3.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAIAAAAAAAIAAAAgAAAAg=</HashCode>
       <FileName>OperatorEngine\ArgumentCollection.cs</FileName>
@@ -98,25 +98,67 @@
       <FileName>OperatorEngine\UserQuery.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Enum Name="Engine.OperatorEngine.EnumProcedureResult" Collapsed="true">
-    <Position X="6.5" Y="0.5" Width="1.5" />
+  <Class Name="Engine.OperatorEngine.ElementCacheManager" Collapsed="true">
+    <Position X="3.75" Y="2.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAQAAEQAAAAAAAAAAggQAAAAQIAAAAggAABA=</HashCode>
+      <HashCode>CAABEAACIQABhgAFQEAAAgEAAIAgABwMgkAAAAACQAI=</HashCode>
+      <FileName>OperatorEngine\ElementCacheManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.EntityType" Collapsed="true">
+    <Position X="13.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAEAEACQAAAAAAAIAICAAAAAAACAAAAg=</HashCode>
+      <FileName>OperatorEngine\EntityType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.EntityTypesCollection" Collapsed="true">
+    <Position X="11.25" Y="4.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAIACAAAAAAAAAAIAAAAAAAgAAAAAA=</HashCode>
+      <FileName>OperatorEngine\EntityTypesCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.FileSystemManager" Collapsed="true">
+    <Position X="0.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ABAAABAAABAAACABAQAAAAAAABCAAEAAkAAAAACAAQA=</HashCode>
+      <FileName>OperatorEngine\FileSystemManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.FuncArgument" Collapsed="true">
+    <Position X="7.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAhCIJAAIAAAAgAiAAAAAAQAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>OperatorEngine\FuncArgument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.NamespaceConstants" Collapsed="true">
+    <Position X="13.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAABAAAAAAAAAAAACAAAAAQAAAAAgAAAAA=</HashCode>
+      <FileName>OperatorEngine\NamespaceConstants.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Engine.OperatorEngine.RegexManager" Collapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAQAAAAAAAQAQAQAAAAAQAAABCAAgAABAA=</HashCode>
+      <FileName>OperatorEngine\RegexManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Engine.OperatorEngine.EnumProcedureResult" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAEQAAAAAAAAQAggQAAAAQIAAAAggAABA=</HashCode>
       <FileName>OperatorEngine\EnumProcedureResult.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="Engine.EnumRegexType">
-    <Position X="1" Y="3.25" Width="1.5" />
+  <Enum Name="Engine.OperatorEngine.EnumRegexType" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAEAAAAAAAAAIAQAAAAAAAAAAAAAAAAAAAAJA=</HashCode>
-      <FileName>EnumRegexType.cs</FileName>
-    </TypeIdentifier>
-  </Enum>
-  <Enum Name="Engine.EnumProcedureResult">
-    <Position X="4.5" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAQAAEQAAAAAAAAQAggQAAAAQIAAAAggAABA=</HashCode>
-      <FileName>EnumProcedureResult.cs</FileName>
+      <FileName>OperatorEngine\EnumRegexType.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

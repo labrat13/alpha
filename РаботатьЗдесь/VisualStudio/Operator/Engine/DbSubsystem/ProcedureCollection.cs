@@ -27,7 +27,7 @@ namespace Engine.DbSubsystem
         /// <summary>
         /// RT-Получить список объектов процедур.
         /// </summary>
-        public List<Procedure> Procedures
+        public List<Procedure> Items
         {
             get { return this.m_proclist; }
         }

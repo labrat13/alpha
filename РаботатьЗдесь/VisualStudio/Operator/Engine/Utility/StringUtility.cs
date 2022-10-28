@@ -56,16 +56,16 @@ namespace Engine.Utility
             return String.Equals(s1, s2, StringComparison.OrdinalIgnoreCase);
         }
         /// <summary>
-        /// NT-Return string value or [Null] if string is null.
+        /// NT-Return string value or [Null] if argument is null.
         /// </summary>
-        /// <param name="s">String</param>
+        /// <param name="s">Any Object</param>
         /// <returns>Return string value or [Null] if string is null.</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static String GetStringTextNull(string s)
+        public static String GetStringTextNull(Object s)
         {
             if (s == null)
                 return "[Null]";
-            else return s;
+            else return s.ToString();
         }
 
 

@@ -382,16 +382,16 @@
   - Dialogs                     - ported, NT
   - DialogConsoleColor          - ported, NT
   - SpeakDialogResult           - ported, NT
-- LogSubsystem                  - need
+- LogSubsystem                  - ported, NT
   - EnumLogMsgClass             - ported, RT
   - EnumLogMsgState             - ported, RT, need refactoring - не определена роль этого в системе сообщений лога.         
   - LogManager                  - deleted, replaced from LogManager2 class
   - LogManager2                 - ported, renamed to LogManager, NT
   - LogMessage                  - ported, NT
-- OperatorEngine                - need
+- OperatorEngine                - ported
   - ArgumentCollection          - ported, NT
   - ElementCacheManager         - ported, NT
-  - Engine                      -  портировать в последнюю очередь после всех подсистем.
+  - Engine                      - ported, но возможно неправильно будет работать где-то...
   - EngineSubsystem             - ported, NT
   - EntityType                  - ported, NT
   - EntityTypesCollection       - ported, NT
@@ -403,7 +403,7 @@
   - NamespaceConstant           - ported, NT
   - Place                       - ported, NT, refactoring
   - Procedure                   - ported, NT
-  - RegexManager                - need
+  - RegexManager                - ported, NT, возможно, сработает неправильно из-за ошибок портирования.
   - UserQuery                   - ported, NT
 - ProcedureSubsystem            - need
   - ImplementationState         - ported, RT.
@@ -419,13 +419,13 @@
 - Utility                       - 
   - FileUtility                 - 
   - InOutArgument               - создан для обхода ограничений JAVA  и вроде бы в проекте не нужен?
-  - ItemDictionaryBase          - ported
-  - ItemDictionaryByNamespace   - ported
-  - OperatorVersion             - ported
+  - ItemDictionaryBase          - ported, NT,
+  - ItemDictionaryByNamespace   - ported, NT,
+  - OperatorVersion             - ported, NT,
   - SingleAppInstance           - need refactoring - file locking 
   - StringUtility               - need refactoring
   - SystemInfoManager           - ported, need refactoring
-  - WindowUtility               - ported
+  - WindowUtility               - ported, NT,
 - приложение Operator
   - Program                     - need
 - библиотека процедур GeneralProcedures

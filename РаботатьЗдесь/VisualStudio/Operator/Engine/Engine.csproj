@@ -86,6 +86,7 @@
     <Compile Include="SettingSubsystem\SettingItem.cs" />
     <Compile Include="SettingSubsystem\SettingItemCollection.cs" />
     <Compile Include="SettingSubsystem\SettingKey.cs" />
+    <Compile Include="Utility\FileLink.cs" />
     <Compile Include="Utility\FileUtility.cs" />
     <Compile Include="Utility\InOutArgument.cs" />
     <Compile Include="Utility\ItemDictionaryBase.cs" />
