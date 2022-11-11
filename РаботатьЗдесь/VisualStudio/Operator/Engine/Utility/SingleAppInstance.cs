@@ -158,7 +158,7 @@ namespace Engine.Utility
          * @throws IOException
          *             Error on unlocking
          */
-        public static void unlockInstance() throws IOException
+        public static void unlockInstance() 
         {
         if (m_fl != null)
         {
