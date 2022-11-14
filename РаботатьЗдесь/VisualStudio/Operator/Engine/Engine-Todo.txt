@@ -422,12 +422,12 @@
   - ItemDictionaryBase          - ported, NT,
   - ItemDictionaryByNamespace   - ported, NT,
   - OperatorVersion             - ported, NT,
-  - SingleAppInstance           - need refactoring - file locking 
+  - SingleAppInstance           - ported, NT, 
   - StringUtility               - need refactoring
   - SystemInfoManager           - ported, need refactoring
   - WindowUtility               - ported, NT,
 - приложение Operator
-  - Program                     - need
+  - Program                     - ported, NT, нужна переработка по тодо
 - библиотека процедур GeneralProcedures
   - LibraryManager              - need
   - PlaceProcedures             - need

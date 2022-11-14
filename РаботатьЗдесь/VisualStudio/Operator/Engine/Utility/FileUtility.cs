@@ -102,7 +102,7 @@ namespace Engine.Utility
         /** 
          * NR-проверить, что строка это локальный путь файла
          * @param addr Проверяемая строка
-         * @return Возвращает True, если строка это веб-ссылка, False в противном случае.
+         * @return Возвращает True, если строка это локальный путь файла, False в противном случае.
          */
         public static Boolean isLocalFile(String addr)
         {

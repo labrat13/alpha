@@ -4,33 +4,11 @@ using System.Runtime.InteropServices;
 
 namespace Engine.Utility
 {
-    public class WindowUtility
+    public class SingleAppInstance2
     {
-        #region Console titlebar CloseButton disable
-        //07072019 добавлено в Operator.CWindowProcessor 
-
-        [DllImport("user32.dll", EntryPoint = "GetSystemMenu", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.Winapi)]
-        private static extern IntPtr GetSystemMenu(IntPtr hWnd, int bRevert);
-
-        [DllImport("user32.dll")]
-        private static extern Boolean DeleteMenu(IntPtr hMenu, int uPosition, int uFlags);
-
-        /// <summary>
-        /// Выключить кнопку Close на титлебаре окна консольного приложения
-        /// </summary>
-        public static void DisableConsoleCloseButton()
-        {
-            //1 получить описатель окна приложения
-            Process p = Process.GetCurrentProcess();
-            IntPtr hwnd = p.MainWindowHandle;
-            //2 получить служебное меню окна
-            IntPtr sysMenu = GetSystemMenu(hwnd, 0);
-            //3 выключить пункт Закрыть
-            DeleteMenu(sysMenu, 6, 1024);
-
-            return;
-        }
-        #endregion
+        //Код копирован из Utility.WindowUtility класса, дублируется в качестве  самостоятельного класса.
+        //Надо выбрать один способ, и добавить классы в мою библиотеку классов.
+        //Но я не решил пока, какой лучше...
 
         #region switch to previous Operator application
         //Это только для консольного приложения годится.
@@ -66,7 +44,7 @@ namespace Engine.Utility
         /// NT-выявить что приложение - дубликат и активировать более раннее приложение
         /// </summary>
         /// <returns>Возвращает True, если текущее приложение надо закрыть, False в противном случае.</returns>
-        internal static bool DoubleApplication()
+        public static bool DoubleApplication()
         {
             //получить текущий процесс
             Process curProcess = Process.GetCurrentProcess();
@@ -128,7 +106,5 @@ namespace Engine.Utility
         }
 
         #endregion
-
-
     }
 }

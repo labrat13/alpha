@@ -48,5 +48,11 @@
     <Content Include="Operator-Todo.txt" />
     <Content Include="Operator-Version.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Engine\Engine.csproj">
+      <Project>{74311202-af2d-4fb2-b842-18ce981e9716}</Project>
+      <Name>Engine</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

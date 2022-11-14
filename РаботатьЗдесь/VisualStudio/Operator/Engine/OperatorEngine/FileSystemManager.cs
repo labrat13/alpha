@@ -10,7 +10,7 @@ namespace Engine.OperatorEngine
     /// <summary>
     /// NR - Всевозможные операции с файлами и каталогами
     /// </summary>
-    internal static class FileSystemManager
+    public static class FileSystemManager
     {
 
         /// <summary>

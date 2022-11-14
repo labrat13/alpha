@@ -92,6 +92,7 @@
     <Compile Include="Utility\ItemDictionaryBase.cs" />
     <Compile Include="Utility\ItemDictionaryByNamespace.cs" />
     <Compile Include="Utility\SingleAppInstance.cs" />
+    <Compile Include="Utility\SingleAppInstance2.cs" />
     <Compile Include="Utility\StringUtility.cs" />
     <Compile Include="Utility\OperatorVersion.cs" />
     <Compile Include="Utility\SystemInfoManager.cs" />
