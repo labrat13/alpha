@@ -540,7 +540,7 @@ namespace Engine.DbSubsystem
                 ps.Parameters.Add("a2", DbType.String);
                 ps.Parameters.Add("a3", DbType.String);
                 // write back
-                this.m_cmdAddPlace = ps;
+                this.m_cmdAddSetting = ps;
             }
             // set parameters
             ps.Parameters[0].Value = p.Namespace;
